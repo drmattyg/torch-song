@@ -23,6 +23,9 @@ class LimitSwitch:
 	def get_state_raw(self):
 		return GPIO.input(self.channel)
 
+	def get_state(self):
+		return self.current_state
+
 	def set_change_callback(self, cb):
 		self.change_callback = cb
 
