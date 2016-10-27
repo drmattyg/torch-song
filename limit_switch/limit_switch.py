@@ -5,17 +5,19 @@ import time
 
 class LimitSwitch:
 
+	GO = 1
+	STOP = 0
+
 	def __init__(self, ch):
 		GPIO.setup(ch, GPIO.IN)
 		self.channel = ch
 		self.current_state = self.get_state_raw()
 		self.change_callback = None
 		self.__run_thread = True
-		self._thread = threading.Thread(target = self._monitor_debouce)
-		self._thread.start()
+		self._thread = None
 
-	# def __del__(self):
-	# 	self.kill()
+	def __del__(self):
+		self.kill()
 
 	def kill(self):
 		self.__run_thread = False
@@ -28,6 +30,8 @@ class LimitSwitch:
 
 	def set_change_callback(self, cb):
 		self.change_callback = cb
+		self._thread = threading.Thread(target = self._monitor_debouce)
+		self._thread.start()
 
 	def thread_is_alive(self):
 		if not self._thread:
