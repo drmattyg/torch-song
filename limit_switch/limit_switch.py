@@ -2,14 +2,17 @@ import RPi.GPIO as GPIO
 import threading
 from datetime import datetime
 import time
+import Adafruit_GPIO.MCP230xx as MCP
+import Adafruit_GPIO as GPIO
 
 class LimitSwitch:
 
 	GO = 1
 	STOP = 0
 
-	def __init__(self, ch):
-		GPIO.setup(ch, GPIO.IN)
+	def __init__(self, ch, setup_gpio=True):
+		if setup_gpio:
+			GPIO.setup(ch, GPIO.IN)
 		self.channel = ch
 		self.current_state = self.get_state_raw()
 		self.change_callback = None
@@ -57,6 +60,17 @@ class LimitSwitch:
 				if self.change_callback is not None:
 					self.change_callback(self.current_state)
 
+
+class LimitSwitchMCP(LimitSwitch):
+	def __init__(self, mcp, channel):
+		self.mcp = mcp
+		LimitSwitch.__init__(self, channel, setup_gpio=False)
+		
+
+	def get_state_raw(self, update=True):
+		if update:
+			self.mcp.update()
+		return self.mcp.state[self.channel]
 
 
 
