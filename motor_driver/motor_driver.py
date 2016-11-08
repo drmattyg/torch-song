@@ -1,15 +1,18 @@
 import RPi.GPIO as GPIO
 from limit_switch import LimitSwitch
 class MotorDriver:
-	def FORWARD = 0
-	def REVERSE = 1
+	FORWARD = 0
+	REVERSE = 1
 
 	def __init__(self, drive_channel, direction_channel):
 		self.drive_channel = drive_channel
-		self.drive_channel = direction_channel
+		self.direction_channel = direction_channel
+		GPIO.setup(drive_channel, GPIO.OUT)
+		GPIO.setup(direction_channel, GPIO.OUT)
 		self.pwm = GPIO.PWM(drive_channel, 10000) # max is 20kHz according to docs
 		GPIO.setup(direction_channel, GPIO.OUT)
-		self.set_direction(GPIO.FORWARD)
+		self.set_direction(MotorDriver.FORWARD)
+		self.speed = 0
 
 	def set_direction(self, dir):
 		if dir not in [MotorDriver.FORWARD, MotorDriver.REVERSE]:
@@ -17,14 +20,23 @@ class MotorDriver:
 		GPIO.output(self.direction_channel, dir)
 
 
-	def __drive_raw(self, speed, direction):
+	def _drive_raw(self, speed, direction):
 		self.set_direction(direction)
-		if not (0.0 < speed < 100.0):
+		if not (0.0 <= speed <= 100.0):
 			raise ValueError("Speed must be between 0 and 100")
-		self.pwm.ChangeDutyCycle(speed)
+		self.pwm.start(speed)
+
+	def start(self):
+		self.pwm.start(self.speed)
 
 	def stop(self):
-		self.pwm.ChangeDutyCycle(0)
+		self.pwm.stop()
+
+	def set_speed(self, speed):
+		if not (0.0 <= speed <= 100.0):
+			raise ValueError("Speed must be between 0 and 100")
+		self.speed = speed
+		self.pwm.ChangeDutyCycle(speed)
 
 	def drive(self, speed, direction, limit_switch_1, limit_switch_2):
 

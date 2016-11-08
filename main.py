@@ -3,6 +3,7 @@ from MCP import MCPInput
 import click
 import time
 import RPi.GPIO as GPIO
+from motor_driver import MotorDriver
 
 
 @click.group()
@@ -37,6 +38,8 @@ V_OPEN = 0
 V_CLOSE = 1
 IG_ON = 0
 IG_OFF = 1
+PWM = 24
+DIR = 23
 def valve(state):
 	GPIO.output(VALVE, state)
 
@@ -44,7 +47,7 @@ def ignitor(state):
 	GPIO.output(IGN, state)
 
 @cli.command()
-@click.argument("speed", type=click.IntRange(1, 100))
+@click.argument("speed", type=click.IntRange(0, 100))
 def runtest(speed):
 	IGN = 14
 	VALVE = 15
@@ -59,6 +62,23 @@ def runtest(speed):
 		time.sleep(0.5)
 		GPIO.output(VALVE, 1)
 		time.sleep(0.5)
+
+@cli.command()
+@click.argument("speed", type=click.IntRange(0, 100))
+@click.argument("direction", type=click.IntRange(0, 1))
+
+def drivetest(speed, direction):
+	try:
+		md = MotorDriver(PWM, DIR)
+		md.set_direction(direction)
+		md.set_speed(speed)
+		md.start()
+		while True:
+			pass
+	except KeyboardInterrupt:
+		md.stop()
+
+
 
 if __name__ == '__main__':
 	cli()
