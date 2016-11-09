@@ -58,7 +58,7 @@ class LimitSwitch:
 				counter = 0
 				self.current_state = reading
 				if self.change_callback is not None:
-					self.change_callback(self.current_state)
+					self.change_callback(self.current_state, self.channel)
 
 
 class LimitSwitchMCP(LimitSwitch):

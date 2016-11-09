@@ -1,0 +1,13 @@
+- 1:
+    speed: 50
+    dir: F
+    time: 4
+    valve: O
+  2:
+    speed: 100
+    dir: R
+- pause: 10
+- 1:
+    valve: C
+  2:
+    valve: C

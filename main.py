@@ -49,19 +49,29 @@ def ignitor(state):
 @cli.command()
 @click.argument("speed", type=click.IntRange(0, 100))
 def runtest(speed):
-	IGN = 14
-	VALVE = 15
+	# Initialize valve and ignition
 	GPIO.setmode(GPIO.BCM)
 	GPIO.setup(IGN, GPIO.OUT)
 	GPIO.setup(VALVE, GPIO.OUT)
-	while True:
-		GPIO.output(IGN, 0)
-		GPIO.output(VALVE, 0)
-		time.sleep(0.5)
-		GPIO.output(IGN, 1)
-		time.sleep(0.5)
-		GPIO.output(VALVE, 1)
-		time.sleep(0.5)
+
+	# initialize motor driver
+	md = MotorDriver(PWM, DIR)
+	md.set_direction(MotorDriver.FORWARD)
+	md.set_speed(50)
+
+	# initialize mcp
+	mcp = MCPInput(0x27, 10)
+	# initialize limit switches
+	limit_switch_list = [LimitSwitchMCP(mcp, channel) for channel in [0, 1]]
+
+	def limit_switch_callback(state, channel):
+		if state == False:
+			md.reverse()
+
+	for ls in limit_switch_list:
+		ls.set_change_callback(limit_switch_callback)
+
+	md.start()
 
 @cli.command()
 @click.argument("speed", type=click.IntRange(0, 100))

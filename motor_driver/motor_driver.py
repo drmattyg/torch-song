@@ -7,6 +7,7 @@ class MotorDriver:
 	def __init__(self, drive_channel, direction_channel):
 		self.drive_channel = drive_channel
 		self.direction_channel = direction_channel
+		self.direction = None
 		GPIO.setup(drive_channel, GPIO.OUT)
 		GPIO.setup(direction_channel, GPIO.OUT)
 		self.pwm = GPIO.PWM(drive_channel, 10000) # max is 20kHz according to docs
@@ -17,6 +18,7 @@ class MotorDriver:
 	def set_direction(self, dir):
 		if dir not in [MotorDriver.FORWARD, MotorDriver.REVERSE]:
 			raise ValueError("Incorrect value for set_direction")
+		self.direction = dir
 		GPIO.output(self.direction_channel, dir)
 
 
@@ -31,6 +33,10 @@ class MotorDriver:
 
 	def stop(self):
 		self.pwm.stop()
+
+	def reverse(self):
+		self.set_direction(1 - self.direction)
+
 
 	def set_speed(self, speed):
 		if not (0.0 <= speed <= 100.0):
