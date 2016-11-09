@@ -40,6 +40,8 @@ IG_ON = 0
 IG_OFF = 1
 PWM = 24
 DIR = 23
+shutdown_callback = None
+
 def valve(state):
 	GPIO.output(VALVE, state)
 
@@ -47,8 +49,7 @@ def ignitor(state):
 	GPIO.output(IGN, state)
 
 @cli.command()
-@click.argument("speed", type=click.IntRange(0, 100))
-def runtest(speed):
+def runtest():
 	# Initialize valve and ignition
 	GPIO.setmode(GPIO.BCM)
 	GPIO.setup(IGN, GPIO.OUT)
@@ -73,6 +74,15 @@ def runtest(speed):
 
 	md.start()
 
+	try:
+		while True:
+			time.sleep(0.1)
+	except KeyboardInterrupt:
+		md.stop()
+		for ls in limit_switch_list:
+			ls.kill()
+
+
 @cli.command()
 @click.argument("speed", type=click.IntRange(0, 100))
 @click.argument("direction", type=click.IntRange(0, 1))
@@ -92,3 +102,4 @@ def drivetest(speed, direction):
 
 if __name__ == '__main__':
 	cli()
+
