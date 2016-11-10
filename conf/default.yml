@@ -1,0 +1,33 @@
+subsystems:
+  output:
+    - valve
+    - ign
+    - motor_dir
+  pwm:
+    - motor_pwm
+  input:
+    - limit_switch
+mcp:
+  - type: input
+    addr: 0x27
+    range: 10
+edge:
+  - id: 1
+    ign:
+      gpio: 14
+    valve:
+      gpio: 15
+    motor_pwm:
+      gpio: 24
+    motor_dir:
+      gpio: 23
+    limit_switch:
+      - mcp:
+          addr: 0x27
+          io: 0
+      - mcp:
+          addr: 0x27
+          io: 1
+
+
+
