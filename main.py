@@ -4,7 +4,7 @@ import click
 import time
 import RPi.GPIO as GPIO
 from motor_driver import MotorDriver
-
+from smbus import SMBus
 
 @click.group()
 def cli():
@@ -32,13 +32,13 @@ def monitor():
 
 	# print(list(set_bits))
 
-IGN = 14
-VALVE = 15
+IGN = 8 
+VALVE = 7
 V_OPEN = 0
 V_CLOSE = 1
 IG_ON = 0
 IG_OFF = 1
-PWM = 24
+PWM = 18
 DIR = 23
 shutdown_callback = None
 
@@ -49,16 +49,19 @@ def ignitor(state):
 	GPIO.output(IGN, state)
 
 @cli.command()
-def runtest():
+@click.argument("speed", type=click.IntRange(0, 100))
+def runtest(speed):
 	# Initialize valve and ignition
 	GPIO.setmode(GPIO.BCM)
 	GPIO.setup(IGN, GPIO.OUT)
+	GPIO.output(IGN, 1)
 	GPIO.setup(VALVE, GPIO.OUT)
+	GPIO.output(VALVE, 1)
 
 	# initialize motor driver
 	md = MotorDriver(PWM, DIR)
 	md.set_direction(MotorDriver.FORWARD)
-	md.set_speed(50)
+	md.set_speed(speed)
 
 	# initialize mcp
 	mcp = MCPInput(0x27, 10)
@@ -79,6 +82,7 @@ def runtest():
 			time.sleep(0.1)
 	except KeyboardInterrupt:
 		md.stop()
+                GPIO.cleanup()
 		for ls in limit_switch_list:
 			ls.kill()
 
@@ -97,6 +101,7 @@ def drivetest(speed, direction):
 			pass
 	except KeyboardInterrupt:
 		md.stop()
+                GPIO.cleanup()
 
 
 
