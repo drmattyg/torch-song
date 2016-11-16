@@ -4,7 +4,7 @@ import click
 import time
 import RPi.GPIO as GPIO
 from motor_driver import MotorDriver
-from smbus import SMBus
+from relay import Relay
 
 @click.group()
 def cli():
@@ -53,10 +53,12 @@ def ignitor(state):
 def runtest(speed):
 	# Initialize valve and ignition
 	GPIO.setmode(GPIO.BCM)
-	GPIO.setup(IGN, GPIO.OUT)
-	GPIO.output(IGN, 1)
-	GPIO.setup(VALVE, GPIO.OUT)
-	GPIO.output(VALVE, 1)
+	ign = Relay(IGN)
+	valve = Relay(VALVE)
+	# GPIO.setup(IGN, GPIO.OUT)
+	# GPIO.output(IGN, 1)
+	# GPIO.setup(VALVE, GPIO.OUT)
+	# GPIO.output(VALVE, 1)
 
 	# initialize motor driver
 	md = MotorDriver(PWM, DIR)
@@ -71,6 +73,7 @@ def runtest(speed):
 	def limit_switch_callback(state, channel):
 		if state == False:
 			md.reverse()
+			valve.invert()
 
 	for ls in limit_switch_list:
 		ls.set_change_callback(limit_switch_callback)

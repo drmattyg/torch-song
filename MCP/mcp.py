@@ -6,7 +6,15 @@ class MCPInput:
 		self.address = address
 		self.busnum = busnum
 		self.bit_range = range(0, max_bit) # the bits we're interested in
-		self._mcp = MCP.MCP23017(address, busnum=busnum)
+		self._mcp = None
+		for i in range(10):
+			try:
+				self._mcp = MCP.MCP23017(address, busnum=busnum)
+				break
+			except:
+				pass
+		if self._mcp is None:
+			raise Exception("Unable to instantiate MCP")
 		for b in self.bit_range:
 			self._mcp.setup(b, GPIO.IN)
 			self._mcp.pullup(b, True)
