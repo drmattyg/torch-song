@@ -1,3 +1,18 @@
+io:
+  relays:
+    - id: 1
+      gpio_pin: 8
+    - id: 2
+      gpio_pin: 25
+  motors:
+    - id: 1
+      pwm_pin: 18
+      dir_pin: 23
+  mcp23017:
+    - id: 1
+      i2c_address: 0x20
+      bits: 16
+
 subsystems:
   output:
     - valve
@@ -28,6 +43,7 @@ edge:
       - mcp:
           addr: 0x27
           io: 1
+
 
 
 
