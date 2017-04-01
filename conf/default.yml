@@ -1,49 +1,133 @@
 io:
-  relays:
-    - id: 1
-      gpio_pin: 8
-    - id: 2
-      gpio_pin: 25
-  motors:
-    - id: 1
-      pwm_pin: 18
-      dir_pin: 23
   mcp23017:
     - id: 1
       i2c_address: 0x20
       bits: 16
-
+    - id: 2
+      i2c_address: 0x22
+      bits: 16
+  PCA9685_IO:
+    - id: 1
+      i2c_address: 0x40
 subsystems:
-  output:
-    - valve
-    - ign
-    - motor_dir
-  pwm:
-    - motor_pwm
-  input:
-    - limit_switch
-mcp:
-  - type: input
-    addr: 0x27
-    range: 10
-edge:
-  - id: 1
-    ign:
-      gpio: 14
-    valve:
-      gpio: 15
-    motor_pwm:
-      gpio: 24
-    motor_dir:
+  valves:
+    - id: 1
       gpio: 23
-    limit_switch:
-      - mcp:
-          addr: 0x27
-          io: 0
-      - mcp:
-          addr: 0x27
-          io: 1
-
-
-
-
+    - id: 2
+      gpio: 24
+    - id: 3
+      gpio: 25
+    - id: 4
+      gpio: 8
+    - id: 5
+      gpio: 7
+    - id: 6
+      gpio: 12
+    - id: 7
+      gpio: 16
+    - id: 8
+      gpio: 20
+    - id: 9
+      gpio: 21
+  igniters:
+    - id: 1
+      gpio: 22
+    - id: 2
+      gpio: 10
+    - id: 3
+      gpio: 9
+    - id: 4
+      gpio: 11
+    - id: 5
+      gpio: 5
+    - id: 6
+      gpio: 6
+    - id: 7
+      gpio: 13
+    - id: 8
+      gpio: 19
+    - id: 9
+      gpio: 26
+  limit_switches:
+    - id: 1
+      beg_mcp_id: 1
+      end_mcp_id: 2
+      beg_mcp_io: 0
+      end_mcp_io: 0
+    - id: 2
+      beg_mcp_id: 1
+      end_mcp_id: 2
+      beg_mcp_io: 1
+      end_mcp_io: 1
+    - id: 3
+      beg_mcp_id: 1
+      end_mcp_id: 2
+      beg_mcp_io: 2
+      end_mcp_io: 2
+    - id: 4
+      beg_mcp_id: 1
+      end_mcp_id: 2
+      beg_mcp_io: 3
+      end_mcp_io: 3
+    - id: 5
+      beg_mcp_id: 1
+      end_mcp_id: 2
+      beg_mcp_io: 4
+      end_mcp_io: 4
+    - id: 6
+      beg_mcp_id: 1
+      end_mcp_id: 2
+      beg_mcp_io: 5
+      end_mcp_io: 5
+    - id: 7
+      beg_mcp_id: 1
+      end_mcp_id: 2
+      beg_mcp_io: 6
+      end_mcp_io: 6
+    - id: 8
+      beg_mcp_id: 1
+      end_mcp_id: 2
+      beg_mcp_io: 7
+      end_mcp_io: 7
+    - id: 9
+      beg_mcp_id: 1
+      end_mcp_id: 2
+      beg_mcp_io: 8
+      end_mcp_io: 8
+  motors:
+    - id: 1
+      pwm_io: 8
+      dir_io: 27
+      dir_io_type: RPI_IO
+    - id: 2
+      pwm_io: 7
+      dir_io: 17
+      dir_io_type: RPI_IO
+    - id: 3
+      pwm_io: 6
+      dir_io: 4
+      dir_io_type: RPI_IO
+    - id: 4
+      pwm_io: 5
+      dir_io: 15
+      dir_io_type: RPI_IO
+    - id: 5
+      pwm_io: 4
+      dir_io: 14
+      dir_io_type: RPI_IO
+    - id: 6
+      pwm_io: 1
+      dir_io: 0
+      dir_io_type: PCA9685_IO
+    - id: 7
+      pwm_io: 3
+      dir_io: 2
+      dir_io_type: PCA9685_IO
+    - id: 8
+      pwm_io: 13
+      dir_io: 12
+      dir_io_type: PCA9685_IO
+    - id: 9
+      pwm_io: 15
+      dir_io: 14
+      dir_io_type: PCA9685_IO

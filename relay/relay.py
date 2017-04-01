@@ -4,10 +4,10 @@ class Relay:
     OPEN = 0
     CLOSED = 1
 
-    def __init__(self, pin):
-        self.pin = pin;
+    def __init__(self, io):
+        self._io = io;
         GPIO.setmode(GPIO.BCM)
-        GPIO.setup(self.pin, GPIO.OUT)
+        GPIO.setup(self._io, GPIO.OUT)
         self.set_state(Relay.OPEN)
 
     def get_state(self):
@@ -17,8 +17,8 @@ class Relay:
         if state not in [Relay.CLOSED, Relay.OPEN]:
             raise Exception("Invalid value for set_state")
         self.__state = state;
-        GPIO.output(self.pin, 1 - self.__state)
+        GPIO.output(self._io, 1 - self.__state)
 
     def __del__(self):
         self.set_state(Relay.OPEN)
-        GPIO.setup(self.pin, GPIO.IN)
+        GPIO.setup(self._io, GPIO.IN)

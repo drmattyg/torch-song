@@ -4,18 +4,18 @@ sys.path.append( path.dirname( path.dirname( path.abspath(__file__) ) ) )
 import cmd
 import yaml
 
-from relay import Relay
+from valve import Valve
 
-class relay_cli(cmd.Cmd):
+class valve_cli(cmd.Cmd):
     def __init__(self, config):
-        self.intro = 'Relay CLI'
-        self.prompt = 'Relays > '
-        self.doc_header='Relay Cli (type help):'
+        self.intro = 'Valve CLI'
+        self.prompt = 'Valves > '
+        self.doc_header='Valve Cli (type help):'
 
-        self.relays = {}
-        for r in config['io']['relays']:
-            relay = Relay(r['gpio_pin'])
-            self.relays[r['id']] = relay
+        self.valves = {}
+        for v in config['subsystems']['valves']:
+            valve = Valve(v['gpio_pin'])
+            self.valves[v['id']] = valve
 
         cmd.Cmd.__init__(self)
     def emptyline(self):
@@ -33,22 +33,22 @@ class relay_cli(cmd.Cmd):
     def do_set(self, args):
         which = int(args.split()[0])
         state = int(args.split()[1])
-        self.relays[which].set_state(state)
-        state = self.relays[which].get_state()
-        print('relay%s is now %s' % (which, 'CLOSED' if state == Relay.CLOSED else 'OPEN'))
+        self.valves[which].set_state(state)
+        state = self.valves[which].get_state()
+        print('valve%s is now %s' % (which, 'CLOSED' if state == Valve.CLOSED else 'OPEN'))
     def help_set(self):
-        print('to close relay 1, usage: set 1 1')
+        print('to close valve 1, usage: set 1 1')
     def do_read(self, args):
-        for id, relay in self.relays.iteritems():
-            state = relay.get_state()
-            print('relay%s is %s' % (id, 'CLOSED' if state == Relay.CLOSED else 'OPEN'))
+        for id, valve in self.valves.iteritems():
+            state = valve.get_state()
+            print('valve%s is %s' % (id, 'CLOSED' if state == Valve.CLOSED else 'OPEN'))
     def help_read(self):
-        print('read all relays')
+        print('read all valves')
 
 if __name__ == '__main__':
     stream = open('conf/default.yml', 'r')
     config = yaml.load(stream)
 
-    cli = relay_cli(config)
+    cli = valve_cli(config)
     cli.cmdloop()
 

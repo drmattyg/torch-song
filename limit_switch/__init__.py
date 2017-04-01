@@ -1,3 +1,1 @@
-from .limit_switch import *
-import RPi.GPIO as GPIO
-GPIO.setmode(GPIO.BCM)
+from .limit_switch import LimitSwitch
