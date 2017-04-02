@@ -14,7 +14,7 @@ class valve_cli(cmd.Cmd):
 
         self.valves = {}
         for v in config['subsystems']['valves']:
-            valve = Valve(v['gpio_pin'])
+            valve = Valve(v['gpio'])
             self.valves[v['id']] = valve
 
         cmd.Cmd.__init__(self)

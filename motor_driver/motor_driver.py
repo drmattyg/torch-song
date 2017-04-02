@@ -24,19 +24,14 @@ class MotorDriver:
         self.speed = 0
 
     def set_dir(self, dir):
-        print('dir', dir, self._dir_io, self._dir_io_type)
-        print(self._dir_io_type is 'RPI_IO')
         if dir not in [MotorDriver.FORWARD, MotorDriver.REVERSE]:
             raise ValueError("Incorrect value for set_dir")
         if self._dir_io_type == 'PCA9685_IO':
             if dir is MotorDriver.FORWARD:
                 self._pca.set_off(self._dir_io)
             else:
-                print('backwards')
                 self._pca.set_on(self._dir_io)
         elif self._dir_io_type == 'RPI_IO':
-            print('here')
-            print('dir', dir, self._dir_io)
             GPIO.output(self._dir_io, dir)
 
         self.dir = dir
