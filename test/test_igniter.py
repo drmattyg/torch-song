@@ -35,13 +35,13 @@ class igniter_cli(cmd.Cmd):
         state = int(args.split()[1])
         self.igniters[which].set_state(state)
         state = self.igniters[which].get_state()
-        print('igniter%s is now %s' % (which, 'CLOSED' if state == Igniter.CLOSED else 'OPEN'))
+        print('igniter%s is now %s' % (which, 'CLOSED' if state == Igniter.ON else 'OPEN'))
     def help_set(self):
         print('to close igniter 1, usage: set 1 1')
     def do_read(self, args):
         for id, igniter in self.igniters.iteritems():
             state = igniter.get_state()
-            print('igniter%s is %s' % (id, 'CLOSED' if state == Igniter.CLOSED else 'OPEN'))
+            print('igniter%s is %s' % (id, 'CLOSED' if state == Igniter.ON else 'OPEN'))
     def help_read(self):
         print('read all igniters')
 
