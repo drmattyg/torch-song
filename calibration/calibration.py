@@ -35,7 +35,7 @@ class TSCalibration:
 
     def run_calibration(self):
         # todo implement this; currently this is a placeholder
-        self.edge_map = {e: TSEdgeCalibration(e) for e in range(8)}
+        self.edge_map = {e: TSEdgeCalibration(e) for e in range(9)}
 
     def get_calibration(self, id):
         return self.edge_map[id]
