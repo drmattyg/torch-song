@@ -8,7 +8,9 @@ def test_songbook_parser():
     stream = open('conf/default.yml', 'r')
     config = yaml.load(stream)
     example_songbook = "songbook/example.yml"
-    songbook = Songbook(example_songbook, TSCalibration(config))
+    calibration = TSCalibration(config)
+    calibration.run_calibration()
+    songbook = Songbook(example_songbook, calibration)
     print(songbook.timepoints)
 
 
