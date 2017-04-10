@@ -11,6 +11,7 @@ class Songbook:
         self.timepoints = {}
         self.calibration = calibration
         self.sorted_timepoints = None
+        self.generating_timing_map()
 
     def generating_timing_map(self):
         for measure in self.songbook['songbook']:
@@ -27,10 +28,12 @@ class Songbook:
                         ignitor_start_time = start_time - IGNITOR_OFFSET
                         if not ignitor_start_time in self.timepoints:
                             self.timepoints[ignitor_start_time] = []
-                        self.timepoints[ignitor_start_time].append(Measure.IGNITER, id, 1)
-                        self.timepoints[start_time].append(Measure.IGNITER, id, 0)
+                        self.timepoints[ignitor_start_time].append(
+                            Measure.Transition(Measure.IGNITER, id, 1))
+                        self.timepoints[start_time].append(
+                            Measure.Transition(Measure.IGNITER, id, 0))
                 if 'dir' in e:
-                    edge_calibration = self.calibration.get_calibration()[int(id)]
+                    edge_calibration = self.calibration.get_calibration(int(id))
                     distance = e['distance'] if 'distance' in e else 1
                     t = float(measure['time'])
                     direction = int(e['dir'])

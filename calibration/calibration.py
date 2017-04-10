@@ -38,4 +38,4 @@ class TSCalibration:
         self.edge_map = {e: TSEdgeCalibration(e) for e in range(8)}
 
     def get_calibration(self, id):
-        return self.edge_map
+        return self.edge_map[id]
