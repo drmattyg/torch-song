@@ -1,4 +1,6 @@
 class TSEdgeCalibration:
+    PLACEHOLDER_CALIBRATION = 4000.0
+
     def __init__(self, id, calibration_travel_time=None):
         """
 
@@ -23,7 +25,7 @@ class TSEdgeCalibration:
 
     def run_calibration(self):
         # todo implement this; currently this is a placeholder
-        return 4000.0
+        return TSEdgeCalibration.PLACEHOLDER_CALIBRATION
 
 
 class TSCalibration:
@@ -35,5 +37,5 @@ class TSCalibration:
         # todo implement this; currently this is a placeholder
         self.edge_map = {e: TSEdgeCalibration(e) for e in range(8)}
 
-    def get_calibration(self):
-        return self.edge_map()
+    def get_calibration(self, id):
+        return self.edge_map
