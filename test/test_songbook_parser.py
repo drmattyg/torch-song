@@ -10,3 +10,7 @@ def test_songbook_parser():
     example_songbook = "songbook/example.yml"
     songbook = Songbook(example_songbook, TSCalibration(config))
     print(songbook.timepoints)
+
+
+if __file__ == "__main__":
+    test_songbook_parser()
