@@ -72,7 +72,7 @@ class SimEdge:
         ls0 = color_string(bcolors.GREEN, 'L', self.limit_switches[0])
         ls1 = color_string(bcolors.GREEN, 'R', self.limit_switches[1])
         valve = color_string(bcolors.GREEN, 'V', self.valve)
-        igniter = color_string(bcolors.RED, 'I', self.valve)
+        igniter = color_string(bcolors.RED, 'I', self.igniter)
         if self.igniter:
             shuttle = color_string(bcolors.MAGENTA, "=", True)
         elif self.valve:
