@@ -35,22 +35,27 @@ class SimEdge:
         self.calibration_time = default_calibration_time
         self.position = 0
         self.motor_speed = 0
-        self.motor_direction = 0
+        self.motor_direction = 1
         self.valve = False
         self.igniter = False
         self.limit_switches = [False, False]
+        self._run_thread = threading.Event()
+        self._run_thread.set()
         self._runner_thread = threading.Thread(target=self._runner)
+        self._runner_thread.start()
 
     def _runner(self):
-        if self.position <= 0:
-            self.position = 0
-            self.limit_switches[0] = True
-        if self.position >= 1:
-            self.position = 1
-            self.limit_switches[1] = True
-        time.sleep(SimEdge.SLEEP_TIME / 1000.0)
-        self.position += self.direction * \
-                         (SimEdge.SLEEP_TIME / self.calibration_time) * self.speed / 100.0
+        while self._run_thread.is_set():
+            if self.position <= 0:
+                self.position = 0
+                self.limit_switches[0] = True
+            if self.position >= 1:
+                self.position = 1
+                self.limit_switches[1] = True
+            time.sleep(SimEdge.SLEEP_TIME / 1000.0)
+            self.position += self.motor_direction * \
+                             (
+                                 SimEdge.SLEEP_TIME / self.calibration_time) * self.motor_speed / 100.0
 
     def __str__(self):
         pos = int(SimEdge.STR_LEN * self.position)
@@ -70,10 +75,22 @@ class SimEdge:
                                    left=left_pad,
                                    right=right_pad, shuttle=shuttle)
 
+    def kill(self):
+        self._run_thread.clear()
+        self._runner_thread.join()
+
 
 if __name__ == "__main__":
     se = SimEdge(0)
-    se.position = 0.91
-    se.valve = 0
-    print("\n")
-    print(se)
+    i = 0
+    try:
+        while True:
+            se.motor_speed = 100
+            time.sleep(0.25)
+            print(se)
+            i += 1
+            if i >= 10:
+                se.motor_direction *= -1
+                i = 0
+    except KeyboardInterrupt:
+        se.kill()
