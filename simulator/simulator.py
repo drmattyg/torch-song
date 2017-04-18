@@ -46,19 +46,27 @@ class SimEdge:
 
     def _runner(self):
         while self._run_thread.is_set():
+            self.position += self.motor_direction * \
+                             (SimEdge.SLEEP_TIME / self.calibration_time) * self.motor_speed / 100.0
+
             if self.position <= 0:
                 self.position = 0
                 self.limit_switches[0] = True
+            else:
+                self.limit_switches[0] = False
             if self.position >= 1:
                 self.position = 1
                 self.limit_switches[1] = True
+            else:
+                self.limit_switches[1] = False
+            if self.position > 1:
+                self.position = 1
+            if self.position < 0:
+                self.position = 0
             time.sleep(SimEdge.SLEEP_TIME / 1000.0)
-            self.position += self.motor_direction * \
-                             (
-                                 SimEdge.SLEEP_TIME / self.calibration_time) * self.motor_speed / 100.0
 
     def __str__(self):
-        pos = int(SimEdge.STR_LEN * self.position)
+        pos = min([int(SimEdge.STR_LEN * self.position), 9])
         left_pad = "_" * pos
         right_pad = "_" * (9 - pos)
         ls0 = color_string(bcolors.GREEN, 'L', self.limit_switches[0])
@@ -82,15 +90,14 @@ class SimEdge:
 
 if __name__ == "__main__":
     se = SimEdge(0)
-    i = 0
+    se.position = 0.1
     try:
         while True:
             se.motor_speed = 100
             time.sleep(0.25)
             print(se)
-            i += 1
-            if i >= 10:
+            if se.limit_switches[0] or se.limit_switches[1]:
                 se.motor_direction *= -1
-                i = 0
+                se.valve = 1 - se.valve
     except KeyboardInterrupt:
         se.kill()
