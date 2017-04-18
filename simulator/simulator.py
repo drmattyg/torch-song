@@ -28,7 +28,7 @@ class SimEdge:
     # a software simulated edge
     SLEEP_TIME = 50.0
     STR_LEN = 10
-    REPR = "{valve} {igniter} {ls0}:{left}{shuttle}{right}:{ls1}"
+    REPR = "{id} {valve} {igniter} {ls0}:{left}{shuttle}{right}:{ls1}"
 
     def __init__(self, id, default_calibration_time=4000):
         self.id = id
@@ -66,7 +66,8 @@ class SimEdge:
             shuttle = "=" + up_string(bcolors.BG_YELLOW + bcolors.RED + "*" + bcolors.OFF)
         else:
             shuttle = color_string(bcolors.BLUE, "=", True)
-        return SimEdge.REPR.format(valve=valve, igniter=igniter, ls0=ls0, ls1=ls1, left=left_pad,
+        return SimEdge.REPR.format(id=self.id, valve=valve, igniter=igniter, ls0=ls0, ls1=ls1,
+                                   left=left_pad,
                                    right=right_pad, shuttle=shuttle)
 
 
