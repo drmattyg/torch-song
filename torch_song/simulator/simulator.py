@@ -1,5 +1,7 @@
 import threading
 import time
+import curses
+from enum import Enum
 
 
 class bcolors:
@@ -42,7 +44,7 @@ class SimEdge:
         self._run_thread = threading.Event()
         self._run_thread.set()
         self._runner_thread = threading.Thread(target=self._runner)
-        self._runner_thread.start()
+        # self._runner_thread.start()
 
     def _runner(self):
         while self._run_thread.is_set():
@@ -83,21 +85,67 @@ class SimEdge:
                                    left=left_pad,
                                    right=right_pad, shuttle=shuttle)
 
+    def draw_str(self, scr, x_offset, y_offset):
+        SimEdge.draw_str.x_offset = x_offset  # weird python scoping rules
+
+        def append_str(s, color=SimEdge.Colors.OFF, b=False):
+            scr.addstr(y_offset, SimEdge.draw_str.x_offset, s, curses.color_pair(color.value * b))
+            SimEdge.draw_str.x_offset += len(s)
+
+        pos = min([int(SimEdge.STR_LEN * self.position), 9])
+        left_pad = "_" * pos
+        right_pad = "_" * (9 - pos)
+        append_str("V ", color=SimEdge.Colors.VALVE, b=self.valve)
+        append_str(str(self.id) + " ")
+        append_str("I ", color=SimEdge.Colors.IGNITER, b=self.igniter)
+        append_str("L", color=SimEdge.Colors.LIMIT_SWITCH, b=self.limit_switches[0])
+        append_str(left_pad)
+        append_str("=", color=SimEdge.Colors.FLAME, b=self.valve)
+        append_str(right_pad)
+        append_str("R", color=SimEdge.Colors.LIMIT_SWITCH, b=self.limit_switches[1])
+        scr.clrtoeol()
+
     def kill(self):
         self._run_thread.clear()
         self._runner_thread.join()
 
+    class Colors(Enum):
+        ON = 1
+        OFF = 0
+        LIMIT_SWITCH = 2
+        VALVE = 3
+        IGNITER = 4
+        FLAME = 5
 
-if __name__ == "__main__":
+    @staticmethod
+    def initialize_colors():
+        curses.init_pair(SimEdge.Colors.ON.value, curses.COLOR_GREEN, curses.COLOR_BLACK)
+        curses.init_pair(SimEdge.Colors.LIMIT_SWITCH.value, curses.COLOR_GREEN, curses.COLOR_BLACK)
+        curses.init_pair(SimEdge.Colors.VALVE.value, curses.COLOR_GREEN, curses.COLOR_BLACK)
+        curses.init_pair(SimEdge.Colors.IGNITER.value, curses.COLOR_MAGENTA, curses.COLOR_BLACK)
+        curses.init_pair(SimEdge.Colors.FLAME.value, curses.COLOR_YELLOW, curses.COLOR_BLACK)
+
+
+def main(scr):
+    SimEdge.initialize_colors()
     se = SimEdge(0)
-    se.position = 0.1
+    se.position = 0.5
+    se.limit_switches[0] = True
     try:
         while True:
-            se.motor_speed = 100
+            se.motor_speed = 0
+            se.draw_str(scr, 3, 3)
             time.sleep(0.25)
-            print(se)
             if se.limit_switches[0] or se.limit_switches[1]:
                 se.motor_direction *= -1
                 se.valve = 1 - se.valve
+            s = scr.getstr()
+            if s == "q":
+                break
+        se.kill()
     except KeyboardInterrupt:
         se.kill()
+
+
+if __name__ == "__main__":
+    curses.wrapper(main)
