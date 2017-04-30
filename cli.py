@@ -5,9 +5,6 @@ from os import path
 import cmd
 import yaml
 
-#sys.path.append(path.dirname(path.abspath(__file__)) + '/test')
-#sys.path.append(path.dirname(path.abspath(__file__)) + '/torch_song')
-
 from test.test_mcp import mcp_cli
 from test.test_pca9685 import pca9685_cli
 from test.test_motor_driver import motor_driver_cli
@@ -55,6 +52,10 @@ class test_cli(cmd.Cmd):
         motor_driver_cli(config).cmdloop()
     def help_motor_driver(self):
         print('Motor Driver test interface')
+    def do_load(self, args):
+        load_cli(config).cmdloop()
+    def help_load(self):
+        print('Load test')
 
 if __name__ == '__main__':
     cli = test_cli()

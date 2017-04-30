@@ -14,7 +14,7 @@ class igniter_cli(cmd.Cmd):
 
         self.igniters = {}
         for v in config['subsystems']['igniters']:
-            igniter = Igniter(v['gpio_pin'])
+            igniter = Igniter(v['gpio'])
             self.igniters[v['id']] = igniter
 
         cmd.Cmd.__init__(self)
