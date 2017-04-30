@@ -4,7 +4,7 @@ sys.path.append( path.dirname( path.dirname( path.abspath(__file__) ) ) )
 import cmd
 import yaml
 
-from pca9685 import PCA9685
+from torch_song.pca9685 import PCA9685
 
 class pca9685_cli(cmd.Cmd):
     def __init__(self, config):

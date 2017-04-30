@@ -4,7 +4,7 @@ sys.path.append( path.dirname( path.dirname( path.abspath(__file__) ) ) )
 import cmd
 import yaml
 
-from valve import Valve
+from torch_song.valve import Valve
 
 class valve_cli(cmd.Cmd):
     def __init__(self, config):

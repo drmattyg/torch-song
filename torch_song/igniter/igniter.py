@@ -1,4 +1,4 @@
-from relay import Relay
+from torch_song.relay import Relay
 
 class Igniter:
     OFF = 0

@@ -1,5 +1,5 @@
 import RPi.GPIO as GPIO
-from limit_switch import LimitSwitch
+from torch_song.limit_switch import LimitSwitch
 class MotorDriver:
     FORWARD = 0
     REVERSE = 1

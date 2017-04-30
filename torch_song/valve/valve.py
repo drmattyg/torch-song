@@ -1,4 +1,4 @@
-from relay import Relay
+from torch_song.relay import Relay
 
 class Valve:
     OPEN = 0
