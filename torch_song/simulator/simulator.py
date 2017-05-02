@@ -67,6 +67,9 @@ class SimEdge:
                 self.position = 0
             time.sleep(SimEdge.SLEEP_TIME / 1000.0)
 
+    def start(self):
+        self._runner_thread.start()
+
     def __str__(self):
         pos = min([int(SimEdge.STR_LEN * self.position), 9])
         left_pad = "_" * pos
@@ -126,16 +129,35 @@ class SimEdge:
         curses.init_pair(SimEdge.Colors.FLAME.value, curses.COLOR_YELLOW, curses.COLOR_BLACK)
 
 
+class SimTorchSong:
+    def __init__(self, scr):
+        self.edges = [SimEdge(id) for id in range(9)]
+        self.scr = scr
+        SimEdge.initialize_colors()
+
+    def render(self):
+        for i, edge in enumerate(self.edges):
+            y = (i + 1) * 3
+            edge.draw_str(self.scr, 3, y)
+
+    def kill(self):
+        for edge in self.edges:
+            edge.kill()
+
+    def __del__(self):
+        self.kill()
+
+
 def main(scr):
+    scr.nodelay(1)
     SimEdge.initialize_colors()
     se = SimEdge(0)
-    se.position = 0.5
-    se.limit_switches[0] = True
+    se.motor_speed = 100
+    se.start()
     try:
         while True:
-            se.motor_speed = 0
             se.draw_str(scr, 3, 3)
-            time.sleep(0.25)
+            time.sleep(0.1)
             if se.limit_switches[0] or se.limit_switches[1]:
                 se.motor_direction *= -1
                 se.valve = 1 - se.valve
