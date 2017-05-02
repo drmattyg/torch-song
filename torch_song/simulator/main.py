@@ -9,6 +9,8 @@ def main(scr):
     ts = SimTorchSong(scr)
     for edge in ts.edges:
         edge.motor_speed = 20
+        edge.valve = True
+        edge.igniter = True
         edge.start()
     try:
         while True:

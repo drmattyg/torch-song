@@ -106,10 +106,11 @@ class SimEdge:
         append_str("L", color=SimEdge.Colors.LIMIT_SWITCH, b=self.limit_switches[0])
         append_str(left_pad)
         append_str("=", color=SimEdge.Colors.FLAME, b=self.valve)
-        if self.valve:
-            pass
         append_str(right_pad)
         append_str("R", color=SimEdge.Colors.LIMIT_SWITCH, b=self.limit_switches[1])
+        if self.valve:
+            scr.addstr(y_offset - 1, pos + 7, "&", curses.color_pair(SimEdge.Colors.FIRE.value))
+            scr.clrtoeol()
         scr.clrtoeol()
         self.x_offset = 0
 
@@ -124,6 +125,7 @@ class SimEdge:
         VALVE = 3
         IGNITER = 4
         FLAME = 5
+        FIRE = 6
 
     @staticmethod
     def initialize_colors():
@@ -132,6 +134,7 @@ class SimEdge:
         curses.init_pair(SimEdge.Colors.VALVE.value, curses.COLOR_GREEN, curses.COLOR_BLACK)
         curses.init_pair(SimEdge.Colors.IGNITER.value, curses.COLOR_MAGENTA, curses.COLOR_BLACK)
         curses.init_pair(SimEdge.Colors.FLAME.value, curses.COLOR_YELLOW, curses.COLOR_BLACK)
+        curses.init_pair(SimEdge.Colors.FIRE.value, curses.COLOR_RED, curses.COLOR_BLACK)
 
 
 class SimTorchSong:
@@ -141,6 +144,7 @@ class SimTorchSong:
         SimEdge.initialize_colors()
 
     def render(self):
+        self.scr.clear()
         for i, edge in enumerate(self.edges):
             y = (i + 1) * 3
             edge.draw_str(self.scr, 3, y)
