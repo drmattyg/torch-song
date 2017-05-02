@@ -98,8 +98,9 @@ class SimEdge:
         pos = min([int(SimEdge.STR_LEN * self.position), 9])
         left_pad = "_" * pos
         right_pad = "_" * (9 - pos)
-        append_str("V ", color=SimEdge.Colors.VALVE, b=self.valve)
         append_str(str(self.id) + " ")
+        append_str("V ", color=SimEdge.Colors.VALVE, b=self.valve)
+
         append_str("I ", color=SimEdge.Colors.IGNITER, b=self.igniter)
         append_str("L", color=SimEdge.Colors.LIMIT_SWITCH, b=self.limit_switches[0])
         append_str(left_pad)
