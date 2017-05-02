@@ -44,6 +44,7 @@ class SimEdge:
         self._run_thread = threading.Event()
         self._run_thread.set()
         self._runner_thread = threading.Thread(target=self._runner)
+        self.x_offset = 0
         # self._runner_thread.start()
 
     def _runner(self):
@@ -67,6 +68,9 @@ class SimEdge:
                 self.position = 0
             time.sleep(SimEdge.SLEEP_TIME / 1000.0)
 
+    def start(self):
+        self._runner_thread.start()
+
     def __str__(self):
         pos = min([int(SimEdge.STR_LEN * self.position), 9])
         left_pad = "_" * pos
@@ -89,21 +93,26 @@ class SimEdge:
         SimEdge.draw_str.x_offset = x_offset  # weird python scoping rules
 
         def append_str(s, color=SimEdge.Colors.OFF, b=False):
-            scr.addstr(y_offset, SimEdge.draw_str.x_offset, s, curses.color_pair(color.value * b))
-            SimEdge.draw_str.x_offset += len(s)
+            scr.addstr(y_offset, self.x_offset, s, curses.color_pair(color.value * b))
+            self.x_offset += len(s)
 
         pos = min([int(SimEdge.STR_LEN * self.position), 9])
         left_pad = "_" * pos
         right_pad = "_" * (9 - pos)
-        append_str("V ", color=SimEdge.Colors.VALVE, b=self.valve)
         append_str(str(self.id) + " ")
+        append_str("V ", color=SimEdge.Colors.VALVE, b=self.valve)
+
         append_str("I ", color=SimEdge.Colors.IGNITER, b=self.igniter)
         append_str("L", color=SimEdge.Colors.LIMIT_SWITCH, b=self.limit_switches[0])
         append_str(left_pad)
         append_str("=", color=SimEdge.Colors.FLAME, b=self.valve)
         append_str(right_pad)
         append_str("R", color=SimEdge.Colors.LIMIT_SWITCH, b=self.limit_switches[1])
+        if self.valve:
+            scr.addstr(y_offset - 1, pos + 7, "&", curses.color_pair(SimEdge.Colors.FIRE.value))
+            scr.clrtoeol()
         scr.clrtoeol()
+        self.x_offset = 0
 
     def kill(self):
         self._run_thread.clear()
@@ -116,6 +125,7 @@ class SimEdge:
         VALVE = 3
         IGNITER = 4
         FLAME = 5
+        FIRE = 6
 
     @staticmethod
     def initialize_colors():
@@ -124,18 +134,39 @@ class SimEdge:
         curses.init_pair(SimEdge.Colors.VALVE.value, curses.COLOR_GREEN, curses.COLOR_BLACK)
         curses.init_pair(SimEdge.Colors.IGNITER.value, curses.COLOR_MAGENTA, curses.COLOR_BLACK)
         curses.init_pair(SimEdge.Colors.FLAME.value, curses.COLOR_YELLOW, curses.COLOR_BLACK)
+        curses.init_pair(SimEdge.Colors.FIRE.value, curses.COLOR_RED, curses.COLOR_BLACK)
+
+
+class SimTorchSong:
+    def __init__(self, scr):
+        self.edges = [SimEdge(id) for id in range(9)]
+        self.scr = scr
+        SimEdge.initialize_colors()
+
+    def render(self):
+        self.scr.clear()
+        for i, edge in enumerate(self.edges):
+            y = (i + 1) * 3
+            edge.draw_str(self.scr, 3, y)
+
+    def kill(self):
+        for edge in self.edges:
+            edge.kill()
+
+    def __del__(self):
+        self.kill()
 
 
 def main(scr):
+    scr.nodelay(1)
     SimEdge.initialize_colors()
     se = SimEdge(0)
-    se.position = 0.5
-    se.limit_switches[0] = True
+    se.motor_speed = 100
+    se.start()
     try:
         while True:
-            se.motor_speed = 0
             se.draw_str(scr, 3, 3)
-            time.sleep(0.25)
+            time.sleep(0.1)
             if se.limit_switches[0] or se.limit_switches[1]:
                 se.motor_direction *= -1
                 se.valve = 1 - se.valve
