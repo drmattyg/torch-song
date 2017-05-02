@@ -44,6 +44,7 @@ class SimEdge:
         self._run_thread = threading.Event()
         self._run_thread.set()
         self._runner_thread = threading.Thread(target=self._runner)
+        self.x_offset = 0
         # self._runner_thread.start()
 
     def _runner(self):
@@ -92,8 +93,8 @@ class SimEdge:
         SimEdge.draw_str.x_offset = x_offset  # weird python scoping rules
 
         def append_str(s, color=SimEdge.Colors.OFF, b=False):
-            scr.addstr(y_offset, SimEdge.draw_str.x_offset, s, curses.color_pair(color.value * b))
-            SimEdge.draw_str.x_offset += len(s)
+            scr.addstr(y_offset, self.x_offset, s, curses.color_pair(color.value * b))
+            self.x_offset += len(s)
 
         pos = min([int(SimEdge.STR_LEN * self.position), 9])
         left_pad = "_" * pos
@@ -105,9 +106,12 @@ class SimEdge:
         append_str("L", color=SimEdge.Colors.LIMIT_SWITCH, b=self.limit_switches[0])
         append_str(left_pad)
         append_str("=", color=SimEdge.Colors.FLAME, b=self.valve)
+        if self.valve:
+            pass
         append_str(right_pad)
         append_str("R", color=SimEdge.Colors.LIMIT_SWITCH, b=self.limit_switches[1])
         scr.clrtoeol()
+        self.x_offset = 0
 
     def kill(self):
         self._run_thread.clear()
