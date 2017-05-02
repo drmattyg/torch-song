@@ -7,6 +7,9 @@ import curses
 def main(scr):
     scr.nodelay(1)
     ts = SimTorchSong(scr)
+    for edge in ts.edges:
+        edge.motor_speed = 20
+        edge.start()
     try:
         while True:
             ts.render()
