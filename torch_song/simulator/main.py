@@ -1,6 +1,9 @@
 import time
+import click
 
+from torch_song.calibration import TSCalibration
 from torch_song.simulator import SimTorchSong
+from torch_song.songbook import Songbook
 import curses
 
 
@@ -26,6 +29,19 @@ def main(scr):
                 break
     except KeyboardInterrupt:
         ts.kill()
+
+
+@click.argument('songbook')
+def ts_cli(songbook):
+    """
+
+    :param songbook: A path to a songbook yml file to load
+    :return:
+    """
+
+    # stub calibration
+    calibration = TSCalibration(None)
+    sb = Songbook(songbook, calibration)
 
 
 if __name__ == "__main__":

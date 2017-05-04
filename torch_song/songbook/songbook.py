@@ -1,6 +1,7 @@
 import yaml
+import time
 
-from songbook.measure import Measure
+from .measure import Measure
 
 IGNITOR_OFFSET = 3000
 
@@ -11,9 +12,9 @@ class Songbook:
         self.timepoints = {}
         self.calibration = calibration
         self.sorted_timepoints = None
-        self.generating_timing_map()
+        self.generate_timing_map()
 
-    def generating_timing_map(self):
+    def generate_timing_map(self):
         for measure in self.songbook['songbook']:
             start_time = measure['start_at']
             if start_time not in self.timepoints:
@@ -42,3 +43,21 @@ class Songbook:
                                                   Measure.MotorState(direction, speed))
                     self.timepoints[start_time].append(tx_motor)
         self.sorted_timepoints = sorted(self.timepoints.keys())
+
+
+class SongbookRunner:
+    def __init__(self, songbook, torch_song):
+        self.songbook = songbook
+        self.torch_song = torch_song
+
+    def run(self):
+        t0 = time.time() * 1000
+        for ts in self.songbook.sorted_timepoints:
+            now = time.time()
+            if now - t0 < ts:
+                time.sleep(ts - (now - t0))
+            for measure in enumerate(self.songbook.timepoints[ts]):
+                self.execute_measure(measure)
+
+    def execute_measure(self, measure):
+        raise NotImplementedError()
