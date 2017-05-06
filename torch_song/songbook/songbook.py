@@ -1,9 +1,8 @@
 import yaml
 import time
+from torch_song.songbook.measure import Measure
 
-from .measure import Measure
-
-IGNITOR_OFFSET = 3000
+IGNITER_OFFSET = 3000
 
 
 class Songbook:
@@ -26,7 +25,7 @@ class Songbook:
                     tx_valve = Measure.Transition(Measure.VALVE, id, flame_state)
                     self.timepoints[start_time].append(tx_valve)
                     if flame_state == 1:
-                        ignitor_start_time = start_time - IGNITOR_OFFSET
+                        ignitor_start_time = start_time - IGNITER_OFFSET
                         if not ignitor_start_time in self.timepoints:
                             self.timepoints[ignitor_start_time] = []
                         self.timepoints[ignitor_start_time].append(
@@ -46,9 +45,13 @@ class Songbook:
 
 
 class SongbookRunner:
-    def __init__(self, songbook, torch_song):
+    def __init__(self, songbook, torch_song, handlers=None):
         self.songbook = songbook
         self.torch_song = torch_song
+        if handlers is None:
+            handlers = {t: (lambda x: print(x)) for t in [Measure.IGNITER, Measure.MOTOR,
+                                                          Measure.VALVE]}  # stub transition behavior; should replace this with appropriate callbacks
+        self.handlers = handlers
 
     def run(self):
         t0 = time.time() * 1000
@@ -56,8 +59,8 @@ class SongbookRunner:
             now = time.time()
             if now - t0 < ts:
                 time.sleep(ts - (now - t0))
-            for measure in enumerate(self.songbook.timepoints[ts]):
-                self.execute_measure(measure)
+            for tx in enumerate(self.songbook.timepoints[ts]):
+                self.execute_transiton(tx)
 
-    def execute_measure(self, measure):
-        raise NotImplementedError()
+    def execute_measure(self, tx):
+        self.handlers[tx.type](tx)
