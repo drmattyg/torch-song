@@ -13,6 +13,10 @@ class Songbook:
         self.sorted_timepoints = None
         self.generate_timing_map()
 
+    # todo: 1) Add stop events.
+    # todo: 2) Normalize simulator API with hardware API for motor_driver, valve, igniter, etc
+
+
     def generate_timing_map(self):
         for measure in self.songbook['songbook']:
             start_time = measure['start_at']
@@ -25,10 +29,10 @@ class Songbook:
                     tx_valve = Measure.Transition(Measure.VALVE, id, flame_state)
                     self.timepoints[start_time].append(tx_valve)
                     if flame_state == 1:
-                        ignitor_start_time = start_time - IGNITER_OFFSET
-                        if not ignitor_start_time in self.timepoints:
-                            self.timepoints[ignitor_start_time] = []
-                        self.timepoints[ignitor_start_time].append(
+                        igniter_start_time = start_time - IGNITER_OFFSET
+                        if not igniter_start_time in self.timepoints:
+                            self.timepoints[igniter_start_time] = []
+                        self.timepoints[igniter_start_time].append(
                             Measure.Transition(Measure.IGNITER, id, 1))
                         self.timepoints[start_time].append(
                             Measure.Transition(Measure.IGNITER, id, 0))
