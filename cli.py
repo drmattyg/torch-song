@@ -10,6 +10,7 @@ from test.test_pca9685 import pca9685_cli
 from test.test_motor_driver import motor_driver_cli
 from test.test_igniter import igniter_cli
 from test.test_valve import valve_cli
+from test.test_load import load_cli
 
 stream = open('conf/default.yml', 'r')
 config = yaml.load(stream)
