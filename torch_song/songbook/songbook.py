@@ -2,7 +2,9 @@ import yaml
 import time
 from torch_song.songbook.measure import Measure
 
+MTransition = Measure.Transition
 IGNITER_OFFSET = 3000
+IGNITER_DELAY = 1000
 
 
 class Songbook:
@@ -16,36 +18,38 @@ class Songbook:
     # todo: 1) Add stop events.
     # todo: 2) Normalize simulator API with hardware API for motor_driver, valve, igniter, etc
 
+    def add_transition(self, ts, tx):
+        if ts not in self.timepoints:
+            self.timepoints[ts] = []
+        self.timepoints.append(tx)
 
     def generate_timing_map(self):
         for measure in self.songbook['songbook']:
             start_time = measure['start_at']
-            if start_time not in self.timepoints:
-                self.timepoints[start_time] = []
             for e in measure['edges']:
                 id = e['edge']
                 if 'flame' in e:
                     flame_state = int(e['flame'])
-                    tx_valve = Measure.Transition(Measure.VALVE, id, flame_state)
-                    self.timepoints[start_time].append(tx_valve)
+                    tx_valve = MTransition(Measure.VALVE, id, flame_state)
+                    self.add_transition(tx_valve, start_time)
                     if flame_state == 1:
                         igniter_start_time = start_time - IGNITER_OFFSET
-                        if igniter_start_time not in self.timepoints:
-                            self.timepoints[igniter_start_time] = []
-                        self.timepoints[igniter_start_time].append(
-                            Measure.Transition(Measure.IGNITER, id, 1))
-                        self.timepoints[start_time].append(
-                            Measure.Transition(Measure.IGNITER, id, 0))
-                if 'dir' in e:
-                    edge_calibration = self.calibration.get_calibration(int(id))
-                    distance = e['distance'] if 'distance' in e else 1
-                    t = float(measure['time'])
-                    direction = int(e['dir'])
-                    speed = edge_calibration.get_speed(t, distance=distance)
-                    tx_motor = Measure.Transition(Measure.MOTOR, id,
-                                                  Measure.MotorState(direction, speed))
-                    self.timepoints[start_time].append(tx_motor)
-        self.sorted_timepoints = sorted(self.timepoints.keys())
+                        self.add_transition(MTransition(Measure.IGNITER, id, 1), igniter_start_time)
+                        self.add_transition(MTransition(Measure.IGNITER, id, 0),
+                                            start_time + IGNITER_DELAY)
+                    if 'dir' in e:
+                        edge_calibration = self.calibration.get_calibration(int(id))
+                        distance = e['distance'] if 'distance' in e else 1
+                        t = float(measure['time'])
+                        direction = int(e['dir'])
+                        speed = edge_calibration.get_speed(t, distance=distance)
+                        tx_motor = MTransition(Measure.MOTOR, id,
+                                               Measure.MotorState(direction, speed))
+                        self.add_transition(start_time, tx_motor)
+                        tx_motor_off = MTransition(Measure.MOTOR, id,
+                                                   Measure.MotorState(direction, 0))
+                        self.add_transition(start_time + time, tx_motor_off)
+                    self.sorted_timepoints = sorted(self.timepoints.keys())
 
 
 class SongbookRunner:
