@@ -3,6 +3,8 @@ import time
 import curses
 from enum import Enum
 
+from torch_song.torch_song import AbstractEdge
+
 
 class bcolors:
     BLUE = '\033[94m'
@@ -26,14 +28,27 @@ def up_string(s):
     return bcolors.BACK + bcolors.UP + s + bcolors.DOWN
 
 
-class SimEdge:
+class SimEdge(AbstractEdge):
+    def set_valve_state(self, v):
+        self.valve = v
+
+    def set_igniter_state(self, g):
+        self.igniter = g
+
+    def set_motor_state(self, direction, speed):
+        self.motor_direction = direction
+        self.motor_speed = speed
+
+    def get_limit_switch_state(self):
+        return self.limit_switches
+
     # a software simulated edge
     SLEEP_TIME = 50.0
     STR_LEN = 10
     REPR = "{id} {valve} {igniter} {ls0}:{left}{shuttle}{right}:{ls1}"
 
-    def __init__(self, id, default_calibration_time=4000):
-        self.id = id
+    def __init__(self, id_val, default_calibration_time=4000):
+        self.id = id_val
         self.calibration_time = default_calibration_time
         self.position = 0
         self.motor_speed = 0
@@ -45,6 +60,7 @@ class SimEdge:
         self._run_thread.set()
         self._runner_thread = threading.Thread(target=self._runner)
         self.x_offset = 0
+        super(self.__class__, self).__init__(id_val)
         # self._runner_thread.start()
 
     def _runner(self):

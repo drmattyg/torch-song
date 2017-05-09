@@ -1,10 +1,9 @@
 import curses
-
 import time
 from torch_song.simulator import SimEdge
 
 
-class TorchSongSim:
+class TorchSongSim():
     def __init__(self, edge_list):
         self.edges = edge_list
 
