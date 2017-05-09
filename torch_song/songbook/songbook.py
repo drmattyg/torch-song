@@ -30,7 +30,7 @@ class Songbook:
                     self.timepoints[start_time].append(tx_valve)
                     if flame_state == 1:
                         igniter_start_time = start_time - IGNITER_OFFSET
-                        if not igniter_start_time in self.timepoints:
+                        if igniter_start_time not in self.timepoints:
                             self.timepoints[igniter_start_time] = []
                         self.timepoints[igniter_start_time].append(
                             Measure.Transition(Measure.IGNITER, id, 1))
