@@ -21,7 +21,7 @@ class Songbook:
     def add_transition(self, ts, tx):
         if ts not in self.timepoints:
             self.timepoints[ts] = []
-        self.timepoints.append(tx)
+        self.timepoints[ts].append(tx)
 
     def generate_timing_map(self):
         for measure in self.songbook['songbook']:
@@ -67,8 +67,14 @@ class SongbookRunner:
             now = time.time()
             if now - t0 < ts:
                 time.sleep(ts - (now - t0))
-            for tx in enumerate(self.songbook.timepoints[ts]):
-                self.execute_transiton(tx)
+            for tx in self.songbook.timepoints[ts]:
+                self.execute_measure(tx)
 
     def execute_measure(self, tx):
-        self.handlers[tx.type](tx)
+        edge = self.torch_song.edges[tx.id]
+        if tx.type == Measure.VALVE:
+            edge.set_valve_state(tx.value)
+        elif tx.type == Measure.IGNITER:
+            edge.set_igniter_state(tx.value)
+        elif tx.type == Measure.MOTOR:
+            edge.set_motor_state(tx.value.direction, tx.value.speed)
