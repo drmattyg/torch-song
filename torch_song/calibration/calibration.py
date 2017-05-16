@@ -32,6 +32,7 @@ class TSCalibration:
     def __init__(self, config):
         self.config = config
         self.edge_map = {}
+        self.run_calibration()
 
     def run_calibration(self):
         # todo implement this; currently this is a placeholder
