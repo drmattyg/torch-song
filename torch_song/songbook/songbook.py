@@ -1,7 +1,5 @@
 import yaml
 import time
-
-from torch_song.calibration import TSCalibration
 from torch_song.songbook.measure import Measure
 
 MTransition = Measure.Transition
@@ -57,7 +55,7 @@ class Songbook:
                         self.add_transition(start_time, tx_motor)
                         tx_motor_off = MTransition(Measure.MOTOR, id,
                                                    Measure.MotorState(direction, 0))
-                        self.add_transition(start_time + time, tx_motor_off)
+                        self.add_transition(start_time + t, tx_motor_off)
                     self.sorted_timepoints = sorted(self.timepoints.keys())
 
 
