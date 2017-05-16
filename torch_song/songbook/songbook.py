@@ -1,5 +1,7 @@
 import yaml
 import time
+
+from torch_song.calibration import TSCalibration
 from torch_song.songbook.measure import Measure
 
 MTransition = Measure.Transition
@@ -15,8 +17,15 @@ class Songbook:
         self.sorted_timepoints = None
         self.generate_timing_map()
 
-    # todo: 1) Add stop events.
-    # todo: 2) Normalize simulator API with hardware API for motor_driver, valve, igniter, etc
+    @staticmethod
+    def from_string(yml, calibration):
+        _self = Songbook.__new__(Songbook);
+        _self.songbook = yaml.load(yml)
+        _self.timepoints = {}
+        _self.calibration = calibration
+        _self.sorted_timepoints = None
+        _self.generate_timing_map()
+        return _self
 
     def add_transition(self, ts, tx):
         if ts not in self.timepoints:
@@ -53,13 +62,9 @@ class Songbook:
 
 
 class SongbookRunner:
-    def __init__(self, songbook, torch_song, handlers=None):
+    def __init__(self, songbook, torch_song):
         self.songbook = songbook
         self.torch_song = torch_song
-        if handlers is None:
-            handlers = {t: (lambda x: print(x)) for t in [Measure.IGNITER, Measure.MOTOR,
-                                                          Measure.VALVE]}  # stub transition behavior; should replace this with appropriate callbacks
-        self.handlers = handlers
 
     def run(self):
         t0 = time.time() * 1000
