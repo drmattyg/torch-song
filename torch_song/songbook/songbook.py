@@ -25,7 +25,7 @@ class Songbook:
         _self.generate_timing_map()
         return _self
 
-    def add_transition(self, ts, tx):
+    def add_transition(self, tx, ts):
         if ts not in self.timepoints:
             self.timepoints[ts] = []
         self.timepoints[ts].append(tx)
@@ -52,10 +52,10 @@ class Songbook:
                         speed = edge_calibration.get_speed(t, distance=distance)
                         tx_motor = MTransition(Measure.MOTOR, id,
                                                Measure.MotorState(direction, speed))
-                        self.add_transition(start_time, tx_motor)
+                        self.add_transition(tx_motor, start_time)
                         tx_motor_off = MTransition(Measure.MOTOR, id,
                                                    Measure.MotorState(direction, 0))
-                        self.add_transition(start_time + t, tx_motor_off)
+                        self.add_transition(tx_motor_off, start_time + t)
                     self.sorted_timepoints = sorted(self.timepoints.keys())
 
 
