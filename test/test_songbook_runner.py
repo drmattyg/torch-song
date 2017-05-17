@@ -1,6 +1,7 @@
 from torch_song.calibration import TSCalibration
 from torch_song.simulator import SimTorchSong
 from torch_song.songbook import Songbook, SongbookRunner
+import curses
 import time
 
 SIMPLE_SONGBOOK = """
@@ -23,6 +24,11 @@ songbook:
 """
 
 
+def setup_module():
+    curses.initscr()
+    curses.start_color()
+
+
 def test_songbook_runner():
     sb = Songbook.from_string(SIMPLE_SONGBOOK, TSCalibration(None))
     ts = SimTorchSong(None)
@@ -30,3 +36,7 @@ def test_songbook_runner():
     runner.run()
     time.sleep(5)
     print(ts.edges)
+
+
+def teardown_module():
+    curses.endwin()
