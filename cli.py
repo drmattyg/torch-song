@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 import sys
 from os import path
@@ -11,6 +11,7 @@ from test.test_motor_driver import motor_driver_cli
 from test.test_igniter import igniter_cli
 from test.test_valve import valve_cli
 from test.test_load import load_cli
+from test.test_edge import edge_cli
 
 stream = open('conf/default.yml', 'r')
 config = yaml.load(stream)
@@ -57,6 +58,10 @@ class test_cli(cmd.Cmd):
         load_cli(config).cmdloop()
     def help_load(self):
         print('Load test')
+    def do_single_edge(self, args):
+        edge_cli(config).cmdloop()
+    def help_single_edge(self):
+        print('Single edge test interface')
 
 if __name__ == '__main__':
     cli = test_cli()

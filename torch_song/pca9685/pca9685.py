@@ -20,7 +20,7 @@ class PCA9685:
         self.set_duty(channel, 0)
 
     def set_duty(self, channel, duty):
-        self._pca.set_pwm(channel, 0, duty * 4095 / 100)
+        self._pca.set_pwm(channel, 0, int(duty * 4095 / 100))
         self.duty[channel] = duty
 
     def disable(self, channel):

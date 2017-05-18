@@ -31,7 +31,7 @@ class mcp_cli(cmd.Cmd):
     def help_quit(self, args):
         print('Quit session')
     def do_readall(self, args):
-        for k,v in self.mcps.iteritems():
+        for k,v in self.mcps.items():
             print('mcp23017 id:%s' % k)
             for i, val in enumerate(v.update()):
                 print('  %d: %d' % (i, val))

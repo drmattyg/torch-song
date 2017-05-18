@@ -23,6 +23,9 @@ class MotorDriver:
         self.set_dir(MotorDriver.FORWARD)
         self.speed = 0
 
+    def get_dir(self):
+        return self.dir
+
     def set_dir(self, dir):
         if dir not in [MotorDriver.FORWARD, MotorDriver.REVERSE]:
             raise ValueError("Incorrect value for set_dir")
