@@ -42,6 +42,9 @@ class SimEdge(AbstractEdge):
     def get_limit_switch_state(self):
         return self.limit_switches
 
+    def calibrate(self):
+        pass
+
     # a software simulated edge
     SLEEP_TIME = 50.0
     STR_LEN = 10
