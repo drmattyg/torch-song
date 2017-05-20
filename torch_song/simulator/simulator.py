@@ -61,7 +61,7 @@ class SimEdge(AbstractEdge):
         self._runner_thread = threading.Thread(target=self._runner)
         self.x_offset = 0
         super(self.__class__, self).__init__(id_val)
-        # self._runner_thread.start()
+        self._runner_thread.start()
 
     def _runner(self):
         while self._run_thread.is_set():
