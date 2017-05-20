@@ -36,7 +36,7 @@ def test_songbook_runner():
     th.start()
     print("start")
     t0 = time.time()
-    time.sleep((IGNITER_OFFSET + 1000 + 100) / 1000)
+    time.sleep((IGNITER_OFFSET + sb.songbook['songbook'][0]['start_at'] + 100) / 1000)
     print("Time = %s" % str(time.time() - t0))
     nt.assert_true(ts.edges[0].valve)
     nt.assert_true(ts.edges[0].motor_speed > 0)
