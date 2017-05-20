@@ -18,7 +18,7 @@ songbook:
     edges:
       - edge: 1
         flame: 1
-        dir: 1
+        dir: -1
       - edge: 6
         flame: 0
         dir: 0
@@ -38,13 +38,17 @@ def test_songbook_runner():
     t0 = time.time()
     time.sleep(IGNITER_OFFSET / 2 / 1000)
     nt.assert_true(ts.edges[0].igniter)
+    nt.assert_false(ts.edges[1].igniter)
     time.sleep((IGNITER_OFFSET + sb.songbook['songbook'][0]['start_at'] + 100) / 1000)
     print("Time = %s" % str(time.time() - t0))
     nt.assert_true(ts.edges[0].valve)
     nt.assert_true(ts.edges[0].motor_speed > 0)
+    nt.assert_true(ts.edges[1].igniter)
     time.sleep((IGNITER_DELAY) / 1000)
     print("Time = %s" % str(time.time() - t0))
     nt.assert_false(ts.edges[0].igniter)
+    nt.assert_true(ts.edges[1].motor_speed > 0)
+    nt.assert_true(ts.edges[1].motor_direction == -1)
     time.sleep(sb.songbook['songbook'][0]['time'] / 1000)
     print("Time = %s" % str(time.time() - t0))
     nt.assert_true(ts.edges[0].motor_speed == 0)
