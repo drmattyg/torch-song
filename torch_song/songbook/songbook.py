@@ -44,19 +44,19 @@ class Songbook:
                         self.add_transition(MTransition(Measure.IGNITER, id, 1), igniter_start_time)
                         self.add_transition(MTransition(Measure.IGNITER, id, 0),
                                             start_time + IGNITER_DELAY)
-                    if 'dir' in e:
-                        edge_calibration = self.calibration.get_calibration(int(id))
-                        distance = e['distance'] if 'distance' in e else 1
-                        t = float(measure['time'])
-                        direction = int(e['dir'])
-                        speed = edge_calibration.get_speed(t, distance=distance)
-                        tx_motor = MTransition(Measure.MOTOR, id,
-                                               Measure.MotorState(direction, speed))
-                        self.add_transition(tx_motor, start_time)
-                        tx_motor_off = MTransition(Measure.MOTOR, id,
-                                                   Measure.MotorState(direction, 0))
-                        self.add_transition(tx_motor_off, start_time + t)
-                    self.sorted_timepoints = sorted(self.timepoints.keys())
+                if 'dir' in e:
+                    edge_calibration = self.calibration.get_calibration(int(id))
+                    distance = e['distance'] if 'distance' in e else 1
+                    t = float(measure['time'])
+                    direction = int(e['dir'])
+                    speed = edge_calibration.get_speed(t, distance=distance)
+                    tx_motor = MTransition(Measure.MOTOR, id,
+                                           Measure.MotorState(direction, speed))
+                    self.add_transition(tx_motor, start_time)
+                    tx_motor_off = MTransition(Measure.MOTOR, id,
+                                               Measure.MotorState(direction, 0))
+                    self.add_transition(tx_motor_off, start_time + t)
+        self.sorted_timepoints = sorted(self.timepoints.keys())
 
 
 class SongbookRunner:
@@ -66,10 +66,16 @@ class SongbookRunner:
 
     def run(self):
         t0 = time.time() * 1000
+
+        # In the future we'll start the music earlier to account for negative timepoints
+        # negative timepoints correspond to igniter offsets; igniters have to come on before flame
+        # for now, add on the min_time
+        min_time = -min(self.songbook.sorted_timepoints)
         for ts in self.songbook.sorted_timepoints:
-            now = time.time()
-            if now - t0 < ts:
-                time.sleep(ts - (now - t0))
+            now = time.time() * 1000
+            ts_0 = ts + min_time
+            if now - t0 < ts_0:
+                time.sleep((ts_0 - (now - t0)) / 1000)
             for tx in self.songbook.timepoints[ts]:
                 self.execute_measure(tx)
 
