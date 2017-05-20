@@ -49,7 +49,7 @@ def test_songbook_runner():
     nt.assert_false(ts.edges[0].igniter)
     nt.assert_true(ts.edges[1].motor_speed > 0)
     nt.assert_true(ts.edges[1].motor_direction == -1)
-    nt.assert_true(ts.edges[6].motor_speed == 0)
+    nt.assert_true(ts.edges[6].position == 0)
     time.sleep(sb.songbook['songbook'][0]['time'] / 1000)
     print("Time = %s" % str(time.time() - t0))
     nt.assert_true(ts.edges[0].motor_speed == 0)
