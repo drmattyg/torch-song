@@ -1,6 +1,6 @@
 from torch_song.calibration import TSCalibration
 from torch_song.simulator import SimTorchSong
-from torch_song.songbook import Songbook, SongbookRunner, IGNITER_OFFSET
+from torch_song.songbook import Songbook, SongbookRunner, IGNITER_OFFSET, IGNITER_DELAY
 import nose.tools as nt
 import time
 import threading
@@ -36,8 +36,16 @@ def test_songbook_runner():
     th.start()
     print("start")
     t0 = time.time()
+    time.sleep(IGNITER_OFFSET / 2 / 1000)
+    nt.assert_true(ts.edges[0].igniter)
     time.sleep((IGNITER_OFFSET + sb.songbook['songbook'][0]['start_at'] + 100) / 1000)
     print("Time = %s" % str(time.time() - t0))
     nt.assert_true(ts.edges[0].valve)
     nt.assert_true(ts.edges[0].motor_speed > 0)
+    time.sleep((IGNITER_DELAY) / 1000)
+    print("Time = %s" % str(time.time() - t0))
+    nt.assert_false(ts.edges[0].igniter)
+    time.sleep(sb.songbook['songbook'][0]['time'] / 1000)
+    print("Time = %s" % str(time.time() - t0))
+    nt.assert_true(ts.edges[0].motor_speed == 0)
     th.join()
