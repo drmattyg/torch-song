@@ -167,7 +167,7 @@ class SimTorchSong:
             edge.draw_str(self.scr, 3, y)
 
     def kill(self):
-        for edge in self.edges:
+        for edge in self.edges.values():
             edge.kill()
 
     def __del__(self):
