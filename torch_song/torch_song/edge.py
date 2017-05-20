@@ -18,5 +18,10 @@ class AbstractEdge(metaclass=ABCMeta):
         raise NotImplementedError()
 
     @abstractmethod
+    # returns a tuple [beg, end]
     def get_limit_switch_state(self):
+        raise NotImplementedError()
+
+    @abstractmethod
+    def calibrate(self):
         raise NotImplementedError()

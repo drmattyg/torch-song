@@ -2,7 +2,6 @@ import sys
 from os import path
 sys.path.append( path.dirname( path.dirname( path.abspath(__file__) ) ) )
 import cmd
-import click
 import yaml
 
 from torch_song.motor_driver import MotorDriver
