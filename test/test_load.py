@@ -37,15 +37,15 @@ class load_cli(cmd.Cmd):
     def help_quit(self, args):
         print('Quit session')
     def do_all_on(self, args):
-        for k, v in self.igniters.iteritems():
+        for k, v in self.igniters.items():
             v.set_state(1)
-        for k, v in self.valves.iteritems():
+        for k, v in self.valves.items():
             v.set_state(1)
         print('All relays turned on')
     def do_all_off(self, args):
-        for k, v in self.igniters.iteritems():
+        for k, v in self.igniters.items():
             v.set_state(0)
-        for k, v in self.valves.iteritems():
+        for k, v in self.valves.items():
             v.set_state(0)
 
 if __name__ == '__main__':

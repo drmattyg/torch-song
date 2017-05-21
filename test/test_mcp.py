@@ -33,7 +33,7 @@ class mcp_cli(cmd.Cmd):
     def do_readall(self, args):
         for k,v in self.mcps.items():
             print('mcp23017 id:%s' % k)
-            for i, val in enumerate(v.update()):
+            for i, val in enumerate(v.get_state()):
                 print('  %d: %d' % (i, val))
     def help_readall(self):
         print('read all MCP23017 IO')

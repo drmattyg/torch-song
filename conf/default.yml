@@ -31,69 +31,69 @@ subsystems:
       gpio: 21
   igniters:
     - id: 1
-      gpio: 22
-    - id: 2
-      gpio: 10
-    - id: 3
-      gpio: 9
-    - id: 4
-      gpio: 11
-    - id: 5
-      gpio: 5
-    - id: 6
-      gpio: 6
-    - id: 7
-      gpio: 13
-    - id: 8
-      gpio: 19
-    - id: 9
       gpio: 26
+    - id: 2
+      gpio: 22
+    - id: 3
+      gpio: 10
+    - id: 4
+      gpio: 9
+    - id: 5
+      gpio: 11
+    - id: 6
+      gpio: 5
+    - id: 7
+      gpio: 6
+    - id: 8
+      gpio: 13
+    - id: 9
+      gpio: 19
   limit_switches:
     - id: 1
-      beg_mcp_id: 1
+      beg_mcp_id: 2
       end_mcp_id: 2
       beg_mcp_io: 0
-      end_mcp_io: 0
-    - id: 2
-      beg_mcp_id: 1
-      end_mcp_id: 2
-      beg_mcp_io: 1
       end_mcp_io: 1
+    - id: 2
+      beg_mcp_id: 2
+      end_mcp_id: 2
+      beg_mcp_io: 14
+      end_mcp_io: 15
     - id: 3
-      beg_mcp_id: 1
+      beg_mcp_id: 2
       end_mcp_id: 2
-      beg_mcp_io: 2
-      end_mcp_io: 2
+      beg_mcp_io: 12
+      end_mcp_io: 13
     - id: 4
-      beg_mcp_id: 1
+      beg_mcp_id: 2
       end_mcp_id: 2
-      beg_mcp_io: 3
-      end_mcp_io: 3
+      beg_mcp_io: 10
+      end_mcp_io: 11
     - id: 5
-      beg_mcp_id: 1
+      beg_mcp_id: 2
       end_mcp_id: 2
-      beg_mcp_io: 4
-      end_mcp_io: 4
+      beg_mcp_io: 8
+      end_mcp_io: 9
     - id: 6
       beg_mcp_id: 1
-      end_mcp_id: 2
-      beg_mcp_io: 5
-      end_mcp_io: 5
+      end_mcp_id: 1
+      beg_mcp_io: 0
+      end_mcp_io: 1
     - id: 7
       beg_mcp_id: 1
-      end_mcp_id: 2
-      beg_mcp_io: 6
-      end_mcp_io: 6
+      end_mcp_id: 1
+      beg_mcp_io: 2
+      end_mcp_io: 3
     - id: 8
       beg_mcp_id: 1
-      end_mcp_id: 2
-      beg_mcp_io: 7
-      end_mcp_io: 7
+      end_mcp_id: 1
+      beg_mcp_io: 10
+      end_mcp_io: 11
     - id: 9
       beg_mcp_id: 1
       end_mcp_id: 2
       beg_mcp_io: 8
-      end_mcp_io: 8
+      end_mcp_io: 9
   motors:
     - id: 1
       pwm_io: 8

@@ -58,9 +58,9 @@ class test_cli(cmd.Cmd):
         load_cli(config).cmdloop()
     def help_load(self):
         print('Load test')
-    def do_single_edge(self, args):
+    def do_edge(self, args):
         edge_cli(config).cmdloop()
-    def help_single_edge(self):
+    def help_edge(self):
         print('Single edge test interface')
 
 if __name__ == '__main__':

@@ -47,6 +47,8 @@ class edge_cli(cmd.Cmd):
         self.edge.set_igniter_state(int(args))
     def do_get_limit_switch(self, args):
         print(self.edge.get_limit_switch_state())
+    def do_state(self, args):
+        print(self.edge)
 
 if __name__ == '__main__':
     stream = open('conf/default.yml', 'r')
