@@ -34,10 +34,10 @@ class RealEdge(AbstractEdge):
         self.runner.start()
 
     def __str__(self):
-        s = "igniter: %d, valve: %d, beg. limit: %d, end. limit: %d, motor speed: %f, motor dir: %d" % (
+        s = "igniter: %d, valve: %d, beg. limit: %d, end. limit: %d, motor speed: %f, motor dir: %s" % (
                 self.igniter.get_state(), self.valve.get_state(), self.limit_switch_beg.get_state(),
                 self.limit_switch_end.get_state(), self.motor_driver.get_speed(),
-                self.motor_driver.get_dir())
+                self.motor_driver.get_dir_str())
         return s
 
     def loop(self):
@@ -49,14 +49,16 @@ class RealEdge(AbstractEdge):
                     self.motor_driver.get_speed() > 0 and
                     self.limit_switch_end.get_state() == True):
                 self.motor_driver.stop()
+                self.speed_request = 0
                 print('End limit switch hit for id:%d' % self.id)
             elif (self.motor_driver.get_dir() == MotorDriver.REVERSE and
                     self.motor_driver.get_speed() > 0 and
                     self.limit_switch_beg.get_state() == True):
                 self.motor_driver.stop()
+                self.speed_request = 0
                 print('Beg limit switch hit for id:%d' % self.id)
             else:
-                if (self.speed_request > 0):
+                if (self.speed_request >= 0):
                     self.motor_driver.set_speed(self.speed_request)
                     self.motor_driver.set_dir(self.dir_request)
                     self.speed_request = -1
@@ -80,10 +82,14 @@ class RealEdge(AbstractEdge):
     def get_limit_switch_state(self):
         return [self.limit_switch_beg.get_state(), self.limit_switch_end.get_state()]
 
+    def at_limit(self):
+        return self.limit_switch_beg.get_state() or self.limit_switch_end.get_state()
+
     def calibrate(self):
         pass
 
     def __del__(self):
+        self.motor_driver.stop()
         self.pleaseExit = True
         self.runner.join(5000)
 

@@ -20,9 +20,10 @@ class MotorDriver:
             GPIO.setmode(GPIO.BCM)
             GPIO.setup(dir_io, GPIO.OUT)
 
-        self.speed = 0
-        self.dir = 0
+        self.speed = -1
+        self.dir = -1
 
+        self.set_speed(0)
         self.set_dir(MotorDriver.FORWARD)
 
     def get_dir(self):
@@ -55,7 +56,6 @@ class MotorDriver:
         if not (0.0 <= speed <= 100.0):
             raise ValueError("Speed must be between 0 and 100")
         if (self.speed != speed):
-            print('setting speed %f' % speed)
             self.speed = speed
             self._pca.set_duty(self._pwm_io, speed)
 
@@ -64,6 +64,9 @@ class MotorDriver:
 
     def get_dir(self):
         return self.dir
+
+    def get_dir_str(self):
+        return 'fwd' if self.dir == MotorDriver.FORWARD else 'rev'
 
     def __del__(self):
         self._pca.disable(self._pwm_io)

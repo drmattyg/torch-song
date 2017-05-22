@@ -5,6 +5,8 @@ from os import path
 import cmd
 import yaml
 
+import default_io
+
 from test.test_mcp import mcp_cli
 from test.test_pca9685 import pca9685_cli
 from test.test_motor_driver import motor_driver_cli
