@@ -157,8 +157,8 @@ class SimEdge(AbstractEdge):
 
 
 class SimTorchSong:
-    def __init__(self, scr):
-        self.edges = {id: SimEdge(id) for id in range(9)}
+    def __init__(self, scr, num_edges=9):
+        self.edges = {id: SimEdge(id) for id in range(num_edges)}
         self.scr = scr
 
     #        SimEdge.initialize_colors()
