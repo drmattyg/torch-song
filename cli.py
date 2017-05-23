@@ -5,6 +5,8 @@ from os import path
 import cmd
 import yaml
 
+import default_io
+
 from test.test_mcp import mcp_cli
 from test.test_pca9685 import pca9685_cli
 from test.test_motor_driver import motor_driver_cli
@@ -58,9 +60,9 @@ class test_cli(cmd.Cmd):
         load_cli(config).cmdloop()
     def help_load(self):
         print('Load test')
-    def do_single_edge(self, args):
+    def do_edge(self, args):
         edge_cli(config).cmdloop()
-    def help_single_edge(self):
+    def help_edge(self):
         print('Single edge test interface')
 
 if __name__ == '__main__':

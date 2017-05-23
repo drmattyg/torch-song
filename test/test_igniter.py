@@ -39,7 +39,7 @@ class igniter_cli(cmd.Cmd):
     def help_set(self):
         print('to close igniter 1, usage: set 1 1')
     def do_read(self, args):
-        for id, igniter in self.igniters.iteritems():
+        for id, igniter in self.igniters.items():
             state = igniter.get_state()
             print('igniter%s is %s' % (id, 'CLOSED' if state == Igniter.ON else 'OPEN'))
     def help_read(self):

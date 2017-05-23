@@ -4,7 +4,5 @@ class LimitSwitch:
         self.mcp = mcp
         self.io = io
 
-    def get_state(self, update=True):
-        if update:
-            self.mcp.update()
-        return self.mcp.state[self.io]
+    def get_state(self):
+        return not self.mcp.get_state()[self.io]

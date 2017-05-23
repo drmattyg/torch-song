@@ -20,8 +20,11 @@ class MotorDriver:
             GPIO.setmode(GPIO.BCM)
             GPIO.setup(dir_io, GPIO.OUT)
 
+        self.speed = -1
+        self.dir = -1
+
+        self.set_speed(0)
         self.set_dir(MotorDriver.FORWARD)
-        self.speed = 0
 
     def get_dir(self):
         return self.dir
@@ -29,18 +32,22 @@ class MotorDriver:
     def set_dir(self, dir):
         if dir not in [MotorDriver.FORWARD, MotorDriver.REVERSE]:
             raise ValueError("Incorrect value for set_dir")
-        if self._dir_io_type == 'PCA9685_IO':
-            if dir is MotorDriver.FORWARD:
-                self._pca.set_off(self._dir_io)
-            else:
-                self._pca.set_on(self._dir_io)
-        elif self._dir_io_type == 'RPI_IO':
-            GPIO.output(self._dir_io, dir)
+        if (dir != self.dir):
+            if self._dir_io_type == 'PCA9685_IO':
+                if dir is MotorDriver.FORWARD:
+                    self._pca.set_off(self._dir_io)
+                else:
+                    self._pca.set_on(self._dir_io)
+            elif self._dir_io_type == 'RPI_IO':
+                GPIO.output(self._dir_io, dir)
 
-        self.dir = dir
+            self.dir = dir
+
+    def disable(self):
+        self._pca.disable(self._pwm_io)
 
     def stop(self):
-        self._pca.disable(self._pwm_io)
+        self.set_speed(0)
 
     def reverse(self):
         self.set_dir(1 - self.dir)
@@ -48,8 +55,18 @@ class MotorDriver:
     def set_speed(self, speed):
         if not (0.0 <= speed <= 100.0):
             raise ValueError("Speed must be between 0 and 100")
-        self.speed = speed
-        self._pca.set_duty(self._pwm_io, speed)
+        if (self.speed != speed):
+            self.speed = speed
+            self._pca.set_duty(self._pwm_io, speed)
+
+    def get_speed(self):
+        return self.speed
+
+    def get_dir(self):
+        return self.dir
+
+    def get_dir_str(self):
+        return 'fwd' if self.dir == MotorDriver.FORWARD else 'rev'
 
     def __del__(self):
         self._pca.disable(self._pwm_io)
