@@ -45,7 +45,7 @@ def main(scr):
     th = threading.Thread(target=runner.run)
     th.start()
     try:
-        while True:
+        while not runner.finished:
             ts.render()
             time.sleep(0.1)
             s = scr.getstr()

@@ -63,6 +63,7 @@ class SongbookRunner:
     def __init__(self, songbook, torch_song):
         self.songbook = songbook
         self.torch_song = torch_song
+        self.finished = False
 
     def run(self):
         t0 = time.time() * 1000
@@ -78,6 +79,7 @@ class SongbookRunner:
                 time.sleep((ts_0 - (now - t0)) / 1000)
             for tx in self.songbook.timepoints[ts]:
                 self.execute_measure(tx)
+        self.finished = True
 
     def execute_measure(self, tx):
         edge = self.torch_song.edges[tx.id]
