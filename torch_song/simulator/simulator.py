@@ -167,7 +167,7 @@ class SimTorchSong:
 
     def render(self):
         self.scr.clear()
-        for i, edge in enumerate(self.edges):
+        for i, edge in self.edges.items():
             y = (i + 1) * 3
             edge.draw_str(self.scr, 3, y)
 
