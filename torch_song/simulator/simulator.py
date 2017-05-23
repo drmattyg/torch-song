@@ -161,7 +161,9 @@ class SimTorchSong:
         self.edges = {id: SimEdge(id) for id in range(num_edges)}
         self.scr = scr
 
-    #        SimEdge.initialize_colors()
+    @staticmethod
+    def initialize_curses():
+        SimEdge.initialize_colors()
 
     def render(self):
         self.scr.clear()
