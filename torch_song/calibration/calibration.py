@@ -16,6 +16,7 @@ class TSEdgeCalibration:
             self.calibration_travel_time = float(calibration_travel_time)
         else:
             self.calibration_travel_time = float(self.run_calibration())
+        self.polarity = True
 
     def get_speed(self, time, distance=1):
         """
