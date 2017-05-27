@@ -1,6 +1,7 @@
 from threading import Thread
 from time import sleep, time
 
+from torch_song.calibration.calibration import TSEdgeCalibration
 from torch_song.torch_song import AbstractEdge
 from torch_song.motor_driver import MotorDriver
 from torch_song.igniter import Igniter
@@ -9,7 +10,7 @@ from torch_song.limit_switch import LimitSwitch
 
 
 class RealEdge(AbstractEdge):
-    def __init__(self, i, io, config, update_rate_hz=100):
+    def __init__(self, i, io, config, update_rate_hz=100, calibration=None):
         super().__init__(i)
         self.motor_driver = MotorDriver(io['pca9685'],
                                         config['subsystems']['motors'][self.id - 1]['pwm_io'],
@@ -29,6 +30,11 @@ class RealEdge(AbstractEdge):
 
         self.update_rate_hz = update_rate_hz
 
+        if calibration is None:
+            # insert a default calibration
+            calibration = TSEdgeCalibration(self)
+            calibration.polarity = True
+        self.calibration = calibration
         self.runner = Thread(target=self.loop)
         self.runner.setDaemon(True)
         self.runner.start()

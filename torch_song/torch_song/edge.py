@@ -1,6 +1,5 @@
 from abc import ABCMeta, abstractmethod
 
-
 class AbstractEdge(metaclass=ABCMeta):
     def __init__(self, i):
         self.id = i
