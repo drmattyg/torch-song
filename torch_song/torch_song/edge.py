@@ -26,7 +26,7 @@ class AbstractEdge(metaclass=ABCMeta):
     def get_limit_switch_state(self):
         raise NotImplementedError()
 
-    def get_forward_limit_switch(self):
+    def get_forward_limit_switch_state(self):
         if self.calibration is None:
             raise Exception(
                 "Must set calibration before calling for forward/backwards limit switch")
@@ -36,7 +36,7 @@ class AbstractEdge(metaclass=ABCMeta):
         else:
             return ls_state[1]
 
-    def get_reverse_limit_switch(self):
+    def get_reverse_limit_switch_state(self):
         if self.calibration is None:
             raise Exception(
                 "Must set calibration before calling for forward/backwards limit switch")
