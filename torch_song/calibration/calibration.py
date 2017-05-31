@@ -1,17 +1,22 @@
+import time
+
+
 class TSEdgeCalibration:
     PLACEHOLDER_CALIBRATION = 4000.0
+    LIMIT_SWITCH_TEST_TIME = 0.2
 
-    def __init__(self, id, calibration_travel_time=None):
+    def __init__(self, edge, calibration_travel_time=None):
         """
 
-        :param id: Int.  Edge id
+        :param id: Edge to calibrate
         :param calibration_travel_time: End to end travel time in ms.
         """
-        self.id = id
+        self.edge = edge
         if calibration_travel_time is not None:
             self.calibration_travel_time = float(calibration_travel_time)
         else:
             self.calibration_travel_time = float(self.run_calibration())
+        self.polarity = True
 
     def get_speed(self, time, distance=1):
         """
@@ -24,7 +29,28 @@ class TSEdgeCalibration:
         return int(255.0 * distance * self.calibration_travel_time / time)
 
     def run_calibration(self):
-        # todo implement this; currently this is a placeholder
+        e = self.edge
+        # make sure it's not pinned before we start
+        if any(e.get_limit_switch_state()):
+            e.set_motor_state(1, 150)
+            time.sleep(TSEdgeCalibration.LIMIT_SWITCH_TEST_TIME)
+            e.set_motor_state(1, 0)
+            if any(e.get_limit_switch_state()):
+                e.set_motor_state(-1, 150)
+                time.sleep(TSEdgeCalibration.LIMIT_SWITCH_TEST_TIME)
+                e.set_motor_state(1, 0)
+            if any(e.get_limit_switch_state()):
+                # try a bit faster
+                e.set_motor_state(1, 200)
+                time.sleep(TSEdgeCalibration.LIMIT_SWITCH_TEST_TIME)
+                e.set_motor_state(1, 0)
+            if any(e.get_limit_switch_state()):
+                e.set_motor_state(-1, 200)
+                time.sleep(TSEdgeCalibration.LIMIT_SWITCH_TEST_TIME)
+                e.set_motor_state(1, 0)
+            if any(e.get_limit_switch_state()):
+                raise Exception("Shit, my limit switch is stuck or some shit")
+        # todo: actual calibration
         return TSEdgeCalibration.PLACEHOLDER_CALIBRATION
 
 

@@ -1,15 +1,16 @@
 from threading import Thread
 from time import sleep, time
 
+from torch_song.calibration.calibration import TSEdgeCalibration
 from torch_song.torch_song import AbstractEdge
 from torch_song.motor_driver import MotorDriver
 from torch_song.igniter import Igniter
 from torch_song.valve import Valve
 from torch_song.limit_switch import LimitSwitch
 
-class RealEdge(AbstractEdge):
 
-    def __init__(self, i, io, config, update_rate_hz = 100):
+class RealEdge(AbstractEdge):
+    def __init__(self, i, io, config, update_rate_hz=100, calibration=None):
         super().__init__(i)
         self.motor_driver = MotorDriver(io['pca9685'],
                                         config['subsystems']['motors'][self.id - 1]['pwm_io'],
@@ -29,15 +30,20 @@ class RealEdge(AbstractEdge):
 
         self.update_rate_hz = update_rate_hz
 
-        self.runner = Thread(target = self.loop)
+        if calibration is None:
+            # insert a default calibration
+            calibration = TSEdgeCalibration(self)
+            calibration.polarity = True
+        self.calibration = calibration
+        self.runner = Thread(target=self.loop)
         self.runner.setDaemon(True)
         self.runner.start()
 
     def __str__(self):
         s = "igniter: %d, valve: %d, beg. limit: %d, end. limit: %d, motor speed: %f, motor dir: %s" % (
-                self.igniter.get_state(), self.valve.get_state(), self.limit_switch_beg.get_state(),
-                self.limit_switch_end.get_state(), self.motor_driver.get_speed(),
-                self.motor_driver.get_dir_str())
+            self.igniter.get_state(), self.valve.get_state(), self.limit_switch_beg.get_state(),
+            self.limit_switch_end.get_state(), self.motor_driver.get_speed(),
+            self.motor_driver.get_dir_str())
         return s
 
     def loop(self):
@@ -46,14 +52,14 @@ class RealEdge(AbstractEdge):
             now = time()
             # print('dir: %d beg: %d end %d' % (self.motor_driver.get_dir(), self.limit_switch_beg.get_state(), self.limit_switch_end.get_state())
             if (self.motor_driver.get_dir() == MotorDriver.FORWARD and
-                    self.motor_driver.get_speed() > 0 and
-                    self.limit_switch_end.get_state() == True):
+                        self.motor_driver.get_speed() > 0 and
+                        self.get_forward_limit_switch_state() == True):
                 self.motor_driver.stop()
                 self.speed_request = 0
                 print('End limit switch hit for id:%d' % self.id)
             elif (self.motor_driver.get_dir() == MotorDriver.REVERSE and
-                    self.motor_driver.get_speed() > 0 and
-                    self.limit_switch_beg.get_state() == True):
+                          self.motor_driver.get_speed() > 0 and
+                          self.get_reverse_limit_switch_state() == True):
                 self.motor_driver.stop()
                 self.speed_request = 0
                 print('Beg limit switch hit for id:%d' % self.id)
@@ -63,7 +69,7 @@ class RealEdge(AbstractEdge):
                     self.motor_driver.set_dir(self.dir_request)
                     self.speed_request = -1
 
-            tosleep = 1.0/self.update_rate_hz - (now - time())
+            tosleep = 1.0 / self.update_rate_hz - (now - time())
             if (tosleep > 0):
                 sleep(tosleep)
             else:
@@ -92,4 +98,3 @@ class RealEdge(AbstractEdge):
         self.motor_driver.stop()
         self.pleaseExit = True
         self.runner.join(5000)
-
