@@ -5,9 +5,13 @@ from enum import Enum
 
 import sys
 from os import path
-sys.path.append( path.dirname (path.dirname( path.dirname( path.abspath(__file__) ) ) ))
+
+from torch_song.calibration import EdgeCalibration
+
+sys.path.append(path.dirname(path.dirname(path.dirname(path.abspath(__file__)))))
 
 from torch_song.edge import AbstractEdge
+
 
 class bcolors:
     BLUE = '\033[94m'
@@ -46,7 +50,7 @@ class SimEdge(AbstractEdge):
         return self.limit_switches
 
     def calibrate(self):
-        pass
+        self.calibration.calibrate()
 
     # a software simulated edge
     SLEEP_TIME = 50.0

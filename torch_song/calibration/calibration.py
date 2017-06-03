@@ -1,32 +1,35 @@
 import time
 import numpy
 
+
 def try_decorator(func):
-    timeout = 10
+    timeout = 30
+
     def wrap(*args, **kwargs):
         then = time.time()
         while ((time.time() - then) < timeout):
             if (func(*args, **kwargs)):
                 return True
         return False
+
     return wrap
 
-class EdgeCalibration:
-    MIN_SPEED = 30
-    CAL_SPEED_STEP = 5
 
-    def __init__(self, edge):
+class EdgeCalibration:
+    def __init__(self, edge, min_speed=40, cal_speed_step=20):
         self.edge = edge
         self.map_entries = []
         self.fwd_speed_map = []
         self.rev_speed_map = []
         self.polarity = False
+        self.min_speed = min_speed
+        self.cal_speed_step = cal_speed_step
 
     def __str__(self):
         return (str(self.map_entries) + '\n\r' +
-            str(self.fwd_speed_map) + '\n\r' +
-            str(self.rev_speed_map) + '\n\r' +
-            'polarity:' + str(self.polarity))
+                str(self.fwd_speed_map) + '\n\r' +
+                str(self.rev_speed_map) + '\n\r' +
+                'polarity:' + str(self.polarity))
 
     def get_speed(self, time, distance=1):
         return int(numpy.interp(speed, self.map_entries, self.fwd_speed_map))
@@ -83,7 +86,7 @@ class EdgeCalibration:
 
     def calibrate(self):
         self.calibrate_polarity()
-        for i in range(self.MIN_SPEED, 100+1, self.CAL_SPEED_STEP):
+        for i in range(self.min_speed, 100 + 1, self.cal_speed_step):
             res = self.calibrate_one_speed(i)
             self.map_entries.append(i)
             self.fwd_speed_map.append(res[0])

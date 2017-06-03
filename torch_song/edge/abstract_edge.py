@@ -1,9 +1,12 @@
 from abc import ABCMeta, abstractmethod
 
+from torch_song.calibration import EdgeCalibration
+
+
 class AbstractEdge(metaclass=ABCMeta):
     def __init__(self, i):
         self.id = i
-        self.calibration = None
+        self.calibration = EdgeCalibration(self)
 
     def set_calibration(self, calibration):
         self.calibration = calibration
