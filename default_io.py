@@ -8,10 +8,10 @@ import yaml
 stream = open('conf/default.yml', 'r')
 config = yaml.load(stream)
 
-from torch_song.igniter import Igniter
-from torch_song.valve import Valve
-from torch_song.motor_driver import MotorDriver
-from torch_song.pca9685 import PCA9685
+from torch_song.hardware import Igniter
+from torch_song.hardware import Valve
+from torch_song.hardware import MotorDriver
+from torch_song.hardware import PCA9685
 
 print('setting IO to off-state')
 

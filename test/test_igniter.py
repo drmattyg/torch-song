@@ -4,7 +4,7 @@ sys.path.append( path.dirname( path.dirname( path.abspath(__file__) ) ) )
 import cmd
 import yaml
 
-from torch_song.igniter import Igniter
+from torch_song.hardware import Igniter
 
 class igniter_cli(cmd.Cmd):
     def __init__(self, config):

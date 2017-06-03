@@ -3,7 +3,7 @@ import time
 import curses
 from enum import Enum
 
-from torch_song.torch_song import AbstractEdge
+from torch_song.edge import AbstractEdge
 
 
 class bcolors:

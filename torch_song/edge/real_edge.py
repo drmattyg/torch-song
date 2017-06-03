@@ -2,11 +2,11 @@ from threading import Thread
 from time import sleep, time
 
 from torch_song.calibration.calibration import TSEdgeCalibration
-from torch_song.torch_song import AbstractEdge
-from torch_song.motor_driver import MotorDriver
-from torch_song.igniter import Igniter
-from torch_song.valve import Valve
-from torch_song.limit_switch import LimitSwitch
+from torch_song.edge import AbstractEdge
+from torch_song.hardware import MotorDriver
+from torch_song.hardware import Igniter
+from torch_song.hardware import Valve
+from torch_song.hardware import LimitSwitch
 
 
 class RealEdge(AbstractEdge):

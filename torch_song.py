@@ -1,5 +1,6 @@
-NUM_EDGES = 9
+#!/usr/bin/env python
 
+NUM_EDGES = 9
 
 class TorchSong:
     def __init__(self, EdgeClass):

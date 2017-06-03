@@ -26,7 +26,7 @@ class MCPInput:
         while (not self.pleaseExit):
             now = time()
             self.state = self._mcp.input_pins(self.bit_range)
-            tosleep = 1.0/self.update_rate_hz - (now - time())
+            tosleep = 1.0/self.update_rate_hz - (time() - now)
             if (tosleep > 0):
                 sleep(tosleep)
 

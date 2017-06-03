@@ -4,7 +4,7 @@ sys.path.append( path.dirname( path.dirname( path.abspath(__file__) ) ) )
 import cmd
 import yaml
 
-from torch_song.mcp23017 import MCPInput
+from torch_song.hardware import MCPInput
 
 class mcp_cli(cmd.Cmd):
     def __init__(self, config):

@@ -6,9 +6,9 @@ import yaml
 
 from time import sleep
 
-from torch_song.torch_song.real_edge import RealEdge
-from torch_song.pca9685 import PCA9685
-from torch_song.mcp23017 import MCPInput
+from torch_song.edge.real_edge import RealEdge
+from torch_song.hardware import PCA9685
+from torch_song.hardware import MCPInput
 
 class edge_cli(cmd.Cmd):
     def __init__(self, config):

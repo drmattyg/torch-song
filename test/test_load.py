@@ -4,8 +4,8 @@ sys.path.append( path.dirname( path.dirname( path.abspath(__file__) ) ) )
 import cmd
 import yaml
 
-from torch_song.igniter import Igniter
-from torch_song.valve import Valve
+from torch_song.hardware import Igniter
+from torch_song.hardware import Valve
 
 class load_cli(cmd.Cmd):
     def __init__(self, config):
