@@ -1,1 +1,1 @@
-from .calibration import TSCalibration
+from .calibration import EdgeCalibration

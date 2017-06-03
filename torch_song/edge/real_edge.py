@@ -1,7 +1,7 @@
-from threading import Thread
+from threading import Thread, Lock
 from time import sleep, time
 
-from torch_song.calibration.calibration import TSEdgeCalibration
+from torch_song.calibration import EdgeCalibration
 from torch_song.edge import AbstractEdge
 from torch_song.hardware import MotorDriver
 from torch_song.hardware import Igniter
@@ -32,9 +32,10 @@ class RealEdge(AbstractEdge):
 
         if calibration is None:
             # insert a default calibration
-            calibration = TSEdgeCalibration(self)
-            calibration.polarity = True
-        self.calibration = calibration
+            self.set_calibration(EdgeCalibration(self))
+
+        self.lock = Lock()
+
         self.runner = Thread(target=self.loop)
         self.runner.setDaemon(True)
         self.runner.start()
@@ -49,6 +50,7 @@ class RealEdge(AbstractEdge):
     def loop(self):
         self.pleaseExit = False
         while (not self.pleaseExit):
+            self.lock.acquire()
             now = time()
             # print('dir: %d beg: %d end %d' % (self.motor_driver.get_dir(), self.limit_switch_beg.get_state(), self.limit_switch_end.get_state())
             if (self.motor_driver.get_dir() == MotorDriver.FORWARD and
@@ -68,6 +70,7 @@ class RealEdge(AbstractEdge):
                     self.motor_driver.set_speed(self.speed_request)
                     self.motor_driver.set_dir(self.dir_request)
                     self.speed_request = -1
+            self.lock.release()
 
             tosleep = 1.0 / self.update_rate_hz - (now - time())
             if (tosleep > 0):
@@ -76,8 +79,10 @@ class RealEdge(AbstractEdge):
                 print('edge not calling sleep(), something weird is going on')
 
     def set_motor_state(self, direction, speed):
+        self.lock.acquire()
         self.dir_request = direction
         self.speed_request = speed
+        self.lock.release()
 
     def set_valve_state(self, v):
         self.valve.set_state(v)

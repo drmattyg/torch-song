@@ -45,6 +45,5 @@ class AbstractEdge(metaclass=ABCMeta):
         else:
             return ls_state[0]
 
-    @abstractmethod
     def calibrate(self):
-        raise NotImplementedError()
+        self.calibration.calibrate()

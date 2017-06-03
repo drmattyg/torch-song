@@ -72,22 +72,20 @@ class SimEdge(AbstractEdge):
     def _runner(self):
         while self._run_thread.is_set():
             self.position += self.motor_direction * \
-                             (SimEdge.SLEEP_TIME / self.calibration_time) * self.motor_speed / 255.0
+                             (SimEdge.SLEEP_TIME / self.calibration_time) * self.motor_speed / 100.0
 
             if self.position <= 0:
                 self.position = 0
                 self.limit_switches[0] = True
             else:
                 self.limit_switches[0] = False
+
             if self.position >= 1:
                 self.position = 1
                 self.limit_switches[1] = True
             else:
                 self.limit_switches[1] = False
-            if self.position > 1:
-                self.position = 1
-            if self.position < 0:
-                self.position = 0
+
             time.sleep(SimEdge.SLEEP_TIME / 1000.0)
 
     def __str__(self):
