@@ -3,8 +3,11 @@ import time
 import curses
 from enum import Enum
 
-from torch_song.edge import AbstractEdge
+import sys
+from os import path
+sys.path.append( path.dirname (path.dirname( path.dirname( path.abspath(__file__) ) ) ))
 
+from torch_song.edge import AbstractEdge
 
 class bcolors:
     BLUE = '\033[94m'
@@ -87,9 +90,6 @@ class SimEdge(AbstractEdge):
                 self.position = 0
             time.sleep(SimEdge.SLEEP_TIME / 1000.0)
 
-    def start(self):
-        self._runner_thread.start()
-
     def __str__(self):
         pos = min([int(SimEdge.STR_LEN * self.position), 9])
         left_pad = "_" * pos
@@ -132,6 +132,9 @@ class SimEdge(AbstractEdge):
             scr.clrtoeol()
         scr.clrtoeol()
         self.x_offset = 0
+
+    def __del__(self):
+        self.kill()
 
     def kill(self):
         self._run_thread.clear()
@@ -184,7 +187,6 @@ def main(scr):
     SimEdge.initialize_colors()
     se = SimEdge(0)
     se.motor_speed = 100
-    se.start()
     try:
         while True:
             se.draw_str(scr, 3, 3)
