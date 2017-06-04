@@ -17,19 +17,24 @@ class EdgeCalibration:
 
     def __init__(self, edge):
         self.edge = edge
-        self.map_entries = []
+        self.duty_cycle_map = []
         self.fwd_speed_map = []
         self.rev_speed_map = []
         self.polarity = False
 
     def __str__(self):
-        return (str(self.map_entries) + '\n\r' +
+        return (str(self.duty_cycle_map) + '\n\r' +
             str(self.fwd_speed_map) + '\n\r' +
             str(self.rev_speed_map) + '\n\r' +
             'polarity:' + str(self.polarity))
 
-    def get_speed(self, time, distance=1):
-        return int(numpy.interp(speed, self.map_entries, self.fwd_speed_map))
+    def get_speed(self, time, direction, distance=1):
+        if (direction == 1):
+            return int(numpy.interp(time * distance / 1000, self.fwd_speed_map, self.duty_cycle_map))
+        elif (direction == -1):
+            return int(numpy.interp(time * distance / 1000, self.rev_speed_map, self.duty_cycle_map))
+        else:
+            return 0
 
     @try_decorator
     def chk_beg_limit(self):
@@ -85,6 +90,9 @@ class EdgeCalibration:
         self.calibrate_polarity()
         for i in range(self.MIN_SPEED, 100+1, self.CAL_SPEED_STEP):
             res = self.calibrate_one_speed(i)
-            self.map_entries.append(i)
+            self.duty_cycle_map.append(i)
             self.fwd_speed_map.append(res[0])
             self.rev_speed_map.append(res[1])
+        self.duty_cycle_map.reverse()
+        self.fwd_speed_map.reverse()
+        self.rev_speed_map.reverse()
