@@ -1,5 +1,5 @@
 import time
-import numpy
+import statistics as stats
 
 
 def try_decorator(func):
@@ -32,14 +32,9 @@ class EdgeCalibration:
                 'polarity:' + str(self.polarity))
 
     def get_speed(self, time, direction, distance=1):
-        if (direction == 1):
-            return int(
-                numpy.interp(time * distance / 1000, self.fwd_speed_map, self.duty_cycle_map))
-        elif (direction == -1):
-            return int(
-                numpy.interp(time * distance / 1000, self.rev_speed_map, self.duty_cycle_map))
-        else:
-            return 0
+        if direction:
+            return 100
+        return 0
 
     @try_decorator
     def chk_beg_limit(self):
@@ -55,7 +50,7 @@ class EdgeCalibration:
 
     def calibrate_polarity(self):
         e = self.edge
-        e.set_motor_state(-1, 75)
+        e.set_motor_state(0, 75)
         if (not self.chk_any_limit()):
             e.set_motor_state(0, 0)
             raise Exception('Calibration timeout')
@@ -65,7 +60,7 @@ class EdgeCalibration:
     def calibrate_one_speed(self, speed):
         e = self.edge
         # move to start
-        e.set_motor_state(-1, 75)
+        e.set_motor_state(0, 75)
         if (not self.chk_beg_limit()):
             e.set_motor_state(0, 0)
             raise Exception('Calibration timeout')
@@ -82,7 +77,7 @@ class EdgeCalibration:
 
         # go backward
         then = time.time()
-        e.set_motor_state(-1, speed)
+        e.set_motor_state(0, speed)
         if (not self.chk_beg_limit()):
             e.set_motor_state(0, 0)
             raise Exception('Calibration timeout')
@@ -90,6 +85,17 @@ class EdgeCalibration:
         rev_time = time.time() - then
 
         return [rev_time, fwd_time]
+
+    def simple_calibrate(self, n=5):
+        self.calibrate_polarity()
+        cal_fwd = []
+        cal_rev = []
+        for i in range(n):
+            cal = self.calibrate_one_speed(100)
+            cal_fwd.append(cal[1])
+            cal_rev.append(cal[0])
+        self.fwd_speed_map = [stats.mean(cal_fwd)]
+        self.rev_speed_map = [stats.mean(cal_rev)]
 
     def calibrate(self):
         self.calibrate_polarity()

@@ -3,10 +3,10 @@ from time import sleep, time
 
 from torch_song.calibration import EdgeCalibration
 from torch_song.edge import AbstractEdge
-from torch_song.hardware import MotorDriver
-from torch_song.hardware import Igniter
-from torch_song.hardware import Valve
-from torch_song.hardware import LimitSwitch
+from torch_song.hardware.motor_driver import MotorDriver
+from torch_song.hardware.igniter import Igniter
+from torch_song.hardware.valve import Valve
+from torch_song.hardware.limit_switch import LimitSwitch
 
 
 class RealEdge(AbstractEdge):
@@ -97,7 +97,7 @@ class RealEdge(AbstractEdge):
         return self.limit_switch_beg.get_state() or self.limit_switch_end.get_state()
 
     def calibrate(self):
-        pass
+        self.calibration.calibrate()
 
     def __del__(self):
         self.motor_driver.stop()
