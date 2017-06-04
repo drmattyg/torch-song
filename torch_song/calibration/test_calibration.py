@@ -18,6 +18,7 @@ def main(scr):
     def worker():
         edgeCal.calibrate()
         print(edgeCal)
+        print(edgeCal.get_speed(200, 1))
         time.sleep(1)
 
     worker_thread = threading.Thread(target=worker)

@@ -49,7 +49,7 @@ class Songbook:
                     distance = e['distance'] if 'distance' in e else 1
                     t = float(measure['time'])
                     direction = int(e['dir'])
-                    speed = edge_calibration.get_speed(t, distance=distance)
+                    speed = edge_calibration.get_speed(t, direction, distance=distance)
                     tx_motor = MTransition(Measure.MOTOR, id,
                                            Measure.MotorState(direction, speed))
                     self.add_transition(tx_motor, start_time)
