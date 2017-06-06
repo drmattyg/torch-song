@@ -27,6 +27,7 @@ class RealEdge(AbstractEdge):
 
         self.speed_request = -1
         self.dir_request = MotorDriver.FORWARD
+        self._ignore_limit = False
 
         self.update_rate_hz = update_rate_hz
 
@@ -55,28 +56,35 @@ class RealEdge(AbstractEdge):
             # print('dir: %d beg: %d end %d' % (self.motor_driver.get_dir(), self.limit_switch_beg.get_state(), self.limit_switch_end.get_state())
             if (self.motor_driver.get_dir() == MotorDriver.FORWARD and
                         self.motor_driver.get_speed() > 0 and
+                        not self._ignore_limit and
                         self.get_forward_limit_switch_state() == True):
                 self.motor_driver.stop()
                 self.speed_request = 0
                 print('End limit switch hit for id:%d' % self.id)
             elif (self.motor_driver.get_dir() == MotorDriver.REVERSE and
-                          self.motor_driver.get_speed() > 0 and
-                          self.get_reverse_limit_switch_state() == True):
+                        self.motor_driver.get_speed() > 0 and
+                        not self._ignore_limit and
+                        self.get_reverse_limit_switch_state() == True):
                 self.motor_driver.stop()
                 self.speed_request = 0
                 print('Beg limit switch hit for id:%d' % self.id)
             else:
                 if (self.speed_request >= 0):
                     self.motor_driver.set_speed(self.speed_request)
-                    self.motor_driver.set_dir(self.dir_request)
+                    self.motor_driver.set_dir(MotorDriver.REVERSE if self.dir_request == -1 else MotorDriver.FORWARD)
                     self.speed_request = -1
             self.lock.release()
 
-            tosleep = 1.0 / self.update_rate_hz - (now - time())
+            tosleep = 1.0 / self.update_rate_hz - (time() - now)
             if (tosleep > 0):
                 sleep(tosleep)
             else:
                 print('edge not calling sleep(), something weird is going on')
+
+    def _ignore_limit_switch(state):
+        self.lock.acquire()
+        self._ignore_limit = state
+        self.lock.release()
 
     def set_motor_state(self, direction, speed):
         self.lock.acquire()
@@ -97,7 +105,9 @@ class RealEdge(AbstractEdge):
         return self.limit_switch_beg.get_state() or self.limit_switch_end.get_state()
 
     def calibrate(self):
+        self._ignore_limit_switch(True)
         self.calibration.calibrate()
+        self._ignore_limit_switch(False)
 
     def __del__(self):
         self.motor_driver.stop()

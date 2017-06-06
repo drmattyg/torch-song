@@ -6,7 +6,7 @@ import time
 
 
 class TorchSong:
-    def __init__(self, num_edges=9):
+    def __init__(self, num_edges=1):
         stream = open('conf/default.yml', 'r')
         self.config = yaml.load(stream)
         self.io = dict()
@@ -22,5 +22,5 @@ class TorchSong:
 
     def calibrate(self):
         for e in self.edges.values():
-            e.calibration.simple_calibrate(n=3)
+            e.calibration.calibrate()
             print(e.calibration)
