@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from torch_song import TorchSong
 
 

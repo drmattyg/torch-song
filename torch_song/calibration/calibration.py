@@ -3,20 +3,21 @@ import statistics as stats
 
 
 def try_decorator(func):
-    timeout = 30
+    timeout = 10
 
     def wrap(*args, **kwargs):
         then = time.time()
         while ((time.time() - then) < timeout):
             if (func(*args, **kwargs)):
                 return True
+            time.sleep(0.05)
         return False
 
     return wrap
 
 
 class EdgeCalibration:
-    def __init__(self, edge, min_speed=40, cal_speed_step=20):
+    def __init__(self, edge, min_speed=80, cal_speed_step=20):
         self.edge = edge
         self.duty_cycle_map = []
         self.fwd_speed_map = []
@@ -50,17 +51,18 @@ class EdgeCalibration:
 
     def calibrate_polarity(self):
         e = self.edge
-        e.set_motor_state(0, 75)
+        e.set_motor_state(-1, 75)
         if (not self.chk_any_limit()):
             e.set_motor_state(0, 0)
             raise Exception('Calibration timeout')
         e.set_motor_state(0, 0)
         self.polarity = False if self.edge.get_limit_switch_state()[0] else True
+        return self.polarity
 
     def calibrate_one_speed(self, speed):
         e = self.edge
         # move to start
-        e.set_motor_state(0, 75)
+        e.set_motor_state(-1, 75)
         if (not self.chk_beg_limit()):
             e.set_motor_state(0, 0)
             raise Exception('Calibration timeout')
@@ -77,7 +79,7 @@ class EdgeCalibration:
 
         # go backward
         then = time.time()
-        e.set_motor_state(0, speed)
+        e.set_motor_state(-1, speed)
         if (not self.chk_beg_limit()):
             e.set_motor_state(0, 0)
             raise Exception('Calibration timeout')

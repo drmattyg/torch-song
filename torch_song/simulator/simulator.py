@@ -53,7 +53,7 @@ class SimEdge(AbstractEdge):
         self.calibration.calibrate()
 
     # a software simulated edge
-    SLEEP_TIME = 50.0
+    SLEEP_TIME = 1.0
     STR_LEN = 10
     REPR = "{id} {valve} {igniter} {ls0}:{left}{shuttle}{right}:{ls1}"
 
