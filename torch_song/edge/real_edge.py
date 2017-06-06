@@ -50,8 +50,8 @@ class RealEdge(AbstractEdge):
     def loop(self):
         self.pleaseExit = False
         while (not self.pleaseExit):
-            self.lock.acquire()
             now = time()
+            self.lock.acquire()
             # print('dir: %d beg: %d end %d' % (self.motor_driver.get_dir(), self.limit_switch_beg.get_state(), self.limit_switch_end.get_state())
             if (self.motor_driver.get_dir() == MotorDriver.FORWARD and
                         self.motor_driver.get_speed() > 0 and
@@ -72,7 +72,7 @@ class RealEdge(AbstractEdge):
                     self.speed_request = -1
             self.lock.release()
 
-            tosleep = 1.0 / self.update_rate_hz - (now - time())
+            tosleep = 1.0 / self.update_rate_hz - (time() - now)
             if (tosleep > 0):
                 sleep(tosleep)
             else:
