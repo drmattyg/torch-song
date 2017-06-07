@@ -22,5 +22,5 @@ class TorchSong:
 
     def calibrate(self):
         for e in self.edges.values():
-            e.calibration.calibrate()
+            e.calibrate()
             print(e.calibration)

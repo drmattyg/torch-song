@@ -53,7 +53,6 @@ class RealEdge(AbstractEdge):
         while (not self.pleaseExit):
             self.lock.acquire()
             now = time()
-            # print('dir: %d beg: %d end %d' % (self.motor_driver.get_dir(), self.limit_switch_beg.get_state(), self.limit_switch_end.get_state())
             if (self.motor_driver.get_dir() == MotorDriver.FORWARD and
                         self.motor_driver.get_speed() > 0 and
                         not self._ignore_limit and
@@ -81,7 +80,7 @@ class RealEdge(AbstractEdge):
             else:
                 print('edge not calling sleep(), something weird is going on')
 
-    def _ignore_limit_switch(state):
+    def _ignore_limit_switch(self, state):
         self.lock.acquire()
         self._ignore_limit = state
         self.lock.release()
