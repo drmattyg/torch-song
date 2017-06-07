@@ -8,19 +8,19 @@ IGNITER_DELAY = 1000
 
 
 class Songbook:
-    def __init__(self, filename, calibration):
+    def __init__(self, filename, torch_song):
         self.songbook = yaml.load(open(filename, "r").read())
         self.timepoints = {}
-        self.calibration = calibration
+        self.torch_song = torch_song
         self.sorted_timepoints = None
         self.generate_timing_map()
 
     @staticmethod
-    def from_string(yml, calibration):
+    def from_string(yml, torch_song):
         _self = Songbook.__new__(Songbook);
         _self.songbook = yaml.load(yml)
         _self.timepoints = {}
-        _self.calibration = calibration
+        _self.torch_song = torch_song
         _self.sorted_timepoints = None
         _self.generate_timing_map()
         return _self
@@ -45,7 +45,7 @@ class Songbook:
                         self.add_transition(MTransition(Measure.IGNITER, id, 0),
                                             start_time + IGNITER_DELAY)
                 if 'dir' in e:
-                    edge_calibration = self.calibration.get_calibration(int(id))
+                    edge_calibration = self.torch_song.edges[id].calibration
                     distance = e['distance'] if 'distance' in e else 1
                     t = float(measure['time'])
                     direction = int(e['dir'])

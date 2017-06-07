@@ -3,7 +3,6 @@ import threading
 
 import time
 
-from torch_song.calibration import TSCalibration
 from torch_song.songbook import Songbook, SongbookRunner
 from torch_song.simulator import SimTorchSong
 
@@ -37,8 +36,8 @@ songbook:
 
 
 def main(scr):
-    sb = Songbook.from_string(SONGBOOK_YML, TSCalibration(None))
     ts = SimTorchSong(scr, num_edges=3)
+    sb = Songbook.from_string(SONGBOOK_YML, ts)
     runner = SongbookRunner(sb, ts)
     scr.nodelay(1)
     SimTorchSong.initialize_curses()
