@@ -1,5 +1,5 @@
 import time
-import statistics as stats
+import numpy
 
 
 def try_decorator(func):
@@ -33,9 +33,14 @@ class EdgeCalibration:
                 'polarity:' + str(self.polarity))
 
     def get_speed(self, time, direction, distance=1):
-        if direction:
-            return 100
-        return 0
+        if (direction == 1):
+            return int(
+                numpy.interp(time * distance / 1000, self.fwd_speed_map, self.duty_cycle_map))
+        elif (direction == -1):
+            return int(
+                numpy.interp(time * distance / 1000, self.rev_speed_map, self.duty_cycle_map))
+        else:
+            return 0
 
     @try_decorator
     def chk_beg_limit(self):
