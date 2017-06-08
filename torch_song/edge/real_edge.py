@@ -10,7 +10,7 @@ from torch_song.hardware.limit_switch import LimitSwitch
 
 
 class RealEdge(AbstractEdge):
-    def __init__(self, i, io, config, update_rate_hz=100, calibration=None):
+    def __init__(self, i, io, config, update_rate_hz=20, calibration=None):
         super().__init__(i)
         self.motor_driver = MotorDriver(io['pca9685'],
                                         config['subsystems']['motors'][self.id - 1]['pwm_io'],
@@ -40,6 +40,10 @@ class RealEdge(AbstractEdge):
         self.runner = Thread(target=self.loop)
         self.runner.setDaemon(True)
         self.runner.start()
+
+        # let limit switches settle
+        sleep(2)
+
 
     def __str__(self):
         s = "igniter: %d, valve: %d, beg. limit: %d, end. limit: %d, motor speed: %f, motor dir: %s" % (
@@ -107,6 +111,9 @@ class RealEdge(AbstractEdge):
         self._ignore_limit_switch(True)
         self.calibration.calibrate()
         self._ignore_limit_switch(False)
+
+    def kill(self):
+        self.__del__();
 
     def __del__(self):
         self.motor_driver.stop()

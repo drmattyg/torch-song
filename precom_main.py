@@ -11,7 +11,7 @@ def main():
     runner = SongbookRunner(sb, ts)
     runner.run()
     for e in ts.edges:
-        e.motor_driver.stop()
+        e.kill()
         e.runner.join(5000)
 
 

@@ -62,6 +62,7 @@ class EdgeCalibration:
             raise Exception('Calibration timeout')
         e.set_motor_state(0, 0)
         self.polarity = False if self.edge.get_limit_switch_state()[0] else True
+        print('Calibrated polarity for edge:%d is %d' % (self.edge.id, self.polarity)) 
         return self.polarity
 
     def calibrate_one_speed(self, speed):

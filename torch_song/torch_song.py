@@ -18,9 +18,6 @@ class TorchSong:
         self.io['mcp23017'] = mcps
 
         self.edges = {i: RealEdge(i, self.io, self.config) for i in range(1, num_edges + 1)}
-        time.sleep(1)
-
-    def calibrate(self):
         for e in self.edges.values():
             e.calibrate()
             print(e.calibration)

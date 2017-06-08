@@ -18,7 +18,7 @@ class Songbook:
     @staticmethod
     def from_string(yml, torch_song):
         _self = Songbook.__new__(Songbook);
-        _self.songbook = yaml.load(yml)
+        _self.songbook = yaml.load(open(yml, 'r'))
         _self.timepoints = {}
         _self.torch_song = torch_song
         _self.sorted_timepoints = None
