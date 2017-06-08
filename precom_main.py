@@ -6,13 +6,12 @@ from torch_song.songbook import SongbookRunner
 
 
 def main():
-    ts = TorchSong(num_edges=1)
+    ts = TorchSong(num_edges=3)
     sb = Songbook.from_string("songbooks/one_edge_test.yml", ts)
     runner = SongbookRunner(sb, ts)
     runner.run()
-    for e in ts.edges:
+    for e in ts.edges.values():
         e.kill()
-        e.runner.join(5000)
 
 
 if __name__ == '__main__':
