@@ -42,7 +42,7 @@ class RealEdge(AbstractEdge):
         self.runner.start()
 
         # let limit switches settle
-        sleep(2)
+        sleep(1)
 
 
     def __str__(self):
@@ -107,15 +107,18 @@ class RealEdge(AbstractEdge):
     def at_limit(self):
         return self.limit_switch_beg.get_state() or self.limit_switch_end.get_state()
 
+    def move_to_start(self):
+        self.set_motor_state(-1, 75);
+
     def calibrate(self):
         self._ignore_limit_switch(True)
         self.calibration.calibrate()
         self._ignore_limit_switch(False)
 
     def kill(self):
-        self.__del__();
-
-    def __del__(self):
         self.motor_driver.stop()
         self.pleaseExit = True
         self.runner.join(5000)
+
+    def __del__(self):
+        self.kill()
