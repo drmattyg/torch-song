@@ -2,6 +2,7 @@ from threading import Thread, Lock
 from time import sleep, time
 
 from torch_song.calibration import EdgeCalibration
+from torch_song.common import try_decorator
 from torch_song.edge import AbstractEdge
 from torch_song.hardware.motor_driver import MotorDriver
 from torch_song.hardware.igniter import Igniter
@@ -12,6 +13,8 @@ from torch_song.hardware.limit_switch import LimitSwitch
 class RealEdge(AbstractEdge):
     def __init__(self, i, io, config, update_rate_hz=20, calibration=None):
         super().__init__(i)
+
+        # Hardware config
         self.motor_driver = MotorDriver(io['pca9685'],
                                         config['subsystems']['motors'][self.id - 1]['pwm_io'],
                                         config['subsystems']['motors'][self.id - 1]['dir_io'],
@@ -25,25 +28,28 @@ class RealEdge(AbstractEdge):
         self.valve = Valve(config['subsystems']['valves'][self.id - 1]['gpio'])
         self.igniter = Igniter(config['subsystems']['igniters'][self.id - 1]['gpio'])
 
+        # Thread daemon inits
         self.speed_request = -1
         self.dir_request = MotorDriver.FORWARD
         self._ignore_limit = False
-
         self.update_rate_hz = update_rate_hz
+
+        # Safety params
+        self.time_of_last_limit_switch = time()
+        self.STALL_TIME = 10
 
         if calibration is None:
             # insert a default calibration
             self.set_calibration(EdgeCalibration(self))
 
+        # Threading
         self.lock = Lock()
-
         self.runner = Thread(target=self.loop)
         self.runner.setDaemon(True)
         self.runner.start()
 
         # let limit switches settle
-        sleep(1)
-
+        try_decorator(timeout=5)(lambda:all(get_limit_switch_state()))
 
     def __str__(self):
         s = "igniter: %d, valve: %d, beg. limit: %d, end. limit: %d, motor speed: %f, motor dir: %s" % (
@@ -57,6 +63,18 @@ class RealEdge(AbstractEdge):
         while (not self.pleaseExit):
             self.lock.acquire()
             now = time()
+
+            #safety checks  
+            #both limit switches on
+            if all(self.get_limit_switch_state()):
+                raise Exception('Both limit switches on for edge', self.id)
+
+            #stalled motor
+            if (any(self.get_limit_switch_state()) or self.motor_driver.get_speed() == 0)
+                self.time_of_last_limit_switch = time()
+            if (self.motor_driver.get_speed() > 0 and
+                time()-self.time_of_last_limit_switch > self.STALL_TIME)
+
             if (self.motor_driver.get_dir() == MotorDriver.FORWARD and
                         self.motor_driver.get_speed() > 0 and
                         not self._ignore_limit and

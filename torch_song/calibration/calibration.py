@@ -1,20 +1,7 @@
 import time
 import numpy
 
-
-def try_decorator(func):
-    timeout = 10
-
-    def wrap(*args, **kwargs):
-        then = time.time()
-        while ((time.time() - then) < timeout):
-            if (func(*args, **kwargs)):
-                return True
-            time.sleep(0.05)
-        return False
-
-    return wrap
-
+from torch_song.common import try_decorator
 
 class EdgeCalibration:
     def __init__(self, edge, min_speed=80, cal_speed_step=20):
@@ -42,15 +29,15 @@ class EdgeCalibration:
         else:
             return 0
 
-    @try_decorator
+    @try_decorator()
     def chk_beg_limit(self):
         return self.edge.get_limit_switch_state()[1 if self.polarity else 0]
 
-    @try_decorator
+    @try_decorator()
     def chk_end_limit(self):
         return self.edge.get_limit_switch_state()[0 if self.polarity else 1]
 
-    @try_decorator
+    @try_decorator()
     def chk_any_limit(self):
         return any(self.edge.get_limit_switch_state())
 
