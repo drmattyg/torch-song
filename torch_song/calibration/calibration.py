@@ -44,6 +44,7 @@ class EdgeCalibration:
     def calibrate_polarity(self):
         e = self.edge
         e.set_motor_state(-1, 75)
+        time.sleep(.5)
         if (not self.chk_any_limit()):
             e.set_motor_state(0, 0)
             raise Exception('Calibration timeout')
@@ -99,6 +100,17 @@ class EdgeCalibration:
             self.duty_cycle_map.append(i)
             self.fwd_speed_map.append(res[0])
             self.rev_speed_map.append(res[1])
+        self.home()
         self.duty_cycle_map.reverse()
         self.fwd_speed_map.reverse()
         self.rev_speed_map.reverse()
+
+    def home(self):
+        e = self.edge
+        # move to start
+        e.set_motor_state(-1, 75)
+        if (not self.chk_beg_limit()):
+            e.set_motor_state(0, 0)
+            raise Exception('Calibration timeout')
+        e.set_motor_state(0, 0)
+

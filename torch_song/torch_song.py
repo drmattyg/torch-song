@@ -19,6 +19,8 @@ class TorchSong:
         self.io['mcp23017'] = mcps
 
         self.edges = {i: RealEdge(i, self.io, self.config) for i in range(1, num_edges + 1)}
+        #HACK FOR PRECOM
+        self.edges[1] = self.edges[4] 
         calibrators = {}
 
         for e in self.edges.values():

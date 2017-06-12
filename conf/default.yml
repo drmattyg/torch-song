@@ -99,35 +99,44 @@ subsystems:
       pwm_io: 8
       dir_io: 27
       dir_io_type: RPI_IO
+      polarity: 0
     - id: 2
       pwm_io: 7
       dir_io: 17
       dir_io_type: RPI_IO
+      polarity: 1
     - id: 3
       pwm_io: 6
       dir_io: 4
       dir_io_type: RPI_IO
+      polarity: 0
     - id: 4
       pwm_io: 5
       dir_io: 15
       dir_io_type: RPI_IO
+      polarity: 0
     - id: 5
       pwm_io: 4
       dir_io: 14
       dir_io_type: RPI_IO
+      polarity: 0
     - id: 6
       pwm_io: 1
       dir_io: 0
       dir_io_type: PCA9685_IO
+      polarity: 0
     - id: 7
       pwm_io: 3
       dir_io: 2
       dir_io_type: PCA9685_IO
+      polarity: 0
     - id: 8
       pwm_io: 13
       dir_io: 12
       dir_io_type: PCA9685_IO
+      polarity: 0
     - id: 9
       pwm_io: 15
       dir_io: 14
       dir_io_type: PCA9685_IO
+      polarity: 0

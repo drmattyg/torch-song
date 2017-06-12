@@ -7,11 +7,12 @@ class MotorDriver:
     # We use the PCA9685 as an IO expander in some cases
     IO_TYPE_NAMES = ['PCA9685_IO', 'RPI_IO']
 
-    def __init__(self, pca9685, pwm_io, dir_io, dir_io_type):
+    def __init__(self, pca9685, pwm_io, dir_io, dir_io_type, polarity=0):
         self._pwm_io = pwm_io
         self._dir_io = dir_io
         self._dir_io_type = dir_io_type
         self._pca = pca9685
+        self.polarity = polarity
 
         if dir_io_type not in MotorDriver.IO_TYPE_NAMES:
             raise ValueError("Incorrect IO type for Motor Driver")
@@ -22,7 +23,6 @@ class MotorDriver:
 
         self.speed = -1
         self.dir = -1
-
         self.set_speed(0)
         self.set_dir(MotorDriver.FORWARD)
 
@@ -30,16 +30,32 @@ class MotorDriver:
         return self.dir
 
     def set_dir(self, dir):
+        # polarity
         if dir not in [MotorDriver.FORWARD, MotorDriver.REVERSE]:
             raise ValueError("Incorrect value for set_dir")
         if (dir != self.dir):
             if self._dir_io_type == 'PCA9685_IO':
                 if dir is MotorDriver.FORWARD:
-                    self._pca.set_off(self._dir_io)
+                    if (self.polarity):
+                        self._pca.set_on(self._dir_io)
+                    else:
+                        self._pca.set_off(self._dir_io)
                 else:
-                    self._pca.set_on(self._dir_io)
+                    if (self.polarity):
+                        self._pca.set_off(self._dir_io)
+                    else:
+                        self._pca.set_on(self._dir_io)
             elif self._dir_io_type == 'RPI_IO':
-                GPIO.output(self._dir_io, dir)
+                if dir is MotorDriver.FORWARD:
+                    if (self.polarity):
+                        GPIO.output(self._dir_io, 0)
+                    else:
+                        GPIO.output(self._dir_io, 1)
+                else:
+                    if (self.polarity):
+                        GPIO.output(self._dir_io, 1)
+                    else:
+                        GPIO.output(self._dir_io, 0)
 
             self.dir = dir
 

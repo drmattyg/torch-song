@@ -18,7 +18,8 @@ class RealEdge(AbstractEdge):
         self.motor_driver = MotorDriver(io['pca9685'],
                                         config['subsystems']['motors'][self.id - 1]['pwm_io'],
                                         config['subsystems']['motors'][self.id - 1]['dir_io'],
-                                        config['subsystems']['motors'][self.id - 1]['dir_io_type'])
+                                        config['subsystems']['motors'][self.id - 1]['dir_io_type'],
+                                        config['subsystems']['motors'][self.id - 1]['polarity'])
         beg_mcp_id = config['subsystems']['limit_switches'][self.id - 1]['beg_mcp_id']
         beg_mcp_io = config['subsystems']['limit_switches'][self.id - 1]['beg_mcp_io']
         end_mcp_id = config['subsystems']['limit_switches'][self.id - 1]['end_mcp_id']
@@ -27,10 +28,11 @@ class RealEdge(AbstractEdge):
         self.limit_switch_end = LimitSwitch(io['mcp23017'][end_mcp_id], end_mcp_io)
         self.valve = Valve(config['subsystems']['valves'][self.id - 1]['gpio'])
         self.igniter = Igniter(config['subsystems']['igniters'][self.id - 1]['gpio'])
+        self.dir_polarity =  config['subsystems']['motors'][self.id - 1]['polarity']
 
         # Thread daemon inits
         self.speed_request = -1
-        self.dir_request = MotorDriver.FORWARD
+        self.dir_request = 0
         self._ignore_limit = False
         self.update_rate_hz = update_rate_hz
 
@@ -42,14 +44,15 @@ class RealEdge(AbstractEdge):
             # insert a default calibration
             self.set_calibration(EdgeCalibration(self))
 
+        # let limit switches settle
+        try_decorator(timeout=5)(lambda:not all(self.get_limit_switch_state()))()
+
         # Threading
         self.lock = Lock()
         self.runner = Thread(target=self.loop)
         self.runner.setDaemon(True)
         self.runner.start()
 
-        # let limit switches settle
-        try_decorator(timeout=5)(lambda:all(get_limit_switch_state()))
 
     def __str__(self):
         s = "igniter: %d, valve: %d, beg. limit: %d, end. limit: %d, motor speed: %f, motor dir: %s" % (
@@ -70,10 +73,14 @@ class RealEdge(AbstractEdge):
                 raise Exception('Both limit switches on for edge', self.id)
 
             #stalled motor
-            if (any(self.get_limit_switch_state()) or self.motor_driver.get_speed() == 0)
+            if (any(self.get_limit_switch_state()) or self.motor_driver.get_speed() == 0):
                 self.time_of_last_limit_switch = time()
             if (self.motor_driver.get_speed() > 0 and
-                time()-self.time_of_last_limit_switch > self.STALL_TIME)
+                time()-self.time_of_last_limit_switch > self.STALL_TIME):
+                pass
+                #raise Exception('Stalled motor')
+
+            self.motor_driver.set_dir(MotorDriver.REVERSE if self.dir_request == -1 else MotorDriver.FORWARD)
 
             if (self.motor_driver.get_dir() == MotorDriver.FORWARD and
                         self.motor_driver.get_speed() > 0 and
@@ -81,18 +88,17 @@ class RealEdge(AbstractEdge):
                         self.get_forward_limit_switch_state() == True):
                 self.motor_driver.stop()
                 self.speed_request = 0
-                print('End limit switch hit for id:%d' % self.id)
+                print('(%d) Fwd limit switch hit for id:%d' % (time(), self.id))
             elif (self.motor_driver.get_dir() == MotorDriver.REVERSE and
                         self.motor_driver.get_speed() > 0 and
                         not self._ignore_limit and
                         self.get_reverse_limit_switch_state() == True):
                 self.motor_driver.stop()
                 self.speed_request = 0
-                print('Beg limit switch hit for id:%d' % self.id)
+                print('(%d) Rev limit switch hit for id:%d' % (time(), self.id))
             else:
                 if (self.speed_request >= 0):
                     self.motor_driver.set_speed(self.speed_request)
-                    self.motor_driver.set_dir(MotorDriver.REVERSE if self.dir_request == -1 else MotorDriver.FORWARD)
                     self.speed_request = -1
             self.lock.release()
 
@@ -111,6 +117,7 @@ class RealEdge(AbstractEdge):
         self.lock.acquire()
         self.dir_request = direction
         self.speed_request = speed
+        print('(%d), id %d speed %d dir %d' % (time(), self.id, speed, direction))
         self.lock.release()
 
     def set_valve_state(self, v):

@@ -1,0 +1,53 @@
+version: 1.0
+songbook:
+  - start_at: 0
+    time: 2500
+    edges:
+      - edge: 1
+        flame: 1
+        dir: 1
+  - start_at: 2500
+    time: 2500
+    edges:
+      - edge: 1
+        flame: 0
+        dir: -1
+      - edge: 3
+        flame: 1
+        dir: 1
+  - start_at: 5000
+    time: 2500
+    edges:
+      - edge: 3
+        flame: 0
+        dir: -1
+      - edge: 2
+        flame: 1
+        dir: 1
+  - start_at: 7500
+    time: 2500
+    edges:
+      - edge: 2
+        flame: 0
+        dir: -1
+      - edge: 1
+        flame: 1
+        dir: 1
+  - start_at: 10000
+    time: 2500
+    edges:
+      - edge: 1
+        flame: 0
+        dir: -1
+      - edge: 3
+        flame: 1
+        dir: 1
+  - start_at: 12500
+    time: 2500
+    edges:
+      - edge: 3
+        flame: 0
+        dir: -1
+      - edge: 2
+        flame: 1
+        dir: 1
