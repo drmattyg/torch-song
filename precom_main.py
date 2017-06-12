@@ -21,7 +21,7 @@ def main():
     ts = TorchSong(num_edges=3, sim=sim)
     try:
         ts.calibrate()
-        loops = 10
+        loops = 1
         while (loops > 0):
             sb = Songbook.from_string("songbooks/three_edge_chaser.yml", ts)
             runner = SongbookRunner(sb, ts)

@@ -1,5 +1,6 @@
 import time
 import numpy
+import logging
 
 from torch_song.common import try_decorator
 
@@ -50,7 +51,8 @@ class EdgeCalibration:
             raise Exception('Calibration timeout')
         e.set_motor_state(0, 0)
         self.polarity = False if self.edge.get_limit_switch_state()[0] else True
-        print('Calibrated polarity for edge:%d is %d' % (self.edge.id, self.polarity)) 
+        logging.info('Calibrated polarity for edge:%d is %d' % (self.edge.id, self.polarity),
+                extra={'edge_id': self.edge.id}) 
         return self.polarity
 
     def calibrate_one_speed(self, speed):
@@ -80,7 +82,8 @@ class EdgeCalibration:
         e.set_motor_state(0, 0)
         rev_time = time.time() - then
 
-        print ('Calibrated edge:%d at spd:%d is fwd:%f rev:%f' % (self.edge.id, speed, fwd_time, rev_time))
+        logging.info('Calibrated edge:%d at spd:%d is fwd:%f rev:%f' %
+            (self.edge.id, speed, fwd_time, rev_time), extra={'edge_id': self.edge.id})
 
         return [rev_time, fwd_time]
 

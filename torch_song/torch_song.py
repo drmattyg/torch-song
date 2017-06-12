@@ -2,7 +2,8 @@ import yaml
 import time
 from threading import Thread, Lock, Event
 import traceback
-
+import logging
+from torch_song.edge.edge_color_stream_handler import *
 try:
     from torch_song.edge.real_edge import RealEdge
     from torch_song.hardware import MCPInput
@@ -11,9 +12,19 @@ except ImportError:
     print("Hardware imports failed, reverting to simulation")
     from torch_song.simulator import SimEdge
 
+
 class TorchSong:
     def __init__(self, num_edges=1, sim=False):
         stream = open('conf/default.yml', 'r')
+
+        logger = logging.getLogger()
+        logger.setLevel(logging.DEBUG)
+        formatter = logging.Formatter("[%(asctime)s] %(message)s")
+        ch = EdgeColorStreamHandler()
+        ch.setLevel(logging.DEBUG)
+        ch.setFormatter(formatter)
+        logger.addHandler(ch)
+
         self.config = yaml.load(stream)
         if (not sim):
             self.io = dict()
@@ -36,9 +47,7 @@ class TorchSong:
             traceback.print_exc()
             event.set()
 
-
     def calibrate(self):
-
         calibrators = []
         events = []
 
@@ -51,16 +60,15 @@ class TorchSong:
             c.start()
 
         done = lambda: any(map(lambda c: not c.isAlive(), calibrators))
-        exceception = lambda: any(map(lambda e: e.is_set(), events))
+        is_exc = lambda: any(map(lambda e: e.is_set(), events))
 
         while (not done()):
-            if (exceception()):
+            if (is_exc()):
                 raise Exception('Calibration error')
             time.sleep(.1)
 
-        if (exc()):
+        if (is_exc()):
             raise Exception('Calibration error')
 
         for c in calibrators:
             c.join()
-
