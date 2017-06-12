@@ -30,7 +30,6 @@ class MotorDriver:
         return self.dir
 
     def set_dir(self, dir):
-        # polarity
         if dir not in [MotorDriver.FORWARD, MotorDriver.REVERSE]:
             raise ValueError("Incorrect value for set_dir")
         if (dir != self.dir):
@@ -46,16 +45,10 @@ class MotorDriver:
                     else:
                         self._pca.set_on(self._dir_io)
             elif self._dir_io_type == 'RPI_IO':
-                if dir is MotorDriver.FORWARD:
-                    if (self.polarity):
-                        GPIO.output(self._dir_io, 0)
-                    else:
-                        GPIO.output(self._dir_io, 1)
+                if (self.polarity):
+                    GPIO.output(self._dir_io, (1 - dir)
                 else:
-                    if (self.polarity):
-                        GPIO.output(self._dir_io, 1)
-                    else:
-                        GPIO.output(self._dir_io, 0)
+                    GPIO.output(self._dir_io, dir)
 
             self.dir = dir
 

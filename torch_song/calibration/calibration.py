@@ -80,18 +80,9 @@ class EdgeCalibration:
         e.set_motor_state(0, 0)
         rev_time = time.time() - then
 
-        return [rev_time, fwd_time]
+        print ('Calibrated edge:%d at spd:%d is fwd:%f rev:%f' % (self.edge.id, speed, fwd_time, rev_time))
 
-    def simple_calibrate(self, n=5):
-        self.calibrate_polarity()
-        cal_fwd = []
-        cal_rev = []
-        for i in range(n):
-            cal = self.calibrate_one_speed(100)
-            cal_fwd.append(cal[1])
-            cal_rev.append(cal[0])
-        self.fwd_speed_map = [stats.mean(cal_fwd)]
-        self.rev_speed_map = [stats.mean(cal_rev)]
+        return [rev_time, fwd_time]
 
     def calibrate(self):
         self.calibrate_polarity()
