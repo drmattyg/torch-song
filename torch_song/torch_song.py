@@ -1,6 +1,7 @@
 import yaml
 import time
-from threading import Thread, Lock
+from threading import Thread, Lock, Event
+import traceback
 
 try:
     from torch_song.edge.real_edge import RealEdge
@@ -27,17 +28,39 @@ class TorchSong:
         else:
             self.edges = {i: SimEdge(i, 1000) for i in range(1, num_edges + 1)}
 
-    def worker(self, edge):
-        edge.calibrate()
+    def worker(self, edge, event):
+        try:
+            edge.calibrate()
+        except Exception as e:
+            print(e)
+            traceback.print_exc()
+            event.set()
+
 
     def calibrate(self):
 
-        calibrators = {}
+        calibrators = []
+        events = []
 
         for e in self.edges.values():
-            calibrators[e.id] = Thread(target=self.worker, args=(e,))
-            calibrators[e.id].start()
+            event = Event()
+            calibrators.append(Thread(target=self.worker, args=(e,event,)))
+            events.append(event)
 
-        for c in calibrators.values():
+        for c in calibrators:
+            c.start()
+
+        done = lambda: any(map(lambda c: not c.isAlive(), calibrators))
+        exceception = lambda: any(map(lambda e: e.is_set(), events))
+
+        while (not done()):
+            if (exceception()):
+                raise Exception('Calibration error')
+            time.sleep(.1)
+
+        if (exc()):
+            raise Exception('Calibration error')
+
+        for c in calibrators:
             c.join()
 

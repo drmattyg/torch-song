@@ -32,6 +32,9 @@ def main():
             e.kill()
     except KeyboardInterrupt:
         print('Received ctrl-c, cleaning up')
+    except Exception as e:
+        traceback.print_exc()
+        print(e)
     finally:
         for e in ts.edges.values():
             e.kill()
