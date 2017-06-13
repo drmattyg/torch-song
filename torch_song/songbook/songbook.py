@@ -3,7 +3,7 @@ import time
 from torch_song.songbook.measure import Measure
 
 MTransition = Measure.Transition
-IGNITER_OFFSET = 3000
+IGNITER_OFFSET = 4000
 IGNITER_DELAY = 1000
 
 
