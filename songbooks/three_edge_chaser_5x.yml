@@ -1,0 +1,165 @@
+version: 1.0
+songbook:
+   - edges:
+     - dir: 1
+       edge: 1
+       flame: 1
+     start_at: 0
+     time: 3000
+
+   - edges:
+     - dir: -1
+       edge: 1
+       flame: 0
+     - dir: 1
+       edge: 3
+       flame: 1
+     start_at: 3000
+     time: 3000
+   
+   - edges:
+     - dir: -1
+       edge: 3
+       flame: 0
+     - dir: 1
+       edge: 2
+       flame: 1
+     start_at: 6000
+     time: 3000
+   
+   - edges:
+     - dir: -1
+       edge: 2
+       flame: 0
+     - dir: 1
+       edge: 1
+       flame: 1
+     start_at: 9000
+     time: 3000
+   
+   - edges:
+     - dir: -1
+       edge: 1
+       flame: 0
+     - dir: 1
+       edge: 3
+       flame: 1
+     start_at: 12000
+     time: 3000
+   
+   - edges:
+     - dir: -1
+       edge: 3
+       flame: 0
+     - dir: 1
+       edge: 2
+       flame: 1
+     start_at: 15000
+     time: 3000
+   
+   - edges:
+     - dir: -1
+       edge: 2
+       flame: 0
+     - dir: 1
+       edge: 1
+       flame: 1
+     start_at: 18000
+     time: 3000
+   
+   - edges:
+     - dir: -1
+       edge: 1
+       flame: 0
+     - dir: 1
+       edge: 3
+       flame: 1
+     start_at: 21000
+     time: 3000
+   
+   - edges:
+     - dir: -1
+       edge: 3
+       flame: 0
+     - dir: 1
+       edge: 2
+       flame: 1
+     start_at: 24000
+     time: 3000
+   
+   - edges:
+     - dir: -1
+       edge: 2
+       flame: 0
+     - dir: 1
+       edge: 1
+       flame: 1
+     start_at: 27000
+     time: 3000
+   
+   - edges:
+     - dir: -1
+       edge: 1
+       flame: 0
+     - dir: 1
+       edge: 3
+       flame: 1
+     start_at: 30000
+     time: 3000
+   
+   - edges:
+     - dir: -1
+       edge: 3
+       flame: 0
+     - dir: 1
+       edge: 2
+       flame: 1
+     start_at: 33000
+     time: 3000
+   
+   - edges:
+     - dir: -1
+       edge: 2
+       flame: 0
+     - dir: 1
+       edge: 1
+       flame: 1
+     start_at: 36000
+     time: 3000
+   
+   - edges:
+     - dir: -1
+       edge: 1
+       flame: 0
+     - dir: 1
+       edge: 3
+       flame: 1
+     start_at: 39000
+     time: 3000
+   
+   - edges:
+     - dir: -1
+       edge: 3
+       flame: 0
+     - dir: 1
+       edge: 2
+       flame: 1
+     start_at: 42000
+     time: 3000
+   
+   - edges:
+     - dir: -1
+       edge: 2
+       flame: 0
+     - dir: 1
+       edge: 1
+       flame: 1
+     start_at: 45000
+     time: 3000
+   
+   - edges:
+     - dir: -1
+       edge: 1
+       flame: 0
+     time: 48000
+   
