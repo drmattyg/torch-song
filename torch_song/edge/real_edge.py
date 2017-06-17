@@ -1,5 +1,6 @@
 from threading import Thread, Lock
 from time import sleep, time
+import logging
 
 from torch_song.calibration import EdgeCalibration
 from torch_song.common import try_decorator
@@ -88,14 +89,17 @@ class RealEdge(AbstractEdge):
                         self.get_forward_limit_switch_state() == True):
                 self.motor_driver.stop()
                 self.speed_request = 0
-                print('(%d) Fwd limit switch hit for id:%d' % (time(), self.id))
+
+                logging.info('Fwd limit switch hit for id: %d' %
+                    (self.id), extra={'edge_id': self.id})
             elif (self.motor_driver.get_dir() == MotorDriver.REVERSE and
                         self.motor_driver.get_speed() > 0 and
                         not self._ignore_limit and
                         self.get_reverse_limit_switch_state() == True):
                 self.motor_driver.stop()
                 self.speed_request = 0
-                print('(%d) Rev limit switch hit for id:%d' % (time(), self.id))
+                logging.info('Rev limit switch hit for id: %d' %
+                    (self.id), extra={'edge_id': self.id})
             else:
                 if (self.speed_request >= 0):
                     self.motor_driver.set_speed(self.speed_request)
@@ -117,7 +121,8 @@ class RealEdge(AbstractEdge):
         self.lock.acquire()
         self.dir_request = direction
         self.speed_request = speed
-        print('(%d), id %d speed %d dir %d' % (time(), self.id, speed, direction))
+        logging.info('Speed req: %f dir req: %d id: %d' %
+            (speed, direction, self.id), extra={'edge_id': self.id})
         self.lock.release()
 
     def set_valve_state(self, v):

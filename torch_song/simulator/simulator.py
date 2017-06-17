@@ -39,7 +39,7 @@ def up_string(s):
 class SimEdge(AbstractEdge):
     def set_valve_state(self, v):
         logging.info('Valve edge:%d %s' %
-            (self.id, 'ON' if g else 'OFF'), extra={'edge_id': self.id})
+            (self.id, 'ON' if v else 'OFF'), extra={'edge_id': self.id})
         self.valve = v
 
     def set_igniter_state(self, g):

@@ -2,6 +2,7 @@
 
 import getopt
 import sys
+import traceback
 
 from torch_song.torch_song import TorchSong
 from torch_song.songbook import Songbook
@@ -18,7 +19,7 @@ def main():
         if opt in ('-s', '--sim'):
             sim = True
 
-    ts = TorchSong(num_edges=3, sim=sim)
+    ts = TorchSong(num_edges=4, sim=sim)
     try:
         ts.calibrate()
         loops = 1
@@ -33,8 +34,8 @@ def main():
     except KeyboardInterrupt:
         print('Received ctrl-c, cleaning up')
     except Exception as e:
-        traceback.print_exc()
         print(e)
+        traceback.print_exc()
     finally:
         for e in ts.edges.values():
             e.kill()

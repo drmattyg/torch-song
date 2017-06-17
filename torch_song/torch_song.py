@@ -18,10 +18,10 @@ class TorchSong:
         stream = open('conf/default.yml', 'r')
 
         logger = logging.getLogger()
-        logger.setLevel(logging.DEBUG)
+        logger.setLevel(logging.INFO)
         formatter = logging.Formatter("[%(asctime)s] %(message)s")
         ch = EdgeColorStreamHandler()
-        ch.setLevel(logging.DEBUG)
+        ch.setLevel(logging.INFO)
         ch.setFormatter(formatter)
         logger.addHandler(ch)
 
@@ -38,6 +38,9 @@ class TorchSong:
             self.edges = {i: RealEdge(i, self.io, self.config) for i in range(1, num_edges + 1)}
         else:
             self.edges = {i: SimEdge(i, 1000) for i in range(1, num_edges + 1)}
+
+        #HACK FOR PRECOM
+        self.edges[1] = self.edges[4] 
 
     def worker(self, edge, event):
         try:

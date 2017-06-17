@@ -46,9 +46,9 @@ class MotorDriver:
                         self._pca.set_on(self._dir_io)
             elif self._dir_io_type == 'RPI_IO':
                 if (self.polarity):
-                    GPIO.output(self._dir_io, (1 - dir))
-                else:
                     GPIO.output(self._dir_io, dir)
+                else:
+                    GPIO.output(self._dir_io, 1 - dir)
 
             self.dir = dir
 
