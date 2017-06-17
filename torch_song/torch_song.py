@@ -4,6 +4,7 @@ from threading import Thread, Lock, Event
 import traceback
 import logging
 from torch_song.edge.edge_color_stream_handler import *
+
 try:
     from torch_song.edge.real_edge import RealEdge
     from torch_song.hardware import MCPInput
@@ -15,7 +16,14 @@ except ImportError:
 
 class TorchSong:
     def __init__(self, num_edges=1, sim=False):
-        stream = open('conf/default.yml', 'r')
+        try:
+            stream = open('conf/default-mod.yml', 'r')
+        except Exception:
+            print('here')
+            stream = open('conf/default.yml', 'r')
+        self.config = yaml.load(stream)
+        print(self.config)
+
 
         logger = logging.getLogger()
         logger.setLevel(logging.INFO)
@@ -25,7 +33,6 @@ class TorchSong:
         ch.setFormatter(formatter)
         logger.addHandler(ch)
 
-        self.config = yaml.load(stream)
         if (not sim):
             self.io = dict()
             self.io['pca9685'] = PCA9685()
