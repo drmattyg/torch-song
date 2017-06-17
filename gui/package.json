@@ -13,8 +13,10 @@
   "dependencies": {
     "body-parser": "^1.15.2",
     "express": "^4.14.0",
+    "jpickle": "^0.4.1",
     "js-yaml": "^3.8.4",
     "material-ui": "^0.18.2",
+    "pickle": "^0.2.0",
     "react": "^15.5.0",
     "react-dom": "^15.1.0",
     "react-tap-event-plugin": "^2.0.0",

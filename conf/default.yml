@@ -1,3 +1,5 @@
+logging:
+  port: 4000
 io:
   mcp23017:
     - id: 1

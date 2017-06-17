@@ -3,8 +3,7 @@ const server = dgram.createSocket('udp4');
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
-
-
+const net = require('net');
 const yaml = require('js-yaml');
 const fs = require('fs');
 
@@ -24,6 +23,15 @@ const writeYAML = function(filename, obj, cb) {
     cb(err)
   });
 };
+
+
+const logging_server = net.createServer((socket) => {
+  socket.on('data', (data) => {
+    console.log(data.toString('utf8'))
+  });
+
+});
+logging_server.listen(4000, 'localhost');
 
 const version = process.env.npm_package_version
 console.log(version)

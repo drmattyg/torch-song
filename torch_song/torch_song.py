@@ -3,35 +3,46 @@ import time
 from threading import Thread, Lock, Event
 import traceback
 import logging
+from logging.handlers import SocketHandler
+from logging.handlers import HTTPHandler
 from torch_song.edge.edge_color_stream_handler import *
+import os
 
 try:
     from torch_song.edge.real_edge import RealEdge
     from torch_song.hardware import MCPInput
     from torch_song.hardware import PCA9685
 except ImportError:
-    print("Hardware imports failed, reverting to simulation")
-    from torch_song.simulator import SimEdge
+	print("Hardware imports failed, reverting to simulation")
+    pass
 
+from torch_song.simulator import SimEdge
 
 class TorchSong:
     def __init__(self, num_edges=1, sim=False):
         try:
             stream = open('conf/default-mod.yml', 'r')
         except Exception:
-            print('here')
             stream = open('conf/default.yml', 'r')
         self.config = yaml.load(stream)
-        print(self.config)
-
 
         logger = logging.getLogger()
         logger.setLevel(logging.INFO)
         formatter = logging.Formatter("[%(asctime)s] %(message)s")
-        ch = EdgeColorStreamHandler()
         ch.setLevel(logging.INFO)
-        ch.setFormatter(formatter)
-        logger.addHandler(ch)
+
+        tcpHandlerPort = self.config['logging']['port']
+        self.tcpHandler = SocketHandler('localhost', tcpHandlerPort)
+        self.tcpHandler.createSocket()
+        self.tcpHandler.setLevel(logging.DEBUG)
+        self.tcpHandler.setFormatter(formatter)
+
+        streamHandler = EdgeColorStreamHandler()
+        streamHandler.setLevel(logging.DEBUG)
+        streamHandler.setFormatter(formatter)
+
+        logger.addHandler(streamHandler)
+        logger.addHandler(self.tcpHandler)
 
         if (not sim):
             self.io = dict()
@@ -45,9 +56,6 @@ class TorchSong:
             self.edges = {i: RealEdge(i, self.io, self.config) for i in range(1, num_edges + 1)}
         else:
             self.edges = {i: SimEdge(i, 1000) for i in range(1, num_edges + 1)}
-
-        #HACK FOR PRECOM
-        self.edges[1] = self.edges[4] 
 
     def worker(self, edge, event):
         try:
@@ -82,3 +90,6 @@ class TorchSong:
 
         for c in calibrators:
             c.join()
+
+    def __del__(self):
+        self.tcpHandler.close()
