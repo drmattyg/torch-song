@@ -1,6 +1,7 @@
 import threading
 import time
 import curses
+import logging
 from enum import Enum
 
 import sys
@@ -37,12 +38,18 @@ def up_string(s):
 
 class SimEdge(AbstractEdge):
     def set_valve_state(self, v):
+        logging.info('Valve edge:%d %s' %
+            (self.id, 'ON' if v else 'OFF'), extra={'edge_id': self.id})
         self.valve = v
 
     def set_igniter_state(self, g):
+        logging.info('Igniter edge:%d %s' %
+            (self.id, 'ON' if g else 'OFF'), extra={'edge_id': self.id})
         self.igniter = g
 
     def set_motor_state(self, direction, speed):
+        logging.info('Setting edge:%d to spd:%d and dir:%d' %
+            (self.id, speed, direction), extra={'edge_id': self.id})
         self.motor_direction = direction
         self.motor_speed = speed
 
