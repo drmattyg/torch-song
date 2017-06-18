@@ -43,7 +43,7 @@ def main():
             runner.run()
             for e in ts.edges.values():
                 e.home()
-            iso.ReceiveMessage(120)
+            iso.ReceiveMessage(30)
             # loops -= 1
         for e in ts.edges.values():
             iso.CloseSerial()

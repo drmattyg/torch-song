@@ -51,3 +51,103 @@ songbook:
       - edge: 2
         flame: 1
         dir: 1
+  - start_at: 15000
+    time: 2500
+    edges:
+      - edge: 2
+        flame: 0
+        dir: -1
+      - edge: 1
+        flame: 1
+        dir: 1
+  - start_at: 17500
+    time: 2500
+    edges:
+      - edge: 1
+        flame: 0
+        dir: -1
+      - edge: 3
+        flame: 1
+        dir: 1
+  - start_at: 20000
+    time: 2500
+    edges:
+      - edge: 3
+        flame: 0
+        dir: -1
+      - edge: 2
+        flame: 1
+        dir: 1
+  - start_at: 22500
+    time: 2500
+    edges:
+      - edge: 2
+        flame: 0
+        dir: -1
+      - edge: 1
+        flame: 1
+        dir: 1
+  - start_at: 25000
+    time: 2500
+    edges:
+      - edge: 1
+        flame: 0
+        dir: -1
+      - edge: 3
+        flame: 1
+        dir: 1
+  - start_at: 27500
+    time: 2500
+    edges:
+      - edge: 3
+        flame: 0
+        dir: -1
+      - edge: 2
+        flame: 1
+        dir: 1
+  - start_at: 30000
+    time: 2500
+    edges:
+      - edge: 2
+        flame: 0
+        dir: -1
+      - edge: 1
+        flame: 1
+        dir: 1
+  - start_at: 32500
+    time: 2500
+    edges:
+      - edge: 1
+        flame: 0
+        dir: -1
+      - edge: 3
+        flame: 1
+        dir: 1
+  - start_at: 35000
+    time: 2500
+    edges:
+      - edge: 3
+        flame: 0
+        dir: -1
+      - edge: 2
+        flame: 1
+        dir: 1
+  - start_at: 37500
+    time: 2500
+    edges:
+      - edge: 2
+        flame: 0
+        dir: -1
+      - edge: 1
+        flame: 1
+        dir: 1
+  - start_at: 40000
+    time: 2500
+    edges:
+      - edge: 1
+        flame: 0
+        dir: -1
+      - edge: 3
+        flame: 1
+        dir: 1
+
