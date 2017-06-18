@@ -3,11 +3,17 @@
 import getopt
 import sys
 import traceback
+import random
 
 from torch_song.torch_song import TorchSong
 from torch_song.songbook import Songbook
 from torch_song.songbook import SongbookRunner
 from torch_song.isocahedron import IsoInterface 
+
+songbooks = [
+    'songbooks/three_edge_chaser.yml',
+    'songbooks/points_of_light.yml'
+]
 
 def main():
     try:                                
@@ -30,12 +36,14 @@ def main():
         while True:
             while (not len(iso.ReceiveMessage(1).decode('utf-8'))):
                 pass
-            sb = Songbook.from_string("songbooks/three_edge_chaser.yml", ts)
+            while (not len(iso.ReceiveMessage(1).decode('utf-8'))):
+                pass
+            sb = Songbook.from_string(random.choice(songbooks), ts)
             runner = SongbookRunner(sb, ts)
             runner.run()
             for e in ts.edges.values():
                 e.home()
-            iso.ReceiveMessage(10)
+            iso.ReceiveMessage(120)
             # loops -= 1
         for e in ts.edges.values():
             iso.CloseSerial()
