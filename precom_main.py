@@ -7,6 +7,7 @@ import traceback
 from torch_song.torch_song import TorchSong
 from torch_song.songbook import Songbook
 from torch_song.songbook import SongbookRunner
+from torch_song.isocahedron import IsoInterface 
 
 def main():
     try:                                
@@ -20,16 +21,24 @@ def main():
             sim = True
 
     ts = TorchSong(num_edges=4, sim=sim)
+    iso = IsoInterface()
     try:
         ts.calibrate()
-        loops = 1
-        while (loops > 0):
+        iso.OpenSerial()
+        loops = 5
+        # while (loops > 0):
+        while True:
+            while (not len(iso.ReceiveMessage(1).decode('utf-8'))):
+                pass
             sb = Songbook.from_string("songbooks/three_edge_chaser.yml", ts)
             runner = SongbookRunner(sb, ts)
             runner.run()
             for e in ts.edges.values():
                 e.home()
+            iso.ReceiveMessage(10)
+            # loops -= 1
         for e in ts.edges.values():
+            iso.CloseSerial()
             e.kill()
     except KeyboardInterrupt:
         print('Received ctrl-c, cleaning up')
@@ -38,6 +47,7 @@ def main():
         traceback.print_exc()
     finally:
         for e in ts.edges.values():
+            iso.CloseSerial()
             e.kill()
         if (not sim):
             import default_io
