@@ -55,3 +55,7 @@ class AbstractEdge(metaclass=ABCMeta):
         self.set_igniter_state(0)
         self.set_valve_state(0)
         self.set_motor_state(-1, 75)
+
+    @abstractmethod
+    def get_position(self):
+        raise NotImplementedError()

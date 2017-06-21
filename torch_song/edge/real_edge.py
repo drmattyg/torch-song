@@ -31,6 +31,8 @@ class RealEdge(AbstractEdge):
         self.igniter = Igniter(config['subsystems']['igniters'][self.id - 1]['gpio'])
         self.dir_polarity =  config['subsystems']['motors'][self.id - 1]['polarity']
 
+        self.position = 0
+
         # Thread daemon inits
         self.speed_request = -1
         self.dir_request = 0
@@ -64,9 +66,18 @@ class RealEdge(AbstractEdge):
 
     def loop(self):
         self.pleaseExit = False
+
+        last_cal_time = 0
+        prev_time = time()
+
         while (not self.pleaseExit):
             self.lock.acquire()
             now = time()
+
+            if (not last_cal_time == 0):
+                self.position += (now - prev_time) / last_cal_time
+
+            prev_time = now
 
             #safety checks  
             #both limit switches on
@@ -89,21 +100,26 @@ class RealEdge(AbstractEdge):
                         self.get_forward_limit_switch_state() == True):
                 self.motor_driver.stop()
                 self.speed_request = 0
-
-                logging.info('Fwd limit switch hit for id: %d' %
-                    (self.id), extra={'edge_id': self.id})
+                self.position = 1
+                last_cal_time = 0
+                logging.info('Fwd limit switch hit for id:%d' % (self.id), extra={'edge_id': self.id})
             elif (self.motor_driver.get_dir() == MotorDriver.REVERSE and
                         self.motor_driver.get_speed() > 0 and
                         not self._ignore_limit and
                         self.get_reverse_limit_switch_state() == True):
                 self.motor_driver.stop()
                 self.speed_request = 0
-                logging.info('Rev limit switch hit for id: %d' %
-                    (self.id), extra={'edge_id': self.id})
-            else:
-                if (self.speed_request >= 0):
+                self.position = 0
+                last_cal_time = 0
+                logging.info('Rev limit switch hit for id:%d' % (self.id), extra={'edge_id': self.id})
+            elif (self.speed_request >= 0):
                     self.motor_driver.set_speed(self.speed_request)
                     self.speed_request = -1
+                    last_cal_time = self.calibration.get_cal_time(self.speed_request, self.dir_request)
+                    last_cal_time = last_cal_time * self.dir_request
+            else:
+                last_cal_time = 0
+
             self.lock.release()
 
             tosleep = 1.0 / self.update_rate_hz - (time() - now)
@@ -121,8 +137,7 @@ class RealEdge(AbstractEdge):
         self.lock.acquire()
         self.dir_request = direction
         self.speed_request = speed
-        logging.info('Speed req: %f dir req: %d id: %d' %
-            (speed, direction, self.id), extra={'edge_id': self.id})
+        logging.info('id:%d speed:%d dir:%d' % (self.id, speed, direction), extra={'edge_id': self.id})
         self.lock.release()
 
     def set_valve_state(self, v):
@@ -144,6 +159,10 @@ class RealEdge(AbstractEdge):
         self._ignore_limit_switch(True)
         self.calibration.calibrate()
         self._ignore_limit_switch(False)
+
+    def get_position(self):
+        return self.position
+
 
     def kill(self):
         self.motor_driver.stop()

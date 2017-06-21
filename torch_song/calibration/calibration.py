@@ -7,26 +7,44 @@ from torch_song.common import try_decorator
 class EdgeCalibration:
     def __init__(self, edge, min_speed=80, cal_speed_step=20):
         self.edge = edge
+
         self.duty_cycle_map = []
-        self.fwd_speed_map = []
-        self.rev_speed_map = []
+        self.fwd_time_map = []
+        self.rev_time_map = []
+
+        self.duty_cycle_map_reversed = []
+        self.fwd_time_map_reversed = []
+        self.rev_time_map_reversed = []
+
         self.polarity = False
         self.min_speed = min_speed
         self.cal_speed_step = cal_speed_step
 
     def __str__(self):
-        return (str(self.duty_cycle_map) + '\n\r' +
-                str(self.fwd_speed_map) + '\n\r' +
-                str(self.rev_speed_map) + '\n\r' +
+        return (str(self.duty_cycle_map_reversed) + '\n\r' +
+                str(self.fwd_time_map_reversed) + '\n\r' +
+                str(self.rev_time_map_reversed) + '\n\r' +
                 'polarity:' + str(self.polarity))
 
-    def get_speed(self, time, direction, distance=1):
+    def get_motor_speed(self, time, direction, distance=1):
+        print(self.fwd_time_map_reversed, self.rev_time_map_reversed)
         if (direction == 1):
             return int(
-                numpy.interp(time * distance / 1000, self.fwd_speed_map, self.duty_cycle_map))
+                numpy.interp(time * distance / 1000,
+                self.fwd_time_map_reversed, self.duty_cycle_map_reversed))
         elif (direction == -1):
             return int(
-                numpy.interp(time * distance / 1000, self.rev_speed_map, self.duty_cycle_map))
+                numpy.interp(time * distance / 1000,
+                self.rev_time_map_reversed, self.duty_cycle_map_reversed))
+        else:
+            return 0
+
+    # Returns the calibrated time for end-to-end travel
+    def get_cal_time(self, duty_cycle, direction):
+        if (direction == 1):
+            return numpy.interp(duty_cycle, self.duty_cycle_map, self.fwd_time_map)
+        elif (direction == -1):
+            return numpy.interp(duty_cycle, self.duty_cycle_map, self.rev_time_map)
         else:
             return 0
 
@@ -92,12 +110,17 @@ class EdgeCalibration:
         for i in range(self.min_speed, 100 + 1, self.cal_speed_step):
             res = self.calibrate_one_speed(i)
             self.duty_cycle_map.append(i)
-            self.fwd_speed_map.append(res[0])
-            self.rev_speed_map.append(res[1])
+            self.fwd_time_map.append(res[0])
+            self.rev_time_map.append(res[1])
+
+        self.duty_cycle_map_reversed = list(self.duty_cycle_map)
+        self.duty_cycle_map_reversed.reverse()
+        self.fwd_time_map_reversed = list(self.fwd_time_map)
+        self.fwd_time_map_reversed.reverse()
+        self.rev_time_map_reversed = list(self.rev_time_map)
+        self.rev_time_map_reversed.reverse()
+
         self.home()
-        self.duty_cycle_map.reverse()
-        self.fwd_speed_map.reverse()
-        self.rev_speed_map.reverse()
 
     def home(self):
         e = self.edge

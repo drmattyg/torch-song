@@ -59,6 +59,9 @@ class SimEdge(AbstractEdge):
     def calibrate(self):
         self.calibration.calibrate()
 
+    def get_position(self):
+        return self.position
+
     # a software simulated edge
     SLEEP_TIME = 1.0
     STR_LEN = 10
