@@ -13,10 +13,17 @@ try:
     from torch_song.hardware import MCPInput
     from torch_song.hardware import PCA9685
 except ImportError:
-	print("Hardware imports failed, reverting to simulation")
+    print("Hardware imports failed, reverting to simulation")
     pass
 
 from torch_song.simulator import SimEdge
+
+class SocketHandler2(SocketHandler):
+    def __init__(self, host, port):
+        SocketHandler.__init__(self, host, port)
+
+    def emit(self, record):
+        self.send(record.getMessage().encode())
 
 class TorchSong:
     def __init__(self, num_edges=1, sim=False):
@@ -29,10 +36,9 @@ class TorchSong:
         logger = logging.getLogger()
         logger.setLevel(logging.INFO)
         formatter = logging.Formatter("[%(asctime)s] %(message)s")
-        ch.setLevel(logging.INFO)
 
         tcpHandlerPort = self.config['logging']['port']
-        self.tcpHandler = SocketHandler('localhost', tcpHandlerPort)
+        self.tcpHandler = SocketHandler2('localhost', tcpHandlerPort)
         self.tcpHandler.createSocket()
         self.tcpHandler.setLevel(logging.DEBUG)
         self.tcpHandler.setFormatter(formatter)
