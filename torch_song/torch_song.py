@@ -3,9 +3,7 @@ import time
 from threading import Thread, Lock, Event
 import traceback
 import logging
-from logging.handlers import SocketHandler
-from logging.handlers import HTTPHandler
-from torch_song.edge.edge_color_stream_handler import *
+from torch_song.edge.edge_handlers import *
 import os
 
 try:
@@ -18,13 +16,6 @@ except ImportError:
 
 from torch_song.simulator import SimEdge
 
-class SocketHandler2(SocketHandler):
-    def __init__(self, host, port):
-        SocketHandler.__init__(self, host, port)
-
-    def emit(self, record):
-        self.send(record.getMessage().encode())
-
 class TorchSong:
     def __init__(self, num_edges=1, sim=False):
         try:
@@ -35,20 +26,19 @@ class TorchSong:
 
         logger = logging.getLogger()
         logger.setLevel(logging.INFO)
-        formatter = logging.Formatter("[%(asctime)s] %(message)s")
+        loggingPort = self.config['logging']['port']
 
-        tcpHandlerPort = self.config['logging']['port']
-        self.tcpHandler = SocketHandler2('localhost', tcpHandlerPort)
-        self.tcpHandler.createSocket()
-        self.tcpHandler.setLevel(logging.DEBUG)
-        self.tcpHandler.setFormatter(formatter)
+        self.socketEdgeHandler = SocketEdgeHandler('localhost', loggingPort)
+        self.socketEdgeHandler.createSocket()
+        self.socketEdgeHandler.setLevel(logging.INFO)
 
-        streamHandler = EdgeColorStreamHandler()
+        streamHandler = EdgeStreamHandler()
         streamHandler.setLevel(logging.DEBUG)
+        formatter = logging.Formatter("[%(asctime)s] %(message)s")
         streamHandler.setFormatter(formatter)
 
         logger.addHandler(streamHandler)
-        logger.addHandler(self.tcpHandler)
+        logger.addHandler(self.socketEdgeHandler)
 
         if (not sim):
             self.io = dict()
@@ -67,7 +57,7 @@ class TorchSong:
         try:
             edge.calibrate()
         except Exception as e:
-            print(e)
+            logging.error(e)
             traceback.print_exc()
             event.set()
 
@@ -98,4 +88,4 @@ class TorchSong:
             c.join()
 
     def __del__(self):
-        self.tcpHandler.close()
+        self.socketEdgeHandler.close()

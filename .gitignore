@@ -7,4 +7,4 @@ env
 conf/default-mod.yml
 gui/out
 gui/node_modules
-package-lock
+package-lock.json

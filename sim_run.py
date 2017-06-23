@@ -5,6 +5,7 @@ import sys
 import os
 import traceback
 import random
+import logging
 
 from torch_song.torch_song import TorchSong
 from torch_song.songbook import Songbook
@@ -28,36 +29,26 @@ def main():
             sim = True
 
     ts = TorchSong(num_edges=4, sim=sim)
-    iso = IsoInterface()
+    loops = 0
     try:
         ts.calibrate()
-        iso.OpenSerial()
-        loops = 5
-        # while (loops > 0):
+        raise Exception('Test')
         while True:
-            while (not len(iso.ReceiveMessage(1).decode('utf-8'))):
-                pass
-            while (not len(iso.ReceiveMessage(1).decode('utf-8'))):
-                pass
             sb = Songbook.from_string(random.choice(songbooks), ts)
             runner = SongbookRunner(sb, ts)
             runner.run()
             for e in ts.edges.values():
                 e.home()
-            loops -= 1
-            iso.ReceiveMessage(30)
-            # loops -= 1
+            loops += 1
         for e in ts.edges.values():
-            iso.CloseSerial()
             e.kill()
     except KeyboardInterrupt:
-        print('Received ctrl-c, cleaning up')
+        logging.info('Received ctrl-c, cleaning up')
     except Exception as e:
-        print(e)
+        logging.error(e)
         traceback.print_exc()
     finally:
         for e in ts.edges.values():
-            iso.CloseSerial()
             e.kill()
         if (not sim):
             import default_io

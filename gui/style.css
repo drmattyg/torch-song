@@ -119,4 +119,13 @@ h2 {
   justify-content: space-between;
 }
 
+.logs {
+  height: 300px;
+  overflow-y: scroll;
+}
+
+.log-record{
+  font-family: "Courier New";
+}
+
 

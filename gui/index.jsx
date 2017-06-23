@@ -27,6 +27,7 @@ injectTapEventPlugin();
 const version = process.env.npm_package_version
 
 import {YAMLPanel} from './YAMLParser.jsx';
+import {LogPanel} from './LogViewer.jsx';
 
 class Components extends React.Component {
   render() {
@@ -34,7 +35,10 @@ class Components extends React.Component {
       <div>
         <AppBar title={"Torch Song GUI "}/>
         <Tabs>
-          <Tab label={"Realtime"} >
+          <Tab label={"Control"} >
+          </Tab>
+          <Tab label={"Logs"} >
+            <LogPanel />
           </Tab>
           <Tab label={"YAML parser"} >
             <YAMLPanel />
@@ -43,81 +47,6 @@ class Components extends React.Component {
       </div>
     );
   }
-  /*
-  getInitialState: function() {
-    return {};
-  },
-  componentDidMount: function() {
-    var wasConnected = false;
-    setInterval(() => {
-      fetch('/dbw_state.json').then((resp) => {
-        return resp.json()
-      }).then((json) => {
-        this.setState({dbw_state: json});
-        if (!wasConnected) {
-          this.setState({shouldAlert: true, connected: true})
-        }
-        wasConnected = true;
-      }).catch(() => {
-        if (wasConnected) {
-          this.setState({shouldAlert: true, connected: false})
-        }
-        wasConnected = false;
-      })
-    }, 100);
-  },
-  render: function() {
-    return (
-    <div>
-      <Snackbar open={this.state.shouldAlert}
-          autoHideDuration={1000}
-          onRequestClose={() => { this.setState({shouldAlert: false}) }}
-          message={this.state.connected ? "Connected to server" : "Disconnected from server"} />
-      <Tabs>
-        <Tab label={"DBW GUI Version 1.2.1 (" + (this.state.connected === true ? "Connected" : "Disconnected") + ")"} >
-          <div className="card-wrap">
-            <FaultAndStatusPanel state={this.state.dbw_state}/>
-            <DashIndicatorPanel state={this.state.dbw_state}/>
-            <ContactorPanel state={this.state.dbw_state}/>
-          </div>
-        </Tab>
-      </Tabs>
-      <Tabs>
-        <Tab label="Steering">
-          <div className="card-wrap">
-            <SteeringPanel0 state={this.state.dbw_state}/>
-            <SteeringPanel1 state={this.state.dbw_state}/>
-            <SteeringFeedbackPanel state={this.state.dbw_state}/>
-          </div>
-        </Tab>
-        <Tab label="Brakes">
-          <div className="card-wrap">
-            <BrakePanel0 state={this.state.dbw_state}/>
-            <BrakePanel1 state={this.state.dbw_state}/>
-            <BTDPanel state={this.state.dbw_state}/>
-          </div>
-        </Tab>
-        <Tab label="Throttle">
-          <div className="card-wrap">
-            <ThrottlePanelIn state={this.state.dbw_state}/>
-            <ThrottlePanelOut state={this.state.dbw_state}/>
-          </div>
-        </Tab>
-        <Tab label="Accessories">
-          <div className="card-wrap">
-            <LightPanel state={this.state.dbw_state}/>
-          </div>
-        </Tab>
-        <Tab label="Powercard">
-          <div className="card-wrap">
-            <PowercardMiscPanel state={this.state.dbw_state}/>
-          </div>
-        </Tab>
-      </Tabs>
-    </div>
-    )
-  }
-  */
 };
 
 const App = () => (
