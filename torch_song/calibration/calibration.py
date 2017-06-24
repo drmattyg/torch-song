@@ -121,6 +121,7 @@ class EdgeCalibration:
         self.rev_time_map_reversed.reverse()
 
         self.home()
+        print(self)
 
     def home(self):
         e = self.edge

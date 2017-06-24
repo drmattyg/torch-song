@@ -28,6 +28,7 @@ const version = process.env.npm_package_version
 
 import {YAMLPanel} from './YAMLParser.jsx';
 import {LogPanel} from './LogViewer.jsx';
+import {ControlPanel} from './ControlPanel.jsx';
 
 class Components extends React.Component {
   render() {
@@ -36,6 +37,7 @@ class Components extends React.Component {
         <AppBar title={"Torch Song GUI "}/>
         <Tabs>
           <Tab label={"Control"} >
+            <ControlPanel />
           </Tab>
           <Tab label={"Logs"} >
             <LogPanel />

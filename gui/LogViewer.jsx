@@ -7,18 +7,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import Snackbar from 'material-ui/Snackbar';
 import Paper from 'material-ui/Paper';
 
-const colorWheel = [
-  '#000000',
-  '#ff4136',
-  '#39cccc',
-  '#0074d9',
-  '#ff851b',
-  '#85144b',
-  '#3d9970',
-  '#aaaaaa',
-  '#ffdc00',
-  '#b10dc9',
-];
+import {ColorWheel} from './Common.jsx'
 
 export class LogPanel extends React.Component {
   constructor(props) {
@@ -116,7 +105,7 @@ class LogRecord extends React.Component {
     const edge_id = r.edge_id || 1
     const date = this.formatDate(new Date(r.time * 1000));
     const timeColor = r.levelno == 40 ? 'red' : 'black'
-    const textColor = r.levelno == 40 ? 'red' : colorWheel[edge_id]
+    const textColor = r.levelno == 40 ? 'red' : ColorWheel[edge_id]
     return (
       <div className='log-record'>
         <span className='log-time' style={{color: timeColor}}> [{date + ' ' +  r.levelname}]</span>

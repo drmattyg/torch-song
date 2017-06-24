@@ -53,6 +53,5 @@ class SocketEdgeHandler(logging.handlers.DatagramHandler):
             'pathname': record.pathname,
             'edge_id': record.__dict__.get('edge_id', None)
         }
-        print(record.levelname)
         self.send(json.dumps(obj).encode())
 

@@ -32,7 +32,6 @@ def main():
     loops = 0
     try:
         ts.calibrate()
-        raise Exception('Test')
         while True:
             sb = Songbook.from_string(random.choice(songbooks), ts)
             runner = SongbookRunner(sb, ts)

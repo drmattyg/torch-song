@@ -3,6 +3,7 @@ import time
 from threading import Thread, Lock, Event
 import traceback
 import logging
+from torch_song.edge.edge_control_mux import EdgeControlMux, EdgeControlServer
 from torch_song.edge.edge_handlers import *
 import os
 
@@ -11,19 +12,20 @@ try:
     from torch_song.hardware import MCPInput
     from torch_song.hardware import PCA9685
 except ImportError:
-    print("Hardware imports failed, reverting to simulation")
-    pass
+    logging.error("Hardware imports failed, reverting to simulation")
 
 from torch_song.simulator import SimEdge
 
 class TorchSong:
     def __init__(self, num_edges=1, sim=False):
+        # Configuration
         try:
             stream = open('conf/default-mod.yml', 'r')
         except Exception:
             stream = open('conf/default.yml', 'r')
         self.config = yaml.load(stream)
 
+        # Setup loggersa
         logger = logging.getLogger()
         logger.setLevel(logging.INFO)
         loggingPort = self.config['logging']['port']
@@ -40,6 +42,7 @@ class TorchSong:
         logger.addHandler(streamHandler)
         logger.addHandler(self.socketEdgeHandler)
 
+        # Build edges
         if (not sim):
             self.io = dict()
             self.io['pca9685'] = PCA9685()
@@ -52,6 +55,16 @@ class TorchSong:
             self.edges = {i: RealEdge(i, self.io, self.config) for i in range(1, num_edges + 1)}
         else:
             self.edges = {i: SimEdge(i, 1000) for i in range(1, num_edges + 1)}
+
+        # Hook up command mux
+        for e in self.edges.items():
+            self.edges[e[0]] = EdgeControlMux(e[1])
+
+        # Start an edge command server
+        self.server = EdgeControlServer(self.config['control_server']['port'], self.edges)
+        server_thread = Thread(target=self.server.serve_forever)
+        server_thread.daemon = True
+        server_thread.start()
 
     def worker(self, edge, event):
         try:
@@ -89,3 +102,4 @@ class TorchSong:
 
     def __del__(self):
         self.socketEdgeHandler.close()
+        self.server.kill()

@@ -163,6 +163,8 @@ class RealEdge(AbstractEdge):
     def get_position(self):
         return self.position
 
+    def get_calibration(self):
+        return self.calibration
 
     def kill(self):
         self.motor_driver.stop()

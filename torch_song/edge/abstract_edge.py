@@ -48,8 +48,9 @@ class AbstractEdge(metaclass=ABCMeta):
         else:
             return ls_state[0]
 
+    @abstractmethod
     def calibrate(self):
-        self.calibration.calibrate()
+        raise NotImplementedError()
 
     def home(self):
         self.set_igniter_state(0)
@@ -58,4 +59,12 @@ class AbstractEdge(metaclass=ABCMeta):
 
     @abstractmethod
     def get_position(self):
+        raise NotImplementedError()
+
+    @abstractmethod
+    def kill(self):
+        raise NotImplementedError()
+
+    @abstractmethod
+    def get_calibration(self):
         raise NotImplementedError()

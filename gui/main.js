@@ -5,6 +5,11 @@ const bodyParser = require('body-parser');
 const yaml = require('js-yaml');
 const fs = require('fs');
 
+const logging_server_port = 4000
+const command_server_port = 4001
+const web_server_port = 3000
+
+
 const readYAML = function(filename, cb) {
   fs.readFile(filename, 'utf8', function(err, file) {
     if (err) {
@@ -22,8 +27,10 @@ const writeYAML = function(filename, obj, cb) {
   });
 };
 
+const version = process.env.npm_package_version
+console.log(version)
 
-// Log server
+// UDP Log Server
 let log_buffer = []
 const max_logs = 1000
 const logging_server = dgram.createSocket('udp4');
@@ -35,36 +42,8 @@ logging_server.on('message', (msg) => {
 });
 logging_server.bind(4000);
 
-const version = process.env.npm_package_version
-console.log(version)
-
-var dbw_state = {}
-const udp_port_in = 11301;
-const udp_port_out = 11300;
-const http_port = 3000;
-
-var sender_ip;
-
-// UDP
-/*
-server.on('error', (err) => {
-    console.log(`server error:\n${err.stack}`);
-      server.close();
-});
-
-server.on('message', (msg, rinfo) => {
-  sender_ip = rinfo.address;
-  dbw_state = JSON.parse(msg.toString());
-});
-
-server.on('listening', () => {
-  var address = server.address();
-  console.log(`server listening ${address.address}:${address.port}`);
-});
-
-server.bind(udp_port_in);
-*/
-
+// UDP client for sending commands
+const command_client = dgram.createSocket('udp4')
 
 // Web server
 app.use(bodyParser.json()); // for parsing application/json
@@ -77,6 +56,18 @@ app.get('/logs', function (req, res) {
 app.post('/logs_clear', function (req, res) {
   log_buffer = [];
   res.send('done');
+});
+
+app.post('/control', function (req, res) {
+  const msg = new Buffer(JSON.stringify(req.body))
+  command_client.send(msg, 0, msg.length, command_server_port, 'localhost', (err, bytes) => {
+    if (err) {
+      console.log(err)
+      res.status(500).send(err);
+    } else {
+      res.send('done')
+    }
+  });
 });
 
 app.get('/default-yaml', function (req, res) {
@@ -127,6 +118,6 @@ app.post('/post', function(req, res) {
   res.send();
 });
 
-app.listen(http_port, function () {
-    console.log('HTTP server on port ' + http_port);
+app.listen(web_server_port, function () {
+    console.log('HTTP server on port ' + web_server_port);
 });

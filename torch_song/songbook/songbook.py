@@ -45,7 +45,7 @@ class Songbook:
                         self.add_transition(MTransition(Measure.IGNITER, id, 0),
                                             start_time + IGNITER_DELAY)
                 if 'dir' in e:
-                    edge_calibration = self.torch_song.edges[id].calibration
+                    edge_calibration = self.torch_song.edges[id].get_calibration()
                     distance = e['distance'] if 'distance' in e else 1
                     t = float(measure['time'])
                     direction = int(e['dir'])
