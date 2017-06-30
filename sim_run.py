@@ -6,6 +6,7 @@ import os
 import traceback
 import random
 import logging
+import yaml
 
 from torch_song.torch_song import TorchSong
 from torch_song.songbook import Songbook
@@ -28,7 +29,14 @@ def main():
         if opt in ('-s', '--sim'):
             sim = True
 
-    ts = TorchSong(num_edges=4, sim=sim)
+    # Build config
+    try:
+        stream = open('conf/default-mod.yml', 'r')
+    except Exception:
+        stream = open('conf/default.yml', 'r')
+    config = yaml.load(stream)
+
+    ts = TorchSong(config=config, num_edges=3, sim=sim)
     loops = 0
     try:
         ts.calibrate()

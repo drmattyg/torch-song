@@ -65,6 +65,12 @@ class SimEdge(AbstractEdge):
     def get_calibration(self):
         return self.calibration
 
+    def get_valve_state(self):
+        return self.valve
+
+    def get_igniter_state(self):
+        return self.igniter
+
     # a software simulated edge
     SLEEP_TIME = 1.0
     STR_LEN = 10

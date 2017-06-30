@@ -38,8 +38,8 @@ class EdgeStreamHandler(logging.StreamHandler):
 
 # Send a JSON logm message to a server
 class SocketEdgeHandler(logging.handlers.DatagramHandler):
-    def __init__(self, host, port):
-        logging.handlers.DatagramHandler.__init__(self, host, port)
+    def __init__(self, host, remote_port):
+        logging.handlers.DatagramHandler.__init__(self, host, remote_port)
 
     def emit(self, record):
         obj = {

@@ -4,7 +4,6 @@ import {render} from 'react-dom';
 import 'whatwg-fetch';
 
 import RaisedButton from 'material-ui/RaisedButton';
-import Snackbar from 'material-ui/Snackbar';
 import Paper from 'material-ui/Paper';
 
 import {ColorWheel} from './Common.jsx'
@@ -13,16 +12,15 @@ export class LogPanel extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: [],
-      shouldAlert: false,
-      message: ''
+      logs: []
     };
-    this.fetch = this.fetch.bind(this);
-    this.fetch(false);
     this.clear = this.clear.bind(this);
 
+    var that = this
     setInterval(() => {
-      this.fetch(true)
+      if (window.logs) {
+        this.setState({logs: window.logs})
+      }
     }, 100)
   }
 
@@ -46,16 +44,10 @@ export class LogPanel extends React.Component {
   }
 
 
-  fetch(silent) {
-    fetch('/logs').then((resp) => {
-      return resp.json()
-    }).then((json) => {
-      this.setState({data: json, shouldAlert: !silent, message: 'Loaded logs'})
-    });
-  }
-
-  renderLogRecords(data) {
-    return data.map((record, i) => {
+  renderLogRecords(data, errorsOnly) {
+    return data.filter((el) => {
+      return errorsOnly ? el.levelno == 40 : true
+    }).map((record, i) => {
       return (
         <LogRecord key={i} record={record} />
       )
@@ -68,16 +60,13 @@ export class LogPanel extends React.Component {
     };
     return (
       <div className='log-page'>
-        <Snackbar open={this.state.shouldAlert} autoHideDuration={1000}
-            onRequestClose={() => { this.setState({shouldAlert: false}) }}
-            message={this.state.message} />
         <Paper style={{padding:'20px'}}>
           <div className='log-button-row'>
             <RaisedButton label="Clear" style={style} onTouchTap={this.clear}/>
           </div>
           <hr />
             <div className="logs">
-              { this.renderLogRecords(this.state.data) }
+              { this.renderLogRecords(this.state.logs, this.props.errorsOnly) }
             </div>
           <hr />
           <div className='log-button-row'>
@@ -108,7 +97,7 @@ class LogRecord extends React.Component {
     const textColor = r.levelno == 40 ? 'red' : ColorWheel[edge_id]
     return (
       <div className='log-record'>
-        <span className='log-time' style={{color: timeColor}}> [{date + ' ' +  r.levelname}]</span>
+        <span className='log-time' style={{color: timeColor}}> [{date}]{r.levelname}</span>
         <span className='log-message' style={{color: textColor}}>  {r.message} </span>
       </div>
     )

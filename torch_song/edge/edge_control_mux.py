@@ -1,37 +1,5 @@
 import logging
-import json
 from torch_song.edge import AbstractEdge
-from socketserver import UDPServer, BaseRequestHandler
-
-# Handle requests
-class EdgeRequestHandler(BaseRequestHandler):
-    def handle(self):
-        command = {}
-        try:
-            req = self.request[0].decode('utf-8')
-            command = json.loads(req)
-        except:
-            logging.error('Failed to parse JSON command')
-
-        if 'override' in command:
-            self.server.edges[command['id']].set_override(command['override'])
-        if 'valve' in command:
-            self.server.edges[command['id']].set_valve_state_external(command['valve'])
-        if 'igniter' in command:
-            self.server.edges[command['id']].set_igniter_state_external(command['igniter'])
-        if 'dir' in command:
-            self.server.edges[command['id']].set_motor_state_external(
-                    command['dir'], command['speed'])
-
-class EdgeControlServer(UDPServer):
-    def __init__(self, port, edges):
-        UDPServer.__init__(self, ('localhost', port), EdgeRequestHandler)
-        self.edges = edges
-    def kill(self):
-        self.shutdown()
-        self.server_close()
-    def __del__(self):
-        self.kill()
 
 class EdgeControlMux(AbstractEdge):
     def __init__(self, edge):
@@ -80,7 +48,13 @@ class EdgeControlMux(AbstractEdge):
             self.edge.calibrate()
 
     def get_position(self):
-        return self.edge.position
+        return self.edge.get_position()
+
+    def get_valve_state(self):
+        return self.edge.get_valve_state()
+
+    def get_igniter_state(self):
+        return self.edge.get_igniter_state()
 
     def get_calibration(self):
         return self.edge.calibration

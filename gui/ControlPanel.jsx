@@ -6,6 +6,7 @@ import 'whatwg-fetch';
 import RaisedButton from 'material-ui/RaisedButton';
 import Snackbar from 'material-ui/Snackbar';
 import Paper from 'material-ui/Paper';
+import Slider from 'material-ui/Slider';
 import {SimpleToggle} from './Widgets.jsx'
 
 import {ColorWheel} from './Common.jsx'
@@ -40,25 +41,23 @@ export class ControlPanel extends React.Component {
     });
   }
 
+  renderEdgeControls() {
+    const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+    return arr.map((i) => {
+      return (
+        <EdgeControl key={i} edge_id={i} post={this.post}/>
+      )
+    });
+  }
+
   render() {
     const style = {
       margin: 10
     };
     return (
       <div className='control-page'>
-        <Snackbar open={this.state.shouldAlert} autoHideDuration={1000}
-            onRequestClose={() => { this.setState({shouldAlert: false}) }}
-            message={this.state.message} />
         <Paper style={{padding:'20px'}}>
-          <EdgeControl edge_id={1} post={this.post}/>
-          <EdgeControl edge_id={2} post={this.post}/>
-          <EdgeControl edge_id={3} post={this.post}/>
-          <EdgeControl edge_id={4} post={this.post}/>
-          <EdgeControl edge_id={5} post={this.post}/>
-          <EdgeControl edge_id={6} post={this.post}/>
-          <EdgeControl edge_id={7} post={this.post}/>
-          <EdgeControl edge_id={8} post={this.post}/>
-          <EdgeControl edge_id={9} post={this.post}/>
+          { this.renderEdgeControls() }
         </Paper>
       </div>
     );
@@ -73,6 +72,16 @@ export class EdgeControl extends React.Component {
     this.sendValve = this.sendValve.bind(this)
     this.jogFwd = this.jog.bind(this, 1)
     this.jogRev = this.jog.bind(this, -1)
+    this.state = {
+      pos: 0
+    };
+
+    var that = this
+    setInterval(() => {
+      if (window.torchData[that.props.edge_id]) {
+        this.setState({pos: window.torchData[that.props.edge_id]['position']})
+      }
+    }, 100)
   }
 
   sendIgniter(e, s) {
@@ -101,6 +110,7 @@ export class EdgeControl extends React.Component {
       <div className='edge-control' >
         <h2 style={{backgroundColor: ColorWheel[this.props.edge_id]}}>Edge {this.props.edge_id}</h2>
         <div className='edge-control-items'>
+          <Slider value={this.state.pos} min={0} max={1} />
           <SimpleToggle label='Override' onToggle={this.sendOverride} />
           <SimpleToggle label='Igniter' onToggle={this.sendIgniter} />
           <SimpleToggle label='Valve' onToggle={this.sendValve} />

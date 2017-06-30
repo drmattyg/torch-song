@@ -24,6 +24,14 @@ class AbstractEdge(metaclass=ABCMeta):
         raise NotImplementedError()
 
     @abstractmethod
+    def get_valve_state(self):
+        raise NotImplementedError()
+
+    @abstractmethod
+    def get_igniter_state(self):
+        raise NotImplementedError()
+
+    @abstractmethod
     # returns an uncalibrated tuple [beg, end] of limit switches
     def get_limit_switch_state(self):
         raise NotImplementedError()

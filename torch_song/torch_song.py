@@ -1,10 +1,10 @@
-import yaml
 import time
 from threading import Thread, Lock, Event
 import traceback
 import logging
-from torch_song.edge.edge_control_mux import EdgeControlMux, EdgeControlServer
+from torch_song.edge.edge_control_mux import EdgeControlMux
 from torch_song.edge.edge_handlers import *
+from torch_song.server.control_udp_server import TorchControlServer
 import os
 
 try:
@@ -12,23 +12,19 @@ try:
     from torch_song.hardware import MCPInput
     from torch_song.hardware import PCA9685
 except ImportError:
-    logging.error("Hardware imports failed, reverting to simulation")
+    print("Hardware imports failed, reverting to simulation")
 
 from torch_song.simulator import SimEdge
 
 class TorchSong:
-    def __init__(self, num_edges=1, sim=False):
+    def __init__(self, config, num_edges=1, sim=False):
         # Configuration
-        try:
-            stream = open('conf/default-mod.yml', 'r')
-        except Exception:
-            stream = open('conf/default.yml', 'r')
-        self.config = yaml.load(stream)
+        self.config = config
 
         # Setup loggersa
         logger = logging.getLogger()
         logger.setLevel(logging.INFO)
-        loggingPort = self.config['logging']['port']
+        loggingPort = self.config['logging']['remote_port']
 
         self.socketEdgeHandler = SocketEdgeHandler('localhost', loggingPort)
         self.socketEdgeHandler.createSocket()
@@ -61,12 +57,30 @@ class TorchSong:
             self.edges[e[0]] = EdgeControlMux(e[1])
 
         # Start an edge command server
-        self.server = EdgeControlServer(self.config['control_server']['port'], self.edges)
+        cs_local_port = self.config['control_server']['local_port']
+        cs_remote_port = self.config['control_server']['remote_port']
+        self.server = TorchControlServer(cs_local_port, cs_remote_port, self)
+
         server_thread = Thread(target=self.server.serve_forever)
         server_thread.daemon = True
         server_thread.start()
 
-    def worker(self, edge, event):
+        self.pos_updater = Thread(target = self._pos_updater_loop)
+        self.pos_updater.setDaemon(True)
+        self.pos_updater.start()
+
+    def _pos_updater_loop(self):
+        self.pleaseExit = False
+        update_rate_hz = 100
+        while (not self.pleaseExit):
+            now = time.time()
+            self.server.send_data()
+            tosleep = 1.0/update_rate_hz - (time.time() - now)
+            if (tosleep > 0):
+                time.sleep(tosleep)
+
+
+    def _worker(self, edge, event):
         try:
             edge.calibrate()
         except Exception as e:
@@ -80,7 +94,7 @@ class TorchSong:
 
         for e in self.edges.values():
             event = Event()
-            calibrators.append(Thread(target=self.worker, args=(e,event,)))
+            calibrators.append(Thread(target=self._worker, args=(e,event,)))
             events.append(event)
 
         for c in calibrators:
@@ -101,5 +115,6 @@ class TorchSong:
             c.join()
 
     def __del__(self):
+        self.pleaseExit = True
         self.socketEdgeHandler.close()
         self.server.kill()

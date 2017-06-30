@@ -163,6 +163,13 @@ class RealEdge(AbstractEdge):
     def get_position(self):
         return self.position
 
+    def get_valve_state(self):
+        return self.valve.get_state()
+
+    def get_igniter_state(self):
+        return self.igniter.get_state()
+
+
     def get_calibration(self):
         return self.calibration
 

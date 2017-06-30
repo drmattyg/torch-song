@@ -1,7 +1,9 @@
 logging:
-  port: 4000
+  remote_port: 3001
 control_server:
-  port: 4001
+  local_port: 4002
+  remote_port: 3002
+
 io:
   mcp23017:
     - id: 1

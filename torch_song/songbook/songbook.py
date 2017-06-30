@@ -89,3 +89,4 @@ class SongbookRunner:
             edge.set_igniter_state(tx.value)
         elif tx.type == Measure.MOTOR:
             edge.set_motor_state(tx.value.direction, tx.value.speed)
+
