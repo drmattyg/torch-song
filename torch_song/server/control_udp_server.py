@@ -15,8 +15,6 @@ class TorchRequestHandler(BaseRequestHandler):
         except:
             logging.error('Failed to parse JSON command')
 
-        print(command)
-
         if 'override' in command:
             self.server.torchsong.edges[command['id']].set_override(command['override'])
         if 'valve' in command:
@@ -31,15 +29,16 @@ class TorchRequestHandler(BaseRequestHandler):
         if 'pause' in command:
             print('pause', command)
             logging.info('pause')
-            self.server.songbook_runner.pause(command['pause'])
+            self.server.songbook_runner.request_pause(command['pause'])
 
 class TorchControlServer(UDPServer):
     def __init__(self, local_port, remote_port, torchsong):
         UDPServer.__init__(self, ('localhost', local_port), TorchRequestHandler)
-        print(UDPServer)
+
         self.torchsong = torchsong
-        self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.socket.connect(('localhost', remote_port))
+
+        self.send_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.send_socket.connect(('localhost', remote_port))
 
         self.status_updater = Thread(target = self._status_updater_loop)
         self.status_updater.setDaemon(True)
@@ -55,7 +54,7 @@ class TorchControlServer(UDPServer):
             obj[k]['position'] = v.get_position()
             obj[k]['igniter'] = v.get_igniter_state()
             obj[k]['valve'] = v.get_valve_state()
-        self.socket.send(json.dumps(obj).encode())
+        self.send_socket.send(json.dumps(obj).encode())
 
     def _status_updater_loop(self):
         self.pleaseExit = False

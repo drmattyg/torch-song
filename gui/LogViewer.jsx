@@ -91,7 +91,7 @@ class LogRecord extends React.Component {
 
   render() {
     const r = this.props.record
-    const edge_id = r.edge_id || 1
+    const edge_id = r.edge_id || 0
     const date = this.formatDate(new Date(r.time * 1000));
     const timeColor = r.levelno == 40 ? 'red' : 'black'
     const textColor = r.levelno == 40 ? 'red' : ColorWheel[edge_id]

@@ -14,7 +14,6 @@ class Songbook:
         self.torch_song = torch_song
         self.sorted_timepoints = None
         self.generate_timing_map()
-        self.pause = False
 
     @staticmethod
     def from_string(yml, torch_song):
@@ -65,6 +64,7 @@ class SongbookRunner:
         self.songbook = songbook
         self.torch_song = torch_song
         self.finished = False
+        self.pause = False
 
     def run(self):
         t0 = time.time() * 1000
@@ -76,8 +76,6 @@ class SongbookRunner:
         for ts in self.songbook.sorted_timepoints:
             now = time.time() * 1000
             ts_0 = ts + min_time
-            while self.pause is True:
-                time.sleep(1000)
             if now - t0 < ts_0:
                 time.sleep((ts_0 - (now - t0)) / 1000)
             for tx in self.songbook.timepoints[ts]:
@@ -93,6 +91,6 @@ class SongbookRunner:
         elif tx.type == Measure.MOTOR:
             edge.set_motor_state(tx.value.direction, tx.value.speed)
 
-    def pause(self, state):
+    def request_pause(self, state):
         self.pause = state
 
