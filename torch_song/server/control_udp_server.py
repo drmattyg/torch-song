@@ -1,7 +1,9 @@
 import logging
 import json
-from socketserver import UDPServer, BaseRequestHandler
+import time
 import socket
+from socketserver import UDPServer, BaseRequestHandler
+from threading import Thread
 
 # Handle requests
 class TorchRequestHandler(BaseRequestHandler):
@@ -31,6 +33,11 @@ class TorchControlServer(UDPServer):
         self.torchsong = torchsong
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.socket.connect(('localhost', remote_port))
+
+        self.status_updater = Thread(target = self._status_updater_loop)
+        self.status_updater.setDaemon(True)
+        self.status_updater.start()
+
     def send_data(self):
         obj = {}
         for k,v in self.torchsong.edges.items():
@@ -39,8 +46,20 @@ class TorchControlServer(UDPServer):
             obj[k]['igniter'] = v.get_igniter_state()
             obj[k]['valve'] = v.get_valve_state()
         self.socket.send(json.dumps(obj).encode())
+
+    def _status_updater_loop(self):
+        self.pleaseExit = False
+        update_rate_hz = 100
+        while (not self.pleaseExit):
+            now = time.time()
+            self.send_data()
+            tosleep = 1.0/update_rate_hz - (time.time() - now)
+            if (tosleep > 0):
+                time.sleep(tosleep)
+
     def kill(self):
         self.shutdown()
         self.server_close()
+        self.pleaseExit = True
     def __del__(self):
         self.kill()

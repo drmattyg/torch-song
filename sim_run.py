@@ -8,9 +8,12 @@ import random
 import logging
 import yaml
 
+from threading import Thread
+
 from torch_song.torch_song import TorchSong
 from torch_song.songbook import Songbook
 from torch_song.songbook import SongbookRunner
+from torch_song.server.control_udp_server import TorchControlServer
 from torch_song.isocahedron import IsoInterface
 
 songbooks = [
@@ -36,7 +39,19 @@ def main():
         stream = open('conf/default.yml', 'r')
     config = yaml.load(stream)
 
+    # Create torch song
     ts = TorchSong(config=config, num_edges=3, sim=sim)
+
+    # Start TorchSong server
+    cs_local_port = config['control_server']['local_port']
+    cs_remote_port = config['control_server']['remote_port']
+    cs_server = TorchControlServer(cs_local_port, cs_remote_port, ts)
+
+    cs_server_thread = Thread(target=cs_server.serve_forever)
+    cs_server_thread.daemon = True
+    cs_server_thread.start()
+
+
     loops = 0
     try:
         ts.calibrate()
@@ -57,6 +72,7 @@ def main():
     finally:
         for e in ts.edges.values():
             e.kill()
+        cs_server.kill()
         if (not sim):
             import default_io
         sys.exit(2)

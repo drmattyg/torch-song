@@ -4,7 +4,6 @@ import traceback
 import logging
 from torch_song.edge.edge_control_mux import EdgeControlMux
 from torch_song.edge.edge_handlers import *
-from torch_song.server.control_udp_server import TorchControlServer
 import os
 
 try:
@@ -56,30 +55,6 @@ class TorchSong:
         for e in self.edges.items():
             self.edges[e[0]] = EdgeControlMux(e[1])
 
-        # Start an edge command server
-        cs_local_port = self.config['control_server']['local_port']
-        cs_remote_port = self.config['control_server']['remote_port']
-        self.server = TorchControlServer(cs_local_port, cs_remote_port, self)
-
-        server_thread = Thread(target=self.server.serve_forever)
-        server_thread.daemon = True
-        server_thread.start()
-
-        self.pos_updater = Thread(target = self._pos_updater_loop)
-        self.pos_updater.setDaemon(True)
-        self.pos_updater.start()
-
-    def _pos_updater_loop(self):
-        self.pleaseExit = False
-        update_rate_hz = 100
-        while (not self.pleaseExit):
-            now = time.time()
-            self.server.send_data()
-            tosleep = 1.0/update_rate_hz - (time.time() - now)
-            if (tosleep > 0):
-                time.sleep(tosleep)
-
-
     def _worker(self, edge, event):
         try:
             edge.calibrate()
@@ -117,4 +92,3 @@ class TorchSong:
     def __del__(self):
         self.pleaseExit = True
         self.socketEdgeHandler.close()
-        self.server.kill()
