@@ -58,6 +58,7 @@ def main():
         while True:
             sb = Songbook.from_string(random.choice(songbooks), ts)
             runner = SongbookRunner(sb, ts)
+            cs_server.set_songbook_runner(runner)
             runner.run()
             for e in ts.edges.values():
                 e.home()

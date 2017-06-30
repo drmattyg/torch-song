@@ -15,6 +15,8 @@ class TorchRequestHandler(BaseRequestHandler):
         except:
             logging.error('Failed to parse JSON command')
 
+        print(command)
+
         if 'override' in command:
             self.server.torchsong.edges[command['id']].set_override(command['override'])
         if 'valve' in command:
@@ -26,10 +28,15 @@ class TorchRequestHandler(BaseRequestHandler):
         if 'dir' in command:
             self.server.torchsong.edges[command['id']].set_motor_state_external(
                     command['dir'], command['speed'])
+        if 'pause' in command:
+            print('pause', command)
+            logging.info('pause')
+            self.server.songbook_runner.pause(command['pause'])
 
 class TorchControlServer(UDPServer):
     def __init__(self, local_port, remote_port, torchsong):
         UDPServer.__init__(self, ('localhost', local_port), TorchRequestHandler)
+        print(UDPServer)
         self.torchsong = torchsong
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.socket.connect(('localhost', remote_port))
@@ -37,6 +44,9 @@ class TorchControlServer(UDPServer):
         self.status_updater = Thread(target = self._status_updater_loop)
         self.status_updater.setDaemon(True)
         self.status_updater.start()
+
+    def set_songbook_runner(self, sbr):
+        self.songbook_runner = sbr
 
     def send_data(self):
         obj = {}

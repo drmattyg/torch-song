@@ -14,6 +14,7 @@ import Snackbar from 'material-ui/Snackbar';
 import {YAMLPanel} from './YAMLParser.jsx';
 import {LogPanel} from './LogViewer.jsx';
 import {ControlPanel} from './ControlPanel.jsx';
+import {SongbookPanel} from './SongbookPanel.jsx';
 
 // require to make Tabs work
 const injectTapEventPlugin = require("react-tap-event-plugin");
@@ -79,6 +80,7 @@ class Components extends React.Component {
             message={this.state.message} />
         <Tabs>
           <Tab label={"Control"} >
+            <SongbookPanel />
             <ControlPanel />
           </Tab>
           <Tab label={"Logs"} >
