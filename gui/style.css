@@ -136,13 +136,27 @@ li {
   font-size: 11px
 }
 
+
 #app {
-  width: 900px;
+  width: 500px;
   background-color: #eee;
   margin: auto;
   border: 1px solid #ccc;
   margin-top: 40px;
 }
+
+@media (min-width: 768px) {
+  #app {
+    width: 700px;
+  }
+}
+
+@media (min-width: 1024px) {
+  #app {
+    width: 900px;
+  }
+}
+
 
 .yaml-tree-label,
 .yaml-form-label {

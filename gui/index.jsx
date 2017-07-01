@@ -41,6 +41,7 @@ class Components extends React.Component {
         valve: false
       }
     })
+    window.torchData.current_song = ''
 
     this.fetchLogs = this.fetchLogs.bind(this);
     this.fetchTorchData = this.fetchTorchData.bind(this);

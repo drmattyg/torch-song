@@ -21,7 +21,7 @@ export class LogPanel extends React.Component {
       if (window.logs) {
         this.setState({logs: window.logs})
       }
-    }, 100)
+    }, 250)
   }
 
   clear() {

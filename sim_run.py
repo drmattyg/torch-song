@@ -51,12 +51,11 @@ def main():
     cs_server_thread.daemon = True
     cs_server_thread.start()
 
-
     loops = 0
     try:
         ts.calibrate()
         while True:
-            sb = Songbook.from_string(random.choice(songbooks), ts)
+            sb = Songbook(random.choice(songbooks), ts)
             runner = SongbookRunner(sb, ts)
             cs_server.set_songbook_runner(runner)
             runner.run()

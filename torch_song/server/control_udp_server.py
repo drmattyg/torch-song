@@ -21,15 +21,16 @@ class TorchRequestHandler(BaseRequestHandler):
             self.server.torchsong.edges[command['id']].set_valve_state_external(command['valve'])
         if 'igniter' in command:
             self.server.torchsong.edges[command['id']].set_igniter_state_external(command['igniter'])
-        if 'calibrate' in command:
-            self.server.torchsong.edges[command['id']].calibrate_external()
         if 'dir' in command:
             self.server.torchsong.edges[command['id']].set_motor_state_external(
                     command['dir'], command['speed'])
-        if 'pause' in command:
-            print('pause', command)
-            logging.info('pause')
-            self.server.songbook_runner.request_pause(command['pause'])
+        if 'stop' in command:
+            logging.info('Stopping current song')
+            self.server.songbook_runner.request_stop()
+        if 'calibrate' in command:
+            logging.info('Calibrating')
+            self.server.songbook_runner.request_stop()
+            self.server.torchsong.calibrate()
 
 class TorchControlServer(UDPServer):
     def __init__(self, local_port, remote_port, torchsong):
@@ -54,6 +55,8 @@ class TorchControlServer(UDPServer):
             obj[k]['position'] = v.get_position()
             obj[k]['igniter'] = v.get_igniter_state()
             obj[k]['valve'] = v.get_valve_state()
+        if hasattr(self, 'songbook_runner'):
+            obj['current_song'] = self.songbook_runner.__str__()
         try:
             self.send_socket.send(json.dumps(obj).encode())
         except ConnectionRefusedError:

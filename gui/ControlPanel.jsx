@@ -116,8 +116,8 @@ export class EdgeControl extends React.Component {
         <h2 style={{backgroundColor: edgeColor}}>Edge {this.props.edge_id}</h2>
         <div className='edge-control-items'>
           <div className='edge-icons'>
-            <FontIcon tooltip="igniter" className="material-icons" color={igniterColor}>smoking_rooms</FontIcon>
-            <FontIcon tooltip="valve" className="material-icons" color={valveColor}>brightness_high</FontIcon>
+            <FontIcon className="material-icons" color={igniterColor}>smoking_rooms</FontIcon>
+            <FontIcon className="material-icons" color={valveColor}>brightness_high</FontIcon>
           </div>
           <Slider value={this.state.pos} disabled={true} min={0} max={1} />
           <SimpleToggle label='Override' onToggle={this.sendOverride} />
