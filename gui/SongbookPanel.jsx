@@ -7,6 +7,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import Snackbar from 'material-ui/Snackbar';
 import Paper from 'material-ui/Paper';
 import Slider from 'material-ui/Slider';
+import IconButton from 'material-ui/IconButton';
 import {SimpleToggle} from './Widgets.jsx'
 
 import {ColorWheel} from './Common.jsx'
@@ -51,6 +52,8 @@ export class SongbookPanel extends React.Component {
       <div className='control-page'>
         <Paper style={{padding:'20px'}}>
           <RaisedButton label='||' onTouchTap={this.sendPause}/>
+          <IconButton iconClassName="face" />
+          <i className="material-icons">face</i>
         </Paper>
       </div>
     );

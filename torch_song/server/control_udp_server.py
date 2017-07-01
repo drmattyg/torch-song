@@ -54,7 +54,10 @@ class TorchControlServer(UDPServer):
             obj[k]['position'] = v.get_position()
             obj[k]['igniter'] = v.get_igniter_state()
             obj[k]['valve'] = v.get_valve_state()
-        self.send_socket.send(json.dumps(obj).encode())
+        try:
+            self.send_socket.send(json.dumps(obj).encode())
+        except ConnectionRefusedError:
+            pass
 
     def _status_updater_loop(self):
         self.pleaseExit = False

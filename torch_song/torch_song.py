@@ -6,12 +6,14 @@ from torch_song.edge.edge_control_mux import EdgeControlMux
 from torch_song.edge.edge_handlers import *
 import os
 
+force_sim = False
 try:
     from torch_song.edge.real_edge import RealEdge
     from torch_song.hardware import MCPInput
     from torch_song.hardware import PCA9685
 except ImportError:
     print("Hardware imports failed, reverting to simulation")
+    force_sim = True
 
 from torch_song.simulator import SimEdge
 
@@ -38,7 +40,7 @@ class TorchSong:
         logger.addHandler(self.socketEdgeHandler)
 
         # Build edges
-        if (not sim):
+        if (not sim and not force_sim):
             self.io = dict()
             self.io['pca9685'] = PCA9685()
             mcps = dict()

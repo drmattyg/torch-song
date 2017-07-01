@@ -7,6 +7,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import Snackbar from 'material-ui/Snackbar';
 import Paper from 'material-ui/Paper';
 import Slider from 'material-ui/Slider';
+import FontIcon from 'material-ui/FontIcon';
 import {SimpleToggle} from './Widgets.jsx'
 
 import {ColorWheel} from './Common.jsx'
@@ -79,7 +80,8 @@ export class EdgeControl extends React.Component {
     var that = this
     setInterval(() => {
       if (window.torchData[that.props.edge_id]) {
-        this.setState({pos: window.torchData[that.props.edge_id]['position']})
+        const d = window.torchData[that.props.edge_id];
+        this.setState({pos: d['position'], igniter: d['igniter'], valve: d['valve']})
       }
     }, 100)
   }
@@ -106,11 +108,18 @@ export class EdgeControl extends React.Component {
   }
 
   render () {
+    const edgeColor = ColorWheel[this.props.edge_id];
+    const igniterColor = this.state.igniter ? edgeColor : 'black'
+    const valveColor = this.state.valve ? edgeColor : 'black'
     return (
       <div className='edge-control' >
-        <h2 style={{backgroundColor: ColorWheel[this.props.edge_id]}}>Edge {this.props.edge_id}</h2>
+        <h2 style={{backgroundColor: edgeColor}}>Edge {this.props.edge_id}</h2>
         <div className='edge-control-items'>
-          <Slider value={this.state.pos} min={0} max={1} />
+          <div className='edge-icons'>
+            <FontIcon tooltip="igniter" className="material-icons" color={igniterColor}>smoking_rooms</FontIcon>
+            <FontIcon tooltip="valve" className="material-icons" color={valveColor}>brightness_high</FontIcon>
+          </div>
+          <Slider value={this.state.pos} disabled={true} min={0} max={1} />
           <SimpleToggle label='Override' onToggle={this.sendOverride} />
           <SimpleToggle label='Igniter' onToggle={this.sendIgniter} />
           <SimpleToggle label='Valve' onToggle={this.sendValve} />
