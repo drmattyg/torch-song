@@ -4,7 +4,6 @@ import traceback
 import logging
 from torch_song.edge.edge_control_mux import EdgeControlMux
 from torch_song.edge.edge_handlers import *
-import os
 
 force_sim = False
 try:
@@ -64,6 +63,19 @@ class TorchSong:
             logging.error(e)
             traceback.print_exc()
             event.set()
+
+    def turn_off(self):
+        for e in self.edges.values():
+            e.set_valve_state(0)
+            e.set_igniter_state(0)
+
+    def kill(self):
+        for e in self.edges.values():
+            e.kill()
+
+    def home(self):
+        for e in self.edges.values():
+            e.home()
 
     def calibrate(self):
         calibrators = []

@@ -26,17 +26,27 @@ class TorchRequestHandler(BaseRequestHandler):
                     command['dir'], command['speed'])
         if 'stop' in command:
             logging.info('Stopping current song')
-            self.server.songbook_runner.request_stop()
+            self.server.songbook_manager.request_stop()
+        if 'play' in command:
+            logging.info('Restarting')
+            self.server.songbook_manager.request_play()
+        if 'next' in command:
+            logging.info('Next song')
+            self.server.songbook_manager.request_next()
+        if 'prev' in command:
+            logging.info('Prev song')
+            self.server.songbook_manager.request_prev()
         if 'calibrate' in command:
             logging.info('Calibrating')
-            self.server.songbook_runner.request_stop()
+            self.server.songbook_manager.request_stop()
             self.server.torchsong.calibrate()
 
 class TorchControlServer(UDPServer):
-    def __init__(self, local_port, remote_port, torchsong):
+    def __init__(self, local_port, remote_port, torchsong, songbook_manager):
         UDPServer.__init__(self, ('localhost', local_port), TorchRequestHandler)
 
         self.torchsong = torchsong
+        self.songbook_manager = songbook_manager
 
         self.send_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.send_socket.connect(('localhost', remote_port))
@@ -45,9 +55,6 @@ class TorchControlServer(UDPServer):
         self.status_updater.setDaemon(True)
         self.status_updater.start()
 
-    def set_songbook_runner(self, sbr):
-        self.songbook_runner = sbr
-
     def send_data(self):
         obj = {}
         for k,v in self.torchsong.edges.items():
@@ -55,8 +62,11 @@ class TorchControlServer(UDPServer):
             obj[k]['position'] = v.get_position()
             obj[k]['igniter'] = v.get_igniter_state()
             obj[k]['valve'] = v.get_valve_state()
-        if hasattr(self, 'songbook_runner'):
-            obj['current_song'] = self.songbook_runner.__str__()
+        t = self.songbook_manager.get_song_times()
+        obj['current_song'] = self.songbook_manager.current_song()
+        obj['next_song'] = self.songbook_manager.next_song()
+        obj['current_song_time'] = t[0]
+        obj['end_song_time'] = t[1]
         try:
             self.send_socket.send(json.dumps(obj).encode())
         except ConnectionRefusedError:

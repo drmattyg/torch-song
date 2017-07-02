@@ -75,13 +75,13 @@ class Components extends React.Component {
   render() {
     return (
       <div>
-        <AppBar title={"Torch Song GUI "}/>
+        <AppBar title={"Torch Song GUI "} showMenuIconButton={false}/>
         <Snackbar open={this.state.shouldAlert} autoHideDuration={1000}
             onRequestClose={() => { this.setState({shouldAlert: false}) }}
             message={this.state.message} />
+        <SongbookPanel />
         <Tabs>
           <Tab label={"Control"} >
-            <SongbookPanel />
             <ControlPanel />
           </Tab>
           <Tab label={"Logs"} >

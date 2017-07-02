@@ -33,7 +33,7 @@ console.log(version)
 
 // UDP Log Server
 let log_buffer = []
-const max_logs = 1000
+const max_logs = 200
 
 const logging_server = dgram.createSocket('udp4');
 logging_server.on('message', (msg) => {

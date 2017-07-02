@@ -27,7 +27,6 @@ class EdgeCalibration:
                 'polarity:' + str(self.polarity))
 
     def get_motor_speed(self, time, direction, distance=1):
-        print(self.fwd_time_map_reversed, self.rev_time_map_reversed)
         if (direction == 1):
             return int(
                 numpy.interp(time * distance / 1000,

@@ -11,8 +11,7 @@ import yaml
 from threading import Thread
 
 from torch_song.torch_song import TorchSong
-from torch_song.songbook import Songbook
-from torch_song.songbook import SongbookRunner
+from torch_song.songbook.songbook_manager import SongbookManager
 from torch_song.server.control_udp_server import TorchControlServer
 from torch_song.isocahedron import IsoInterface
 
@@ -41,11 +40,12 @@ def main():
 
     # Create torch song
     ts = TorchSong(config=config, num_edges=3, sim=sim)
+    sbm = SongbookManager(songbooks, ts)
 
     # Start TorchSong server
     cs_local_port = config['control_server']['local_port']
     cs_remote_port = config['control_server']['remote_port']
-    cs_server = TorchControlServer(cs_local_port, cs_remote_port, ts)
+    cs_server = TorchControlServer(cs_local_port, cs_remote_port, ts, sbm)
 
     cs_server_thread = Thread(target=cs_server.serve_forever)
     cs_server_thread.daemon = True
@@ -54,24 +54,14 @@ def main():
     loops = 0
     try:
         ts.calibrate()
-        while True:
-            sb = Songbook(random.choice(songbooks), ts)
-            runner = SongbookRunner(sb, ts)
-            cs_server.set_songbook_runner(runner)
-            runner.run()
-            for e in ts.edges.values():
-                e.home()
-            loops += 1
-        for e in ts.edges.values():
-            e.kill()
+        sbm.run()
     except KeyboardInterrupt:
         logging.info('Received ctrl-c, cleaning up')
     except Exception as e:
         logging.error(e)
         traceback.print_exc()
     finally:
-        for e in ts.edges.values():
-            e.kill()
+        ts.kill()
         cs_server.kill()
         if (not sim):
             import default_io

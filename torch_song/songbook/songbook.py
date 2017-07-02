@@ -3,6 +3,7 @@ import time
 from torch_song.songbook.measure import Measure
 from threading import Event
 import logging
+from os import path
 
 MTransition = Measure.Transition
 IGNITER_OFFSET = 4000
@@ -16,12 +17,12 @@ class Songbook:
         self.torch_song = torch_song
         self.sorted_timepoints = None
         self.generate_timing_map()
-        self.name = filename
+        self.name = path.basename(filename)
 
     @staticmethod
     def from_string(string, torch_song):
         _self = Songbook.__new__(Songbook);
-        _self.songbook = yaml.load(open(string, 'r'))
+        _self.songbook = yaml.load(string)
         _self.timepoints = {}
         _self.torch_song = torch_song
         _self.sorted_timepoints = None
@@ -73,6 +74,14 @@ class SongbookRunner:
         self.pause = False
         self.stop = Event()
         self.finished = Event()
+        self.current_song_time = 0
+        self.end_song_time = 0
+
+    def name(self):
+        return self.__str__()
+
+    def get_song_times(self):
+        return [self.current_song_time, self.end_song_time]
 
     def __str__(self):
         if (not self.finished.is_set()):
@@ -89,6 +98,9 @@ class SongbookRunner:
         # for now, add on the min_time
         min_time = -min(self.songbook.sorted_timepoints)
         for ts in self.songbook.sorted_timepoints:
+            self.current_song_time = ts - self.songbook.sorted_timepoints[0]
+            self.end_song_time = (self.songbook.sorted_timepoints[-1] -
+                                  self.songbook.sorted_timepoints[0])
             if self.stop.is_set():
                 self.stop.clear()
                 break
@@ -109,7 +121,7 @@ class SongbookRunner:
         elif tx.type == Measure.MOTOR:
             edge.set_motor_state(tx.value.direction, tx.value.speed)
 
-    # can be calle in mult-threaded context
+    # Should be called from a different thread
     def request_stop(self):
         self.stop.set()
         isDone = self.finished.wait(3)
