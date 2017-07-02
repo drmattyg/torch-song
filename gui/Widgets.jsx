@@ -68,6 +68,7 @@ export class SimpleToggle extends React.Component{
   }
   render() {
     return <Toggle label={this.props.label} labelPosition="right" style={{padding: "10px"}}
-      onToggle={this.props.onToggle} defaultToggled={this.props.defaultToggled || false} />
+      onToggle={this.props.onToggle} defaultToggled={this.props.defaultToggled || false}
+      disabled={this.props.disabled || false} />
   }
 };

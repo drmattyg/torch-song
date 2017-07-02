@@ -17,10 +17,10 @@ export class ControlPanel extends React.Component {
     super(props);
     this.state = {
       json: {loading: 'loading'},
-      shouldAlert: false,
-      message: ''
+      overridesDisabled: false
     };
     this.post = this.post.bind(this);
+    this.masterOverride = this.masterOverride.bind(this)
   }
 
   post(command) {
@@ -32,21 +32,29 @@ export class ControlPanel extends React.Component {
       },
       body: JSON.stringify(command)
     }).catch(() => {
-      this.setState({shouldAlert: true, message: 'Error sending command'})
+      console.log('error sending command')
     }).then((res) => {
       if (res.status == 200) {
         console.log('sent command')
       } else {
-        this.setState({shouldAlert: true, message: 'Error sending command'})
+        console.log('error sending command')
       }
     });
+  }
+
+  masterOverride(e, s) {
+    for (let i = 1; i <= 9; i += 1) {
+      this.post({id: i, override: s})
+    }
+    this.setState({overridesDisabled: s});
   }
 
   renderEdgeControls() {
     const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9]
     return arr.map((i) => {
       return (
-        <EdgeControl key={i} edge_id={i} post={this.post}/>
+        <EdgeControl key={i} edge_id={i} post={this.post}
+            overridesDisabled={this.state.overridesDisabled}/>
       )
     });
   }
@@ -58,6 +66,7 @@ export class ControlPanel extends React.Component {
     return (
       <div className='control-page'>
         <Paper style={{padding:'20px'}}>
+          <SimpleToggle label='Master Override' onToggle={this.masterOverride} />
           { this.renderEdgeControls() }
         </Paper>
       </div>
@@ -120,7 +129,8 @@ export class EdgeControl extends React.Component {
             <FontIcon className="material-icons" color={valveColor}>brightness_high</FontIcon>
           </div>
           <Slider value={this.state.pos} disabled={true} min={0} max={1} />
-          <SimpleToggle label='Override' onToggle={this.sendOverride} />
+          <SimpleToggle label='Override' onToggle={this.sendOverride}
+              disabled={this.props.overridesDisabled}/>
           <SimpleToggle label='Igniter' onToggle={this.sendIgniter} />
           <SimpleToggle label='Valve' onToggle={this.sendValve} />
           <RaisedButton label='<<' onTouchTap={this.jogRev} />
