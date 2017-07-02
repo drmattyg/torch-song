@@ -40,7 +40,7 @@ def main():
 
     # Create torch song
     ts = TorchSong(config=config, num_edges=3, sim=sim)
-    sbm = SongbookManager(songbooks, ts)
+    sbm = SongbookManager(songbooks, ts, config['songbook_mode'])
 
     # Start TorchSong server
     cs_local_port = config['control_server']['local_port']

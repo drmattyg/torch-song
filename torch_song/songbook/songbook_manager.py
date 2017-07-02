@@ -1,28 +1,33 @@
 import time
 from threading import Event
 import logging
+import itertools
 import random
 from torch_song.songbook import Songbook
 from torch_song.songbook import SongbookRunner
 from os import path
 
 class SongbookManager:
-    def __init__(self, songbooks, torchsong):
+    def __init__(self, songbooks, torchsong, mode='manual'):
         self.songbooks = songbooks
         self.torchsong = torchsong
 
-        self.mode = 'shuffle'
-        self.next_up = random.choice(self.songbooks)
-        self.last_song = self.next_up
+        self.set_mode(mode)
+
+        self.songbook_iterator = itertools.cycle(self.songbooks)
+        if (self.mode == 'shuffle'):
+            self.next_up = random.choice(self.songbooks)
+        else:
+            self.next_up = next(self.songbook_iterator)
 
         self.kill_signal = Event()
         self.is_stopped = Event()
 
     def set_mode(self, mode):
-        if (mode == 'shuffle' or mode == 'inorder' or mode =='icosahedron'):
+        if (mode == 'manual' or mode == 'shuffle' or mode == 'inorder' or mode =='icosahedron'):
             self.mode = mode
         else:
-            raise Exception('unknown song manager mode')
+            raise Exception('unknown song manager mode:', mode)
 
     def request_song(self):
         pass
@@ -69,6 +74,16 @@ class SongbookManager:
         while (not self.kill_signal.is_set()):
             if (self.is_stopped.is_set()):
                 time.sleep(1)
+            elif (self.mode == 'manual'):
+                time.sleep(1)
+            elif (self.mode == 'inorder'):
+                self.torchsong.home()
+                time.sleep(5)
+                self.last_up = self.next_up
+                sb = Songbook(self.next_up, self.torchsong)
+                self.next_up = next(self.songbook_iterator)
+                self.runner.run()
+                self.torchsong.turn_off()
             elif (self.mode == 'shuffle'):
                 self.torchsong.home()
                 time.sleep(5)
