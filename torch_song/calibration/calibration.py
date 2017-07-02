@@ -40,6 +40,8 @@ class EdgeCalibration:
 
     # Returns the calibrated time for end-to-end travel
     def get_cal_time(self, duty_cycle, direction):
+        if (len(self.duty_cycle_map) == 0):
+            return 1
         if (direction == 1):
             return numpy.interp(duty_cycle, self.duty_cycle_map, self.fwd_time_map)
         elif (direction == -1):

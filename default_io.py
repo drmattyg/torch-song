@@ -17,13 +17,23 @@ from torch_song.hardware import PCA9685
 print('setting IO to off-state')
 
 for v in config['subsystems']['igniters']:
-    igniter = Igniter(v['gpio'])
-    igniter.set_state(0)
+    try:
+        igniter = Igniter(v['gpio'])
+        igniter.set_state(0)
+    except Exception as e:
+        pass
 
 for v in config['subsystems']['valves']:
-    valve = Valve(v['gpio'])
-    valve.set_state(0)
+    try:
+        valve = Valve(v['gpio'])
+        valve.set_state(0)
+    except Exception as e:
+        pass
 
 for m in config['subsystems']['motors']:
-    motor = MotorDriver(PCA9685(), m['pwm_io'], m['dir_io'], m['dir_io_type'])
-    motor.stop()
+    try:
+        motor = MotorDriver(PCA9685(), m['pwm_io'], m['dir_io'], m['dir_io_type'])
+        motor.stop()
+    except Exception as e:
+        pass
+
