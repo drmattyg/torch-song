@@ -1,6 +1,7 @@
 from abc import ABCMeta, abstractmethod
 
 from torch_song.calibration import EdgeCalibration
+from torch_song.common import try_decorator
 
 
 class AbstractEdge(metaclass=ABCMeta):
@@ -37,21 +38,21 @@ class AbstractEdge(metaclass=ABCMeta):
         raise NotImplementedError()
 
     def get_forward_limit_switch_state(self):
-        if self.calibration is None:
+        if self.get_calibration() is None:
             raise Exception(
                 "Must set calibration before calling for forward/backwards limit switch")
         ls_state = self.get_limit_switch_state()
-        if self.calibration.polarity:
+        if self.get_calibration().polarity:
             return ls_state[0]
         else:
             return ls_state[1]
 
     def get_reverse_limit_switch_state(self):
-        if self.calibration is None:
+        if self.get_calibration() is None:
             raise Exception(
                 "Must set calibration before calling for forward/backwards limit switch")
         ls_state = self.get_limit_switch_state()
-        if self.calibration.polarity:
+        if self.get_calibration().polarity:
             return ls_state[1]
         else:
             return ls_state[0]
@@ -63,7 +64,12 @@ class AbstractEdge(metaclass=ABCMeta):
     def home(self):
         self.set_igniter_state(0)
         self.set_valve_state(0)
-        self.set_motor_state(-1, 75)
+        if (self.get_reverse_limit_switch_state()):
+            return True
+
+        self.set_motor_state(-1, 90)
+        func = try_decorator(2)(self.get_reverse_limit_switch_state)
+        return func()
 
     @abstractmethod
     def get_position(self):

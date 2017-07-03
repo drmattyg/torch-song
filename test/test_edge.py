@@ -24,7 +24,7 @@ class edge_cli(cmd.Cmd):
             mcps[m['id']] = mcp
         self.io['mcp23017']= mcps
 
-        self.edge = RealEdge(4, self.io, config)
+        self.edge = RealEdge(1, self.io, config)
 
         cmd.Cmd.__init__(self)
     def emptyline(self):

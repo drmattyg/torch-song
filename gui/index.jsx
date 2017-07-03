@@ -29,7 +29,8 @@ class Components extends React.Component {
       logs: [],
       control: {},
       shouldAlert: false,
-      message: ''
+      message: '',
+      connected: false
     };
 
     // We make data globally available to deal with some React limitations
@@ -56,9 +57,14 @@ class Components extends React.Component {
     }, 250)
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    return (this.state.connected != nextState.connected)
+  }
+
   fetchLogs() {
     fetch('/logs').then((resp) => {
       return resp.json()
+    }).catch(() => {
     }).then((json) => {
       window.logs = json
     });
@@ -67,7 +73,10 @@ class Components extends React.Component {
   fetchTorchData() {
     fetch('/control').then((resp) => {
       return resp.json()
+    }).catch(() => {
+      this.setState({connected: false})
     }).then((json) => {
+      this.setState({connected: true})
       window.torchData = json
     });
   }
@@ -75,7 +84,9 @@ class Components extends React.Component {
   render() {
     return (
       <div>
-        <AppBar title={"Torch Song GUI "} showMenuIconButton={false}/>
+        <AppBar
+            title={"Torch Song GUI " + (this.state.connected ? "(connected)" : "(disconnected)")}
+            showMenuIconButton={false}/>
         <Snackbar open={this.state.shouldAlert} autoHideDuration={1000}
             onRequestClose={() => { this.setState({shouldAlert: false}) }}
             message={this.state.message} />

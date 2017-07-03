@@ -16,8 +16,9 @@ from torch_song.server.control_udp_server import TorchControlServer
 from torch_song.isocahedron import IsoInterface
 
 songbooks = [
-    'songbooks/three_edge_chaser.yml',
-    'songbooks/points_of_light.yml'
+    #'songbooks/three_edge_chaser.yml',
+    #'songbooks/points_of_light.yml'
+    'songbooks/one_edge_chaser.yml'
 ]
 
 def main():
@@ -39,7 +40,7 @@ def main():
     config = yaml.load(stream)
 
     # Create torch song
-    ts = TorchSong(config=config, num_edges=3, sim=sim)
+    ts = TorchSong(config=config, num_edges=config['num_edges'], sim=sim)
     sbm = SongbookManager(songbooks, ts, config['songbook_mode'])
 
     # Start TorchSong server
@@ -63,8 +64,6 @@ def main():
     finally:
         ts.kill()
         cs_server.kill()
-        if (not sim):
-            import default_io
         sys.exit(2)
 
 

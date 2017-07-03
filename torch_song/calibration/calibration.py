@@ -104,7 +104,7 @@ class EdgeCalibration:
         logging.info('Calibrated edge:%d at spd:%d is fwd:%f rev:%f' %
             (self.edge.id, speed, fwd_time, rev_time), extra={'edge_id': self.edge.id})
 
-        return [rev_time, fwd_time]
+        return [fwd_time, rev_time]
 
     def calibrate(self):
         self.calibrate_polarity()
@@ -121,14 +121,4 @@ class EdgeCalibration:
         self.rev_time_map_reversed = list(self.rev_time_map)
         self.rev_time_map_reversed.reverse()
 
-        self.home()
-
-    def home(self):
-        e = self.edge
-        # move to start
-        e.set_motor_state(-1, 75)
-        if (not self.chk_beg_limit()):
-            e.set_motor_state(0, 0)
-            raise Exception('Calibration timeout')
-        e.set_motor_state(0, 0)
-
+        self.edge.home()

@@ -75,7 +75,9 @@ class RealEdge(AbstractEdge):
             now = time()
 
             if (not last_cal_time == 0):
-                self.position += (now - prev_time) / last_cal_time
+                add_pos = (now - prev_time) / last_cal_time
+                print(add_pos)
+                self.position += add_pos
 
             prev_time = now
 
@@ -117,8 +119,6 @@ class RealEdge(AbstractEdge):
                     self.speed_request = -1
                     last_cal_time = self.calibration.get_cal_time(self.speed_request, self.dir_request)
                     last_cal_time = last_cal_time * self.dir_request
-            else:
-                last_cal_time = 0
 
             self.lock.release()
 
@@ -174,6 +174,7 @@ class RealEdge(AbstractEdge):
         return self.calibration
 
     def kill(self):
+        logging.info('Stopping edge %d' % (self.id), extra={'edge_id': self.id})
         self.motor_driver.stop()
         self.pleaseExit = True
         self.runner.join(5000)

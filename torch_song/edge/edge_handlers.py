@@ -1,6 +1,8 @@
 import logging
 import json
 
+from logging.handlers import DatagramHandler
+
 # Print a color-coded log message to console
 class EdgeStreamHandler(logging.StreamHandler):
     DEFAULT = '\x1b[0m'

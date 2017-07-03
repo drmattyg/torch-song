@@ -78,7 +78,6 @@ class SongbookManager:
                 time.sleep(1)
             elif (self.mode == 'inorder'):
                 self.torchsong.home()
-                time.sleep(5)
                 self.last_up = self.next_up
                 sb = Songbook(self.next_up, self.torchsong)
                 self.next_up = next(self.songbook_iterator)
@@ -86,7 +85,6 @@ class SongbookManager:
                 self.torchsong.turn_off()
             elif (self.mode == 'shuffle'):
                 self.torchsong.home()
-                time.sleep(5)
                 self.last_up = self.next_up
                 sb = Songbook(self.next_up, self.torchsong)
                 self.runner = SongbookRunner(sb, self.torchsong)

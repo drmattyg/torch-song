@@ -1,9 +1,9 @@
 import time
 from threading import Thread, Lock, Event
-import traceback
 import logging
 from torch_song.edge.edge_control_mux import EdgeControlMux
 from torch_song.edge.edge_handlers import *
+from torch_song.common import run_parallel
 
 force_sim = False
 try:
@@ -56,14 +56,6 @@ class TorchSong:
         for e in self.edges.items():
             self.edges[e[0]] = EdgeControlMux(e[1])
 
-    def _worker(self, edge, event):
-        try:
-            edge.calibrate()
-        except Exception as e:
-            logging.error(e)
-            traceback.print_exc()
-            event.set()
-
     def turn_off(self):
         for e in self.edges.values():
             e.set_valve_state(0)
@@ -74,34 +66,10 @@ class TorchSong:
             e.kill()
 
     def home(self):
-        for e in self.edges.values():
-            e.home()
+        run_parallel('home', self.edges.values())
 
     def calibrate(self):
-        calibrators = []
-        events = []
-
-        for e in self.edges.values():
-            event = Event()
-            calibrators.append(Thread(target=self._worker, args=(e,event,)))
-            events.append(event)
-
-        for c in calibrators:
-            c.start()
-
-        done = lambda: any(map(lambda c: not c.isAlive(), calibrators))
-        is_exc = lambda: any(map(lambda e: e.is_set(), events))
-
-        while (not done()):
-            if (is_exc()):
-                raise Exception('Calibration error')
-            time.sleep(.1)
-
-        if (is_exc()):
-            raise Exception('Calibration error')
-
-        for c in calibrators:
-            c.join()
+        run_parallel('calibrate', self.edges.values())
 
     def __del__(self):
         self.pleaseExit = True
