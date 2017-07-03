@@ -21,6 +21,7 @@ export class ControlPanel extends React.Component {
     };
     this.post = this.post.bind(this);
     this.masterOverride = this.masterOverride.bind(this)
+    this.showFold = this.showFold.bind(this)
   }
 
   post(command) {
@@ -49,12 +50,18 @@ export class ControlPanel extends React.Component {
     this.setState({overridesDisabled: s});
   }
 
+  showFold(e, s) {
+    this.setState({showFold: s})
+  }
+
   renderEdgeControls() {
     const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9]
     return arr.map((i) => {
       return (
         <EdgeControl key={i} edge_id={i} post={this.post}
-            overridesDisabled={this.state.overridesDisabled}/>
+          overridesDisabled={this.state.overridesDisabled}
+          showFold={this.state.showFold}
+        />
       )
     });
   }
@@ -66,7 +73,14 @@ export class ControlPanel extends React.Component {
     return (
       <div className='control-page'>
         <Paper style={{padding:'20px'}}>
-          <SimpleToggle label='Master Override' onToggle={this.masterOverride} />
+          <div className='master-controls'>
+            <div className='master-control'>
+              <SimpleToggle label='Show Overrides' onToggle={this.showFold} />
+            </div>
+            <div className='master-control'>
+              <SimpleToggle label='Master Override' onToggle={this.masterOverride} />
+            </div>
+          </div>
           { this.renderEdgeControls() }
         </Paper>
       </div>
@@ -149,23 +163,25 @@ export class EdgeControl extends React.Component {
             <FontIcon className="material-icons" color={fwdLimit}>chevron_right</FontIcon>
           </div>
           <Slider value={this.state.pos} disabled={true} min={0} max={1} />
-          <SimpleToggle label='Override' onToggle={this.sendOverride}
-              disabled={this.props.overridesDisabled}/>
-          <div className='edge-buttons'>
-            <div className='edge-toggle'>
-              <SimpleToggle label='Igniter' onToggle={this.sendIgniter} />
+          <div className={this.props.showFold ? '' : 'hidden'} >
+            <SimpleToggle label='Override' onToggle={this.sendOverride}
+                disabled={this.props.overridesDisabled}/>
+            <div className='edge-buttons'>
+              <div className='edge-toggle'>
+                <SimpleToggle label='Igniter' onToggle={this.sendIgniter} />
+              </div>
+              <div className='edge-toggle'>
+                <SimpleToggle label='Valve' onToggle={this.sendValve} />
+              </div>
             </div>
-            <div className='edge-toggle'>
-              <SimpleToggle label='Valve' onToggle={this.sendValve} />
+            <div className='edge-buttons'>
+              <RaisedButton className='edge-motor-button' label='<' onTouchTap={this.jogRev} />
+              <RaisedButton className='edge-motor-button' label='>' onTouchTap={this.jogFwd} />
             </div>
-          </div>
-          <div className='edge-buttons'>
-            <RaisedButton className='edge-motor-button' label='<' onTouchTap={this.jogRev} />
-            <RaisedButton className='edge-motor-button' label='>' onTouchTap={this.jogFwd} />
-          </div>
-          <div className='edge-buttons'>
-            <RaisedButton className='edge-motor-button' label='<<' onTouchTap={this.rev} />
-            <RaisedButton className='edge-motor-button' label='>>' onTouchTap={this.fwd} />
+            <div className='edge-buttons'>
+              <RaisedButton className='edge-motor-button' label='<<' onTouchTap={this.rev} />
+              <RaisedButton className='edge-motor-button' label='>>' onTouchTap={this.fwd} />
+            </div>
           </div>
         </div>
       </div>

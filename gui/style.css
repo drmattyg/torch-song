@@ -221,6 +221,10 @@ h2 {
   font-family: "Courier New";
 }
 
+.master-control {
+  display: inline-block
+}
+
 .edge-control {
   display: inline-block;
   border: 1px solid #eeeeee;
@@ -280,4 +284,6 @@ h2 {
   width: 80%;
 }
 
-
+.hidden {
+  display: none
+}
