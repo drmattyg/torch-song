@@ -1,4 +1,4 @@
-num_edges: 1
+num_edges: 9
 # modes are 'manual', 'inorder', 'shuffle', 'icosahedron'
 songbook_mode: shuffle
 logging:

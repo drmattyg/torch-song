@@ -15,15 +15,16 @@ class TorchRequestHandler(BaseRequestHandler):
         except:
             logging.error('Failed to parse JSON command')
 
-        if 'override' in command:
-            self.server.torchsong.edges[command['id']].set_override(command['override'])
-        if 'valve' in command:
-            self.server.torchsong.edges[command['id']].set_valve_state_external(command['valve'])
-        if 'igniter' in command:
-            self.server.torchsong.edges[command['id']].set_igniter_state_external(command['igniter'])
-        if 'dir' in command:
-            self.server.torchsong.edges[command['id']].set_motor_state_external(
-                    command['dir'], command['speed'])
+        if command['id'] in self.server.torchsong.edges:
+            if 'override' in command:
+                self.server.torchsong.edges[command['id']].set_override(command['override'])
+            if 'valve' in command:
+                self.server.torchsong.edges[command['id']].set_valve_state_external(command['valve'])
+            if 'igniter' in command:
+                self.server.torchsong.edges[command['id']].set_igniter_state_external(command['igniter'])
+            if 'dir' in command:
+                self.server.torchsong.edges[command['id']].set_motor_state_external(
+                        command['dir'], command['speed'])
         if 'stop' in command:
             logging.info('Stopping current song')
             self.server.songbook_manager.request_stop()
@@ -62,6 +63,8 @@ class TorchControlServer(UDPServer):
             obj[k]['position'] = v.get_position()
             obj[k]['igniter'] = v.get_igniter_state()
             obj[k]['valve'] = v.get_valve_state()
+            obj[k]['rev_limit'] = v.get_reverse_limit_switch_state()
+            obj[k]['fwd_limit'] = v.get_forward_limit_switch_state()
         t = self.songbook_manager.get_song_times()
         obj['current_song'] = self.songbook_manager.current_song()
         obj['next_song'] = self.songbook_manager.next_song()

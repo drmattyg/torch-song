@@ -17,7 +17,7 @@ except ImportError:
 from torch_song.simulator import SimEdge
 
 class TorchSong:
-    def __init__(self, config, num_edges=1, sim=False):
+    def __init__(self, config, num_edges=1, sim=False, verbose=False):
         # Configuration
         self.config = config
 
@@ -48,9 +48,9 @@ class TorchSong:
                 mcps[m['id']] = mcp
             self.io['mcp23017'] = mcps
 
-            self.edges = {i: RealEdge(i, self.io, self.config) for i in range(1, num_edges + 1)}
+            self.edges = {i: RealEdge(i, self.io, self.config, verbose) for i in range(1, num_edges + 1)}
         else:
-            self.edges = {i: SimEdge(i, 1000) for i in range(1, num_edges + 1)}
+            self.edges = {i: SimEdge(i, 1000, verbose) for i in range(1, num_edges + 1)}
 
         # Hook up command mux
         for e in self.edges.items():

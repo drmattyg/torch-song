@@ -1,14 +1,18 @@
-#!/bin/bash
+#!/bin/sh
 
 cd gui
 
-npm start main.js &
-gui_pid=$!
-echo "kill -15 $gui_pid"
-trap "kill -15 $gui_pid" 2 15
+running=$( pidof "node" | wc -l 1 > /dev/null )
+echo $running
+
+if [ $running -eq 0 ]; then
+  npm start main.js &
+  gui_pid=$!
+  trap "kill -15 $gui_pid" 2 15
+fi
 
 cd ..
 . env/bin/activate
 ./main.py "$@"
+
 ./default_io.py
-kill -9

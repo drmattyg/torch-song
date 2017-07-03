@@ -226,6 +226,7 @@ h2 {
   border: 1px solid #eeeeee;
   margin: 10px;
   border-radius: 4px;
+  box-shadow: 3px 3px 3px #ccc;
 }
 
 .edge-control h2 {
@@ -239,7 +240,20 @@ h2 {
 }
 
 .edge-icons .material-icons{
-  margin-left: 40px
+  margin-left: 25px
+}
+
+.edge-toggle {
+  width: 50%;
+  display:inline-block;
+}
+
+.edge-toggles {
+  display:inline-block
+}
+
+.edge-motor-button {
+  margin: 5px;
 }
 
 .song-calibrate {

@@ -12,7 +12,7 @@ from torch_song.hardware.limit_switch import LimitSwitch
 
 
 class RealEdge(AbstractEdge):
-    def __init__(self, i, io, config, update_rate_hz=20, calibration=None):
+    def __init__(self, i, io, config, verbose=False, update_rate_hz=20, calibration=None):
         super().__init__(i)
 
         # Hardware config
@@ -32,6 +32,8 @@ class RealEdge(AbstractEdge):
         self.dir_polarity =  config['subsystems']['motors'][self.id - 1]['polarity']
 
         self.position = 0
+
+        self.verbose = verbose
 
         # Thread daemon inits
         self.speed_request = -1
@@ -104,7 +106,8 @@ class RealEdge(AbstractEdge):
                 self.speed_request = 0
                 self.position = 1
                 last_cal_time = 0
-                logging.info('Fwd limit switch hit for id:%d' % (self.id), extra={'edge_id': self.id})
+                if (self.verbose):
+                    logging.info('Fwd limit switch hit for id:%d' % (self.id), extra={'edge_id': self.id})
             elif (self.motor_driver.get_dir() == MotorDriver.REVERSE and
                         self.motor_driver.get_speed() > 0 and
                         not self._ignore_limit and
@@ -113,7 +116,8 @@ class RealEdge(AbstractEdge):
                 self.speed_request = 0
                 self.position = 0
                 last_cal_time = 0
-                logging.info('Rev limit switch hit for id:%d' % (self.id), extra={'edge_id': self.id})
+                if (self.verbose):
+                    logging.info('Rev limit switch hit for id:%d' % (self.id), extra={'edge_id': self.id})
             elif (self.speed_request >= 0):
                     self.motor_driver.set_speed(self.speed_request)
                     self.speed_request = -1
@@ -137,13 +141,21 @@ class RealEdge(AbstractEdge):
         self.lock.acquire()
         self.dir_request = direction
         self.speed_request = speed
-        logging.info('id:%d speed:%d dir:%d' % (self.id, speed, direction), extra={'edge_id': self.id})
+        if (self.verbose):
+            logging.info('Setting edge:%d to spd:%d and dir:%d' %
+                (self.id, speed, direction), extra={'edge_id': self.id})
         self.lock.release()
 
     def set_valve_state(self, v):
+        if (self.verbose):
+            logging.info('Valve edge:%d %s' %
+                (self.id, 'ON' if v else 'OFF'), extra={'edge_id': self.id})
         self.valve.set_state(v)
 
     def set_igniter_state(self, g):
+        if (self.verbose):
+            logging.info('Igniter edge:%d %s' %
+                (self.id, 'ON' if g else 'OFF'), extra={'edge_id': self.id})
         self.igniter.set_state(g)
 
     def get_limit_switch_state(self):

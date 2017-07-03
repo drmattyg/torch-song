@@ -8,13 +8,13 @@ class EdgeCalibration:
     def __init__(self, edge, min_speed=80, cal_speed_step=20):
         self.edge = edge
 
-        self.duty_cycle_map = []
-        self.fwd_time_map = []
-        self.rev_time_map = []
+        self.duty_cycle_map = [100]
+        self.fwd_time_map = [6]
+        self.rev_time_map = [6]
 
-        self.duty_cycle_map_reversed = []
-        self.fwd_time_map_reversed = []
-        self.rev_time_map_reversed = []
+        self.duty_cycle_map_reversed = [100]
+        self.fwd_time_map_reversed = [6]
+        self.rev_time_map_reversed = [6]
 
         self.polarity = False
         self.min_speed = min_speed

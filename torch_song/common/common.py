@@ -34,7 +34,9 @@ def run_parallel(function_str, iterable):
 
     for i in iterable:
         event = Event()
-        runners.append(Thread(target=worker, args=(i,event,)))
+        thread = Thread(target=worker, args=(i,event,))
+        thread.setDaemon(True)
+        runners.append(thread)
         events.append(event)
 
     for r in runners:

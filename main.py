@@ -18,19 +18,26 @@ from torch_song.isocahedron import IsoInterface
 songbooks = [
     #'songbooks/three_edge_chaser.yml',
     #'songbooks/points_of_light.yml'
-    'songbooks/one_edge_chaser.yml'
+    'songbooks/nine_edge_test.yml'
 ]
 
 def main():
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "hs", ["help", "sim"])
+        opts, args = getopt.getopt(sys.argv[1:], "hsnv", ["help", "sim", "nocal", "verbose"])
     except getopt.GetoptError:
+        print('Unrecognized option')
         sys.exit(2)
 
     sim = False
+    skipCal = False
+    verbose = False
     for opt, arg in opts:
         if opt in ('-s', '--sim'):
             sim = True
+        if opt in ('-n', '--nocal'):
+            skipCal = True
+        if opt in ('-v', '--verbose'):
+            verbose = True
 
     # Build config
     try:
@@ -40,7 +47,7 @@ def main():
     config = yaml.load(stream)
 
     # Create torch song
-    ts = TorchSong(config=config, num_edges=config['num_edges'], sim=sim)
+    ts = TorchSong(config=config, num_edges=config['num_edges'], sim=sim, verbose=verbose)
     sbm = SongbookManager(songbooks, ts, config['songbook_mode'])
 
     # Start TorchSong server
@@ -54,7 +61,8 @@ def main():
 
     loops = 0
     try:
-        ts.calibrate()
+        if (not skipCal):
+            ts.calibrate()
         sbm.run()
     except KeyboardInterrupt:
         logging.info('Received ctrl-c, cleaning up')

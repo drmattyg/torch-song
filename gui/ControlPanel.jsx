@@ -82,6 +82,8 @@ export class EdgeControl extends React.Component {
     this.sendValve = this.sendValve.bind(this)
     this.jogFwd = this.jog.bind(this, 1)
     this.jogRev = this.jog.bind(this, -1)
+    this.rev = this.rev.bind(this)
+    this.fwd = this.fwd.bind(this)
     this.state = {
       pos: 0
     };
@@ -90,7 +92,13 @@ export class EdgeControl extends React.Component {
     setInterval(() => {
       if (window.torchData[that.props.edge_id]) {
         const d = window.torchData[that.props.edge_id];
-        this.setState({pos: d['position'], igniter: d['igniter'], valve: d['valve']})
+        this.setState({
+          pos: d['position'],
+          igniter: d['igniter'],
+          valve: d['valve'],
+          revLimit: d['rev_limit'],
+          fwdLimit: d['fwd_limit'],
+        })
       }
     }, 100)
   }
@@ -115,26 +123,50 @@ export class EdgeControl extends React.Component {
       clearTimeout(timer)
     }, 500);
   }
+  rev(e) {
+    const id = this.props.edge_id
+    this.props.post({id: id, dir: -1, speed: 80})
+  }
+  fwd(e) {
+    const id = this.props.edge_id
+    this.props.post({id: id, dir: 1, speed: 80})
+  }
 
   render () {
     const edgeColor = ColorWheel[this.props.edge_id];
     const igniterColor = this.state.igniter ? edgeColor : 'black'
     const valveColor = this.state.valve ? edgeColor : 'black'
+    const revLimit = this.state.revLimit ? edgeColor : 'black'
+    const fwdLimit = this.state.fwdLimit ? edgeColor : 'black'
     return (
       <div className='edge-control' >
         <h2 style={{backgroundColor: edgeColor}}>Edge {this.props.edge_id}</h2>
         <div className='edge-control-items'>
           <div className='edge-icons'>
+            <FontIcon className="material-icons" color={revLimit}>chevron_left</FontIcon>
             <FontIcon className="material-icons" color={igniterColor}>smoking_rooms</FontIcon>
             <FontIcon className="material-icons" color={valveColor}>brightness_high</FontIcon>
+            <FontIcon className="material-icons" color={fwdLimit}>chevron_right</FontIcon>
           </div>
           <Slider value={this.state.pos} disabled={true} min={0} max={1} />
           <SimpleToggle label='Override' onToggle={this.sendOverride}
               disabled={this.props.overridesDisabled}/>
-          <SimpleToggle label='Igniter' onToggle={this.sendIgniter} />
-          <SimpleToggle label='Valve' onToggle={this.sendValve} />
-          <RaisedButton label='<<' onTouchTap={this.jogRev} />
-          <RaisedButton label='>>' onTouchTap={this.jogFwd} />
+          <div className='edge-buttons'>
+            <div className='edge-toggle'>
+              <SimpleToggle label='Igniter' onToggle={this.sendIgniter} />
+            </div>
+            <div className='edge-toggle'>
+              <SimpleToggle label='Valve' onToggle={this.sendValve} />
+            </div>
+          </div>
+          <div className='edge-buttons'>
+            <RaisedButton className='edge-motor-button' label='<' onTouchTap={this.jogRev} />
+            <RaisedButton className='edge-motor-button' label='>' onTouchTap={this.jogFwd} />
+          </div>
+          <div className='edge-buttons'>
+            <RaisedButton className='edge-motor-button' label='<<' onTouchTap={this.rev} />
+            <RaisedButton className='edge-motor-button' label='>>' onTouchTap={this.fwd} />
+          </div>
         </div>
       </div>
     )

@@ -38,18 +38,21 @@ def up_string(s):
 
 class SimEdge(AbstractEdge):
     def set_valve_state(self, v):
-        logging.info('Valve edge:%d %s' %
-            (self.id, 'ON' if v else 'OFF'), extra={'edge_id': self.id})
+        if (self.verbose):
+            logging.info('Valve edge:%d %s' %
+                (self.id, 'ON' if v else 'OFF'), extra={'edge_id': self.id})
         self.valve = v
 
     def set_igniter_state(self, g):
-        logging.info('Igniter edge:%d %s' %
-            (self.id, 'ON' if g else 'OFF'), extra={'edge_id': self.id})
+        if (self.verbose):
+            logging.info('Igniter edge:%d %s' %
+                (self.id, 'ON' if g else 'OFF'), extra={'edge_id': self.id})
         self.igniter = g
 
     def set_motor_state(self, direction, speed):
-        logging.info('Setting edge:%d to spd:%d and dir:%d' %
-            (self.id, speed, direction), extra={'edge_id': self.id})
+        if (self.verbose):
+            logging.info('Setting edge:%d to spd:%d and dir:%d' %
+                (self.id, speed, direction), extra={'edge_id': self.id})
         self.motor_direction = direction
         self.motor_speed = speed
 
@@ -76,7 +79,7 @@ class SimEdge(AbstractEdge):
     STR_LEN = 10
     REPR = "{id} {valve} {igniter} {ls0}:{left}{shuttle}{right}:{ls1}"
 
-    def __init__(self, id_val, default_calibration_time=4000):
+    def __init__(self, id_val, default_calibration_time=4000, verbose=False):
         self.id = id_val
         self.calibration_time = default_calibration_time
         self.position = 0
@@ -88,6 +91,8 @@ class SimEdge(AbstractEdge):
         self._run_thread = threading.Event()
         self._run_thread.set()
         self._runner_thread = threading.Thread(target=self._runner)
+        self._runner_thread.setDaemon(True)
+        self.verbose = verbose
         self.x_offset = 0
         super(self.__class__, self).__init__(id_val)
         self._runner_thread.start()
