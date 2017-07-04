@@ -93,7 +93,6 @@ class Components extends React.Component {
       throw new Error()
     }).then((json) => {
       window.proc = json
-      console.log(window.proc)
       this.setState({running: json['state']})
     });
   }

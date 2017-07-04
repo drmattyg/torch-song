@@ -145,19 +145,6 @@ li {
   margin-top: 40px;
 }
 
-@media (min-width: 768px) {
-  #app {
-    width: 700px;
-  }
-}
-
-@media (min-width: 1024px) {
-  #app {
-    width: 900px;
-  }
-}
-
-
 .yaml-tree-label,
 .yaml-form-label {
   font-family: monospace;
@@ -269,10 +256,6 @@ h2 {
   margin: 0px 2px;
 }
 
-.song-process {
-
-}
-
 .song-controls-outter {
   text-align: center;
 }
@@ -301,3 +284,26 @@ h2 {
 .hidden {
   display: none
 }
+
+@media (min-width: 768px) {
+  #app {
+    width: 700px;
+  }
+
+  .song-process {
+    text-align: inherit;
+  }
+
+  .song-controls-outter {
+    text-align: inherit;
+  }
+
+}
+
+@media (min-width: 1024px) {
+  #app {
+    width: 900px;
+  }
+}
+
+
