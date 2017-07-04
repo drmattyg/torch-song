@@ -39,10 +39,6 @@ export class SongbookPanel extends React.Component {
       }
     }, 250)
 
-    setInterval(() => {
-      fetch('/proc'
-    });
-
   }
 
   formatSongTime(time) {
