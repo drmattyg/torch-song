@@ -15,7 +15,7 @@ class TorchRequestHandler(BaseRequestHandler):
         except:
             logging.error('Failed to parse JSON command')
 
-        if command['id'] in self.server.torchsong.edges:
+        if 'id' in command and command['id'] in self.server.torchsong.edges:
             if 'override' in command:
                 self.server.torchsong.edges[command['id']].set_override(command['override'])
             if 'valve' in command:

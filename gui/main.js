@@ -129,8 +129,7 @@ app.post('/default-mod-yaml', function (req, res) {
 });
 
 proc = null;
-path = __dirname + '/../bin'
-exec = 'torch'
+path = __dirname + '/..'
 app.post('/proc', function (req, res) {
   json = req.body;
   if (json['proc']) {
@@ -138,17 +137,31 @@ app.post('/proc', function (req, res) {
       console.log('starting process')
       console.log(path)
       if (!proc) {
-        proc = spawn('sh', ['torch'], {cwd:path} )
+        proc = spawn('/usr/bin/env', ['python', 'main.py'], {cwd:path} )
       }
     } else if (json['proc'] == 'stop') {
-      console.log('stopping process')
       if (proc) {
-        proc.kill()
+        console.log('stopping process')
+        proc.kill('SIGTERM')
+        proc = null;
+      }
+    } else if (json['proc'] == 'estop') {
+      if (proc) {
+        console.log('emergency stop')
+        proc.kill('SIGKILL')
+        proc = spawn('/usr/bin/env', ['python', 'default_io.py'], {cwd:path} )
         proc = null;
       }
     }
   }
 });
+
+app.get('/proc', function (req, res) {
+  let s = {state: null}
+  s.state = proc ? true : false;
+  res.send(s);
+});
+
 
 
 // Send state

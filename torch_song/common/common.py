@@ -56,4 +56,18 @@ def run_parallel(function_str, iterable):
     for r in runners:
         r.join()
 
+# sleep for 'secs' but runs 'updater' function every 'update_rate_s'. Return True when complete
+# Stop sleep early and return False if 'event'
+def interruptable_sleep(secs, event, updater=lambda: None, update_rate_s = .05):
+    then = time.time()
+    now = time.time()
+    while (now - then) < secs:
+        updater()
+        now = time.time()
+        if (event.is_set()):
+            return False
+        else:
+            to_sleep = min(update_rate_s, secs - (now - then))
+            time.sleep(max(to_sleep, 0))
+    return True
 

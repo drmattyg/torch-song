@@ -138,7 +138,7 @@ li {
 
 
 #app {
-  width: 500px;
+  width: 410px;
   background-color: #eee;
   margin: auto;
   border: 1px solid #ccc;
@@ -195,9 +195,9 @@ li {
 
 
 h2 {
-  text-align: center;
-  margin-bottom: 10px;
   font-weight: 500;
+  margin: 25px 0px;
+  text-transform: uppercase;
 }
 
 .material-ui-wrap {
@@ -260,16 +260,30 @@ h2 {
   margin: 5px;
 }
 
-.song-calibrate {
-  display: inline-block;
+.song-process {
   top: -10px;
+  text-align: center;
 }
 
-.song-controls {
-  display: inline-block;
+.song-process-button {
+  margin: 0px 2px;
+}
+
+.song-process {
+
+}
+
+.song-controls-outter {
+  text-align: center;
+}
+
+.song-controls-inner {
   border: 1px solid #ccc;
-  margin-left: 0px;
-  margin-right: 20px;
+  display: inline-block;
+}
+
+.song-control {
+  display: inline-block;
 }
 
 .song-time {
@@ -281,7 +295,7 @@ h2 {
 
 .song-time-bar {
   display: inline-block;
-  width: 80%;
+  width: 50%;
 }
 
 .hidden {

@@ -4,11 +4,13 @@ from torch_song.songbook.measure import Measure
 from threading import Event
 import logging
 from os import path
+from torch_song.common import interruptable_sleep
+
+import pprint
 
 MTransition = Measure.Transition
 IGNITER_OFFSET = 4000
 IGNITER_DELAY = 1000
-
 
 class Songbook:
     def __init__(self, filename, torch_song):
@@ -74,6 +76,8 @@ class SongbookRunner:
         self.pause = False
         self.stop = Event()
         self.finished = Event()
+
+        self.start_song_time = 0
         self.current_song_time = 0
         self.end_song_time = 0
 
@@ -81,7 +85,11 @@ class SongbookRunner:
         return self.__str__()
 
     def get_song_times(self):
-        return [self.current_song_time, self.end_song_time]
+        if (self.finished.is_set()):
+            return [0, self.end_song_time - self.start_song_time]
+        else:
+            return [self.current_song_time - self.start_song_time,
+                    self.end_song_time - self.start_song_time]
 
     def __str__(self):
         if (not self.finished.is_set()):
@@ -89,27 +97,32 @@ class SongbookRunner:
         else:
             return 'None'
 
+    def updater(self):
+        self.current_song_time = time.time() * 1000
+
     def run(self):
         logging.info("Starting songbook:" + self.__str__())
+        self.start_song_time = time.time() * 1000
         t0 = time.time() * 1000
 
         # In the future we'll start the music earlier to account for negative timepoints
         # negative timepoints correspond to igniter offsets; igniters have to come on before flame
         # for now, add on the min_time
+
         min_time = -min(self.songbook.sorted_timepoints)
+        self.end_song_time = ((self.songbook.sorted_timepoints[-1] -
+                              self.songbook.sorted_timepoints[0]) + time.time() * 1000)
         for ts in self.songbook.sorted_timepoints:
-            self.current_song_time = ts - self.songbook.sorted_timepoints[0]
-            self.end_song_time = (self.songbook.sorted_timepoints[-1] -
-                                  self.songbook.sorted_timepoints[0])
-            if self.stop.is_set():
-                self.stop.clear()
-                break
             now = time.time() * 1000
             ts_0 = ts + min_time
             if now - t0 < ts_0:
-                time.sleep((ts_0 - (now - t0)) / 1000)
+                to_sleep = (ts_0 - (now - t0)) / 1000
+                not_interrupted = interruptable_sleep(to_sleep, self.stop, self.updater)
+                if (not not_interrupted):
+                    break
             for tx in self.songbook.timepoints[ts]:
                 self.execute_measure(tx)
+        logging.info("Finished songbook:" + self.__str__())
         self.finished.set()
 
     def execute_measure(self, tx):
@@ -124,8 +137,4 @@ class SongbookRunner:
     # Should be called from a different thread
     def request_stop(self):
         self.stop.set()
-        isDone = self.finished.wait(3)
-        if (not isDone):
-            raise Exception("Didn't stop")
-        return isDone
 

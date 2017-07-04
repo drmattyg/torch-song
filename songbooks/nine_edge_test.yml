@@ -4,7 +4,7 @@ songbook:
     time: 6000
     edges:
       - edge: 1
-        flame: 0
+        flame: 1
         dir: 1
       - edge: 2
         flame: 0
@@ -35,29 +35,29 @@ songbook:
     edges:
       - edge: 1
         flame: 1
-        dir: 1
+        dir: -1
       - edge: 2
         flame: 1
-        dir: 1
+        dir: -1
       - edge: 3
         flame: 1
-        dir: 1
+        dir: -1
       - edge: 4
         flame: 1
-        dir: 1
+        dir: -1
       - edge: 5
         flame: 1
-        dir: 1
+        dir: -1
       - edge: 6
         flame: 1
-        dir: 1
+        dir: -1
       - edge: 7
         flame: 1
-        dir: 1
+        dir: -1
       - edge: 8
         flame: 1
-        dir: 1
+        dir: -1
       - edge: 9
         flame: 1
-        dir: 1
+        dir: -1
 

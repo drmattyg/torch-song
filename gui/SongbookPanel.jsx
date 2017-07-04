@@ -26,6 +26,9 @@ export class SongbookPanel extends React.Component {
     this.sendStop = this.sendStop.bind(this);
     this.sendPlay= this.sendPlay.bind(this);
     this.sendFastForward = this.sendFastForward.bind(this);
+    this.sendRun = this.sendRun.bind(this);
+    this.sendStop= this.sendStop.bind(this);
+    this.sendEstop= this.sendEstop.bind(this);
 
     setInterval(() => {
       if (window.torchData) {
@@ -35,6 +38,10 @@ export class SongbookPanel extends React.Component {
                        endSongTime: window.torchData.end_song_time})
       }
     }, 250)
+
+    setInterval(() => {
+      fetch('/proc'
+    });
 
   }
 
@@ -46,8 +53,8 @@ export class SongbookPanel extends React.Component {
     return minutes + ':' + seconds
   }
 
-  post(command) {
-    fetch('/control', {
+  post(url, command) {
+    fetch('/' + url, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -63,11 +70,14 @@ export class SongbookPanel extends React.Component {
     });
   }
 
-  sendCalibrate() { this.post({calibrate: true})}
-  sendRewind() { this.post({prev: true})}
-  sendStop() { this.post({stop: true})}
-  sendPlay() { this.post({play: true})}
-  sendFastForward() { this.post({next: true})}
+  sendCalibrate() { this.post('control', {calibrate: true})}
+  sendRewind() { this.post('control', {prev: true})}
+  sendStop() { this.post('control', {stop: true})}
+  sendPlay() { this.post('control', {play: true})}
+  sendFastForward() { this.post('control', {next: true})}
+  sendRun() { this.post('proc', {proc: 'start'})}
+  sendStop() { this.post('proc', {proc: 'stop'})}
+  sendEstop() { this.post('proc', {proc: 'estop'})}
 
   render() {
     const style = {
@@ -75,22 +85,53 @@ export class SongbookPanel extends React.Component {
     };
     return (
       <div className='control-page'>
-        <Paper style={{padding:'20px'}}>
-          <div className="song-controls">
-            <IconButton iconClassName="material-icons" onTouchTap={this.sendRewind}>fast_rewind</IconButton>
-            <IconButton iconClassName="material-icons" onTouchTap={this.sendStop}>stop</IconButton>
-            <IconButton iconClassName="material-icons" onTouchTap={this.sendPlay}>play_arrow</IconButton>
-            <IconButton iconClassName="material-icons" onTouchTap={this.sendFastForward}>fast_forward</IconButton>
-          </div>
-          <Label label="Now Playing" value={this.state.currentSong}/>
-          <Label label="Next Up" value={this.state.nextSong}/>
-          <div className="song-calibrate">
+        <Paper style={{padding:'10px'}}>
+          <h2>Torchsong</h2>
+          <div className="song-process">
             <RaisedButton
-              label="CALIBRATE"
+              className="song-process-button"
+              label="RUN"
+              icon={<FontIcon className="material-icons">directions_run</FontIcon>}
+              onTouchTap={this.sendRun}
+            />
+            <RaisedButton
+              className="song-process-button"
+              label="STOP"
+              icon={<FontIcon className="material-icons">accessibility</FontIcon>}
+              onTouchTap={this.sendStop}
+            />
+            <RaisedButton
+              className="song-process-button"
+              label="CAL"
               icon={<FontIcon className="material-icons">compare_arrows</FontIcon>}
               onTouchTap={this.sendCalibrate}
             />
+            <RaisedButton
+              className="song-process-button"
+              label="KILL"
+              icon={<FontIcon className="material-icons">error</FontIcon>}
+              onTouchTap={this.sendEstop}
+            />
           </div>
+          <h2>Songbook Control</h2>
+          <div className="song-controls-outter">
+            <div className="song-controls-inner">
+              <div className="song-control">
+                <IconButton iconClassName="material-icons" onTouchTap={this.sendRewind}>fast_rewind</IconButton>
+              </div>
+              <div className="song-control">
+                <IconButton iconClassName="material-icons" onTouchTap={this.sendStop}>stop</IconButton>
+              </div>
+              <div className="song-control">
+                <IconButton iconClassName="material-icons" onTouchTap={this.sendPlay}>play_arrow</IconButton>
+              </div>
+              <div className="song-control">
+                <IconButton iconClassName="material-icons" onTouchTap={this.sendFastForward}>fast_forward</IconButton>
+              </div>
+            </div>
+          </div>
+          <Label className='song-current' label="Now Playing" value={this.state.currentSong}/>
+          <Label className='song-next' label="Next Up" value={this.state.nextSong}/>
           <div>
             <div className='song-time'>{this.formatSongTime(this.state.currentSongTime)}</div>
             <div className='song-time-bar'>

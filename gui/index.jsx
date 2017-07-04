@@ -46,6 +46,7 @@ class Components extends React.Component {
     window.torchData.current_song = ''
 
     this.fetchLogs = this.fetchLogs.bind(this);
+    this.fetchProc = this.fetchProc.bind(this);
     this.fetchTorchData = this.fetchTorchData.bind(this);
 
     setInterval(() => {
@@ -54,12 +55,13 @@ class Components extends React.Component {
 
 
     setInterval(() => {
+      this.fetchProc()
       this.fetchLogs()
     }, 250)
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    return (this.state.connected != nextState.connected)
+    return (this.state.running != nextState.running)
   }
 
   fetchLogs() {
@@ -83,20 +85,30 @@ class Components extends React.Component {
     });
   }
 
+  fetchProc() {
+    fetch('/proc').then((resp) => {
+      return resp.json()
+    }).catch(() => {
+      this.setState({running: false})
+      throw new Error()
+    }).then((json) => {
+      window.proc = json
+      console.log(window.proc)
+      this.setState({running: json['state']})
+    });
+  }
+
   render() {
     return (
       <div>
         <AppBar
-            title={"Torch Song GUI " + (this.state.connected ? "(connected)" : "(disconnected)")}
+            title={"Torch Song GUI " + (this.state.running? "(running)" : "(stopped)")}
             showMenuIconButton={false}/>
         <Snackbar open={this.state.shouldAlert} autoHideDuration={1000}
             onRequestClose={() => { this.setState({shouldAlert: false}) }}
             message={this.state.message} />
         <SongbookPanel />
         <Tabs>
-          <Tab label={"Torchsong"} >
-            <TorchsongPanel />
-          </Tab>
           <Tab label={"Control"} >
             <ControlPanel />
           </Tab>
