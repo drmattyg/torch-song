@@ -7,6 +7,7 @@ import traceback
 import random
 import logging
 import yaml
+import signal
 
 from threading import Thread
 
@@ -23,19 +24,19 @@ songbooks = [
 
 def main():
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "hsnv", ["help", "sim", "nocal", "verbose"])
+        opts, args = getopt.getopt(sys.argv[1:], "hscv", ["help", "sim", "calibrate", "verbose"])
     except getopt.GetoptError:
         print('Unrecognized option')
         sys.exit(2)
 
     sim = False
-    skipCal = False
+    calibrate = False
     verbose = False
     for opt, arg in opts:
         if opt in ('-s', '--sim'):
             sim = True
-        if opt in ('-n', '--nocal'):
-            skipCal = True
+        if opt in ('-c', '--cal'):
+            calibrate = True
         if opt in ('-v', '--verbose'):
             verbose = True
 
@@ -59,9 +60,10 @@ def main():
     cs_server_thread.daemon = True
     cs_server_thread.start()
 
-    loops = 0
+    signal.signal(signal.SIGTERM, lambda sig, frame: sbm.kill())
+
     try:
-        if (not skipCal):
+        if (calibrate):
             ts.calibrate()
         sbm.run()
     except KeyboardInterrupt:
@@ -70,6 +72,7 @@ def main():
         logging.error(e)
         traceback.print_exc()
     finally:
+        logging.info('Closing shop')
         ts.kill()
         cs_server.kill()
         sys.exit(2)

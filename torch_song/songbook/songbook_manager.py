@@ -65,6 +65,7 @@ class SongbookManager:
             return [0, 0]
 
     def kill(self):
+        logging.info('Stopping songbook manager')
         self.kill_signal.set()
 
     def __del__(self):

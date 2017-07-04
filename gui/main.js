@@ -4,6 +4,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const yaml = require('js-yaml');
 const fs = require('fs');
+const spawn = require('child_process').spawn
 
 const web_server_port = 3000
 const logging_server_local_port = 3001
@@ -125,6 +126,28 @@ app.post('/default-mod-yaml', function (req, res) {
       res.send('done');
     }
   });
+});
+
+proc = null;
+path = __dirname + '/../bin'
+exec = 'torch'
+app.post('/proc', function (req, res) {
+  json = req.body;
+  if (json['proc']) {
+    if (json['proc'] == 'start') {
+      console.log('starting process')
+      console.log(path)
+      if (!proc) {
+        proc = spawn('sh', ['torch'], {cwd:path} )
+      }
+    } else if (json['proc'] == 'stop') {
+      console.log('stopping process')
+      if (proc) {
+        proc.kill()
+        proc = null;
+      }
+    }
+  }
 });
 
 

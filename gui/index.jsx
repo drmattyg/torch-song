@@ -15,6 +15,7 @@ import {YAMLPanel} from './YAMLParser.jsx';
 import {LogPanel} from './LogViewer.jsx';
 import {ControlPanel} from './ControlPanel.jsx';
 import {SongbookPanel} from './SongbookPanel.jsx';
+import {TorchsongPanel} from './TorchsongPanel.jsx';
 
 // require to make Tabs work
 const injectTapEventPlugin = require("react-tap-event-plugin");
@@ -75,6 +76,7 @@ class Components extends React.Component {
       return resp.json()
     }).catch(() => {
       this.setState({connected: false})
+      throw new Error()
     }).then((json) => {
       this.setState({connected: true})
       window.torchData = json
@@ -92,6 +94,9 @@ class Components extends React.Component {
             message={this.state.message} />
         <SongbookPanel />
         <Tabs>
+          <Tab label={"Torchsong"} >
+            <TorchsongPanel />
+          </Tab>
           <Tab label={"Control"} >
             <ControlPanel />
           </Tab>
