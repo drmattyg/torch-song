@@ -135,6 +135,8 @@ class SongbookRunner:
             edge.set_motor_state(tx.value.direction, tx.value.speed)
 
     # Should be called from a different thread
-    def request_stop(self):
+    def request_stop(self, block=False):
         self.stop.set()
+        if (block):
+            self.finished.wait(15)
 

@@ -32,10 +32,10 @@ class SongbookManager:
     def request_song(self):
         pass
 
-    def request_stop(self):
+    def request_stop(self, block):
         self.is_stopped.set()
         if hasattr(self, 'runner'):
-            self.runner.request_stop()
+            self.runner.request_stop(block)
         self.torchsong.turn_off()
 
     def request_play(self):

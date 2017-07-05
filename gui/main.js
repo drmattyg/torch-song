@@ -134,9 +134,24 @@ app.post('/proc', function (req, res) {
   json = req.body;
   if (json['proc']) {
     if (json['proc'] == 'start') {
-      console.log('starting process')
       if (!proc) {
+        console.log('starting process')
         proc = spawn('/usr/bin/env', ['python', 'main.py'], {cwd:path} )
+
+        proc.stdout.on('data', function (data) {
+          console.log(data.toString());
+        });
+
+        proc.stderr.on('data', function (data) {
+          console.log(data.toString());
+        });
+
+        proc.on('exit', function (code) {
+          if (code) {
+            console.log('child process exited with code ' + code.toString());
+          }
+        });
+
       }
     } else if (json['proc'] == 'stop') {
       if (proc) {
@@ -148,8 +163,17 @@ app.post('/proc', function (req, res) {
       if (proc) {
         console.log('emergency stop')
         proc.kill('SIGKILL')
-        proc = spawn('/usr/bin/env', ['python', 'default_io.py'], {cwd:path} )
         proc = null;
+        proc2 = spawn('/usr/bin/env', ['python', 'default_io.py'], {cwd:path} )
+        proc2.stdout.on('data', function (data) {
+          console.log(data.toString());
+        });
+
+        proc2.stderr.on('data', function (data) {
+          console.log(data.toString());
+        });
+
+        proc2 = null;
       }
     }
   }

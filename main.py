@@ -58,7 +58,7 @@ def main():
     socketEdgeHandler.createSocket()
     socketEdgeHandler.setLevel(logging.INFO)
 
-    streamHandler = EdgeStreamHandler()
+    streamHandler = EdgeStreamHandler(sys.stdout)
     streamHandler.setLevel(logging.DEBUG)
     formatter = logging.Formatter("[%(asctime)s] %(message)s")
     streamHandler.setFormatter(formatter)

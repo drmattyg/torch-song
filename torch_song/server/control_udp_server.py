@@ -27,7 +27,7 @@ class TorchRequestHandler(BaseRequestHandler):
                         command['dir'], command['speed'])
         if 'stop' in command:
             logging.info('Stopping current song')
-            self.server.songbook_manager.request_stop()
+            self.server.songbook_manager.request_stop(True)
         if 'play' in command:
             logging.info('Restarting')
             self.server.songbook_manager.request_play()
@@ -39,7 +39,7 @@ class TorchRequestHandler(BaseRequestHandler):
             self.server.songbook_manager.request_prev()
         if 'calibrate' in command:
             logging.info('Calibrating')
-            self.server.songbook_manager.request_stop()
+            self.server.songbook_manager.request_stop(True)
             self.server.torchsong.calibrate()
 
 class TorchControlServer(UDPServer):
