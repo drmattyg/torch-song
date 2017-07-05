@@ -26,6 +26,26 @@ class EdgeCalibration:
                 str(self.rev_time_map_reversed) + '\n\r' +
                 'polarity:' + str(self.polarity))
 
+    def serialize(self):
+        return {
+            'polarity': self.polarity,
+            'duty_cycle_map': self.duty_cycle_map,
+            'duty_cycle_map_reversed': self.duty_cycle_map_reversed,
+            'fwd_time_map':  self.fwd_time_map,
+            'rev_time_map': self.rev_time_map,
+            'fwd_time_map_reversed': self.fwd_time_map_reversed,
+            'rev_time_map_reversed': self.rev_time_map_reversed,
+        }
+
+    def deserialize(self, obj):
+        self.polarity = obj['polarity']
+        self.duty_cycle_map = obj['duty_cycle_map']
+        self.duty_cycle_map_reversed = obj['duty_cycle_map_reversed']
+        self.fwd_time_map = obj['fwd_time_map']
+        self.rev_time_map = obj['rev_time_map']
+        self.fwd_time_map_reversed = obj['fwd_time_map_reversed']
+        self.rev_time_map_reversed = obj['rev_time_map_reversed']
+
     def get_motor_speed(self, time, direction, distance=1):
         if (direction == 1):
             return int(
@@ -107,6 +127,10 @@ class EdgeCalibration:
         return [fwd_time, rev_time]
 
     def calibrate(self):
+        self.duty_cycle_map = []
+        self.fwd_time_map = []
+        self.rev_time_map = []
+
         self.calibrate_polarity()
         for i in range(self.min_speed, 100 + 1, self.cal_speed_step):
             res = self.calibrate_one_speed(i)

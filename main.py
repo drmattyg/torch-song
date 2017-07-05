@@ -15,6 +15,7 @@ from torch_song.torch_song import TorchSong
 from torch_song.songbook.songbook_manager import SongbookManager
 from torch_song.server.control_udp_server import TorchControlServer
 from torch_song.isocahedron import IsoInterface
+from torch_song.edge.edge_handlers import *
 
 songbooks = [
     #'songbooks/three_edge_chaser.yml',
@@ -29,6 +30,7 @@ def main():
         print('Unrecognized option')
         sys.exit(2)
 
+    # Opts
     sim = False
     calibrate = False
     verbose = False
@@ -46,6 +48,23 @@ def main():
     except Exception:
         stream = open('conf/default.yml', 'r')
     config = yaml.load(stream)
+
+    # Setup loggers
+    logger = logging.getLogger()
+    logger.setLevel(logging.INFO)
+    loggingPort = config['logging']['remote_port']
+
+    socketEdgeHandler = SocketEdgeHandler('localhost', loggingPort)
+    socketEdgeHandler.createSocket()
+    socketEdgeHandler.setLevel(logging.INFO)
+
+    streamHandler = EdgeStreamHandler()
+    streamHandler.setLevel(logging.DEBUG)
+    formatter = logging.Formatter("[%(asctime)s] %(message)s")
+    streamHandler.setFormatter(formatter)
+
+    logger.addHandler(streamHandler)
+    logger.addHandler(socketEdgeHandler)
 
     # Create torch song
     ts = TorchSong(config=config, num_edges=config['num_edges'], sim=sim, verbose=verbose)
@@ -73,6 +92,8 @@ def main():
         traceback.print_exc()
     finally:
         logging.info('Closing shop')
+        sbm.kill()
+        socketEdgeHandler.close()
         ts.kill()
         cs_server.kill()
         sys.exit(2)

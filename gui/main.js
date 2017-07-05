@@ -135,7 +135,6 @@ app.post('/proc', function (req, res) {
   if (json['proc']) {
     if (json['proc'] == 'start') {
       console.log('starting process')
-      console.log(path)
       if (!proc) {
         proc = spawn('/usr/bin/env', ['python', 'main.py'], {cwd:path} )
       }

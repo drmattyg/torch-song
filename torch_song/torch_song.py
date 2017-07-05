@@ -2,8 +2,8 @@ import time
 from threading import Thread, Lock, Event
 import logging
 from torch_song.edge.edge_control_mux import EdgeControlMux
-from torch_song.edge.edge_handlers import *
 from torch_song.common import run_parallel
+import json
 
 force_sim = False
 try:
@@ -20,23 +20,9 @@ class TorchSong:
     def __init__(self, config, num_edges=1, sim=False, verbose=False):
         # Configuration
         self.config = config
+        self.cal_file = 'cal/cal.json'
 
-        # Setup loggersa
-        logger = logging.getLogger()
-        logger.setLevel(logging.INFO)
-        loggingPort = self.config['logging']['remote_port']
-
-        self.socketEdgeHandler = SocketEdgeHandler('localhost', loggingPort)
-        self.socketEdgeHandler.createSocket()
-        self.socketEdgeHandler.setLevel(logging.INFO)
-
-        streamHandler = EdgeStreamHandler()
-        streamHandler.setLevel(logging.DEBUG)
-        formatter = logging.Formatter("[%(asctime)s] %(message)s")
-        streamHandler.setFormatter(formatter)
-
-        logger.addHandler(streamHandler)
-        logger.addHandler(self.socketEdgeHandler)
+        logging.info('Welcome to Torchsong')
 
         # Build edges
         if (not sim and not force_sim):
@@ -52,6 +38,12 @@ class TorchSong:
         else:
             self.edges = {i: SimEdge(i, 1000, verbose) for i in range(1, num_edges + 1)}
 
+        try:
+            self.load_calibration()
+            logging.info('Loaded calibration')
+        except Exception as e:
+            logging.error('Failed to load calibration. Try recalibrating. Error:' +  str(e))
+
         # Hook up command mux
         for e in self.edges.items():
             self.edges[e[0]] = EdgeControlMux(e[1])
@@ -62,6 +54,7 @@ class TorchSong:
             e.set_igniter_state(0)
 
     def kill(self):
+        logging.info('Shutting down hardware')
         for e in self.edges.values():
             e.kill()
 
@@ -69,8 +62,24 @@ class TorchSong:
         run_parallel('home', self.edges.values())
 
     def calibrate(self):
+        logging.info('Starting calibration')
         run_parallel('calibrate', self.edges.values())
+        self.save_calibration()
+        logging.info('Finished and saved calibration')
+
+    def load_calibration(self):
+        with open(self.cal_file, "r") as fp:
+            cal = json.load(fp)
+            for e in self.edges.items():
+                if (cal[str(e[0])]):
+                    e[1].get_calibration().deserialize(cal[str(e[0])])
+
+    def save_calibration(self):
+        cal = {}
+        for e in self.edges.items():
+            cal[e[0]] = e[1].get_calibration().serialize()
+        with open(self.cal_file, "w") as fp:
+            json.dump(cal, fp)
 
     def __del__(self):
         self.pleaseExit = True
-        self.socketEdgeHandler.close()
