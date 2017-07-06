@@ -153,7 +153,7 @@ app.post('/proc', function (req, res) {
         });
 
       }
-    } else if (json['proc'] == 'stop') {
+    } else if (json['proc'] == 'normal_stop') {
       if (proc) {
         console.log('stopping process')
         proc.kill('SIGTERM')

@@ -23,7 +23,7 @@ export class SongbookPanel extends React.Component {
     this.post = this.post.bind(this);
     this.sendCalibrate = this.sendCalibrate.bind(this);
     this.sendRewind = this.sendRewind.bind(this);
-    this.sendStop = this.sendStop.bind(this);
+    this.sendPlayStop = this.sendPlayStop.bind(this);
     this.sendPlay= this.sendPlay.bind(this);
     this.sendFastForward = this.sendFastForward.bind(this);
     this.sendRun = this.sendRun.bind(this);
@@ -68,11 +68,11 @@ export class SongbookPanel extends React.Component {
 
   sendCalibrate() { this.post('control', {calibrate: true})}
   sendRewind() { this.post('control', {prev: true})}
-  sendStop() { this.post('control', {stop: true})}
+  sendPlayStop() { this.post('control', {stop: true})}
   sendPlay() { this.post('control', {play: true})}
   sendFastForward() { this.post('control', {next: true})}
   sendRun() { this.post('proc', {proc: 'start'})}
-  sendStop() { this.post('proc', {proc: 'stop'})}
+  sendStop() { this.post('proc', {proc: 'normal_stop'})}
   sendEstop() { this.post('proc', {proc: 'estop'})}
 
   render() {
@@ -116,7 +116,7 @@ export class SongbookPanel extends React.Component {
                 <IconButton iconClassName="material-icons" onTouchTap={this.sendRewind}>fast_rewind</IconButton>
               </div>
               <div className="song-control">
-                <IconButton iconClassName="material-icons" onTouchTap={this.sendStop}>stop</IconButton>
+                <IconButton iconClassName="material-icons" onTouchTap={this.sendPlayStop}>stop</IconButton>
               </div>
               <div className="song-control">
                 <IconButton iconClassName="material-icons" onTouchTap={this.sendPlay}>play_arrow</IconButton>

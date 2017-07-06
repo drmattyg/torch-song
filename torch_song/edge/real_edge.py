@@ -58,6 +58,8 @@ class RealEdge(AbstractEdge):
         self.runner.setDaemon(True)
         self.runner.start()
 
+        logging.info('Starting edge %d' % (self.id), extra={'edge_id': self.id})
+
 
     def __str__(self):
         s = "igniter: %d, valve: %d, beg. limit: %d, end. limit: %d, motor speed: %f, motor dir: %s" % (
@@ -76,10 +78,14 @@ class RealEdge(AbstractEdge):
             self.lock.acquire()
             now = time()
 
-            if (not last_cal_time == 0):
+            if (not last_cal_time == 0 and self.dir_request != 0):
                 add_pos = (now - prev_time) / last_cal_time
-                print(add_pos)
-                self.position += add_pos
+                self.position += add_pos * self.dir_request
+                if (self.position > 1):
+                    self.position = 1
+                if (self.position < 0):
+                    self.position = 0
+
 
             prev_time = now
 
@@ -188,6 +194,8 @@ class RealEdge(AbstractEdge):
     def kill(self):
         logging.info('Stopping edge %d' % (self.id), extra={'edge_id': self.id})
         self.motor_driver.stop()
+        self.valve.set_state(0)
+        self.igniter.set_state(0)
         self.pleaseExit = True
         self.runner.join(5000)
 

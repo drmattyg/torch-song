@@ -67,7 +67,7 @@ class SongbookManager:
     def kill(self):
         logging.info('Stopping songbook manager')
         self.kill_signal.set()
-        if (self.runner):
+        if hasattr(self, 'runner'):
             self.runner.request_stop()
 
     def __del__(self):
