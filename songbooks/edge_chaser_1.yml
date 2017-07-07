@@ -1,0 +1,96 @@
+version: 1.0
+author: matt@hydrocarboncollective.org
+songbook:
+  - start_at: 0
+    time: 7000
+    edges:
+     - edge: 7
+       flame: 1
+       dir: 1
+  - start_at: 7000
+    time: 7000
+    edges:
+     - edge: 7
+       flame: 0
+       dir: -1
+     - edge: 4
+       flame: 1
+       dir: 1
+  - start_at: 14000
+    time: 7000
+    edges:
+     - edge: 4
+       flame: 0
+       dir: -1
+     - edge: 5
+       flame: 1
+       dir: 1
+  - start_at: 21000
+    time: 7000
+    edges:
+     - edge: 5
+       flame: 0
+       dir: -1
+     - edge: 0
+       flame: 1
+       dir: 1
+     - edge: 2
+       flame: 0
+       dir: 1
+  - start_at: 28000
+    time: 7000
+    edges:
+     - edge: 2
+       flame: 1
+       dir: -1
+     - edge: 0
+       flame: 0
+       dir: -1
+     - edge: 8
+       flame: 0
+       dir: 1
+  - start_at: 35000
+    time: 7000
+    edges:
+     - edge: 8
+       flame: 1
+       dir: -1
+     - edge: 2
+       flame: 0
+       dir: 0
+  - start_at: 42000
+    time: 7000
+    edges:
+     - edge: 6
+       flame: 1
+       dir: 1
+     - edge: 8
+       flame: 0
+       dir: 0
+  - start_at: 49000
+    time: 7000
+    edges:
+     - edge: 6
+       flame: 0
+       dir: -1
+     - edge: 3
+       flame: 1
+       dir: 1
+  - start_at: 56000
+    time: 7000
+    edges:
+     - edge: 3
+       flame: 0
+       dir: -1
+     - edge: 4
+       flame: 1
+       dir: 1
+  - start_at: 63000
+    time: 7000
+    edges:
+     - edge: 4
+       flame: 0
+       dir: -1
+     - edge: 2
+       flame: 1
+       dir: 1
