@@ -149,6 +149,7 @@ app.post('/proc', function (req, res) {
         proc.on('exit', function (code) {
           if (code) {
             console.log('child process exited with code ' + code.toString());
+            proc = null
           }
         });
 

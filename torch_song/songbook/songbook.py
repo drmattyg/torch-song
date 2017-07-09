@@ -45,6 +45,8 @@ class Songbook:
             start_time = measure['start_at']
             for e in measure['edges']:
                 id = e['edge']
+                if not id in self.torch_song.edges:
+                    continue
                 if 'flame' in e:
                     flame_state = int(e['flame'])
                     tx_valve = MTransition(Measure.VALVE, id, flame_state)

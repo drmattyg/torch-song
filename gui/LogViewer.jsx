@@ -33,12 +33,12 @@ export class LogPanel extends React.Component {
       },
       body: JSON.stringify({})
     }).catch(() => {
-      this.setState({shouldAlert: true, message: 'Error clearing logs'})
+      this.props.notify('Error clearing logs')
     }).then((res) => {
       if (res.status == 200) {
-        this.setState({shouldAlert: true, message: 'Cleared logs'})
+        this.props.notify('Cleared logs')
       } else {
-        this.setState({shouldAlert: true, message: 'Error clearing logs'})
+        this.props.notify('Error clearing logs')
       }
     });
   }
@@ -58,10 +58,11 @@ export class LogPanel extends React.Component {
     const style = {
       margin: 10
     };
+    const showControls = this.props.showControls ? 'block' : 'none'
     return (
       <div className='log-page'>
         <Paper style={{padding:'20px'}}>
-          <div className='log-button-row'>
+          <div className='log-button-row' style={{display:showControls}}>
             <RaisedButton label="Clear" style={style} onTouchTap={this.clear}/>
           </div>
           <hr />
@@ -69,7 +70,7 @@ export class LogPanel extends React.Component {
               { this.renderLogRecords(this.state.logs, this.props.errorsOnly) }
             </div>
           <hr />
-          <div className='log-button-row'>
+          <div className='log-button-row' style={{display:showControls}}>
             <RaisedButton label="Clear" style={style} onTouchTap={this.clear}/>
           </div>
         </Paper>

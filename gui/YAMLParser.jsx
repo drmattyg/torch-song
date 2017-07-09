@@ -4,7 +4,6 @@ import {render} from 'react-dom';
 import 'whatwg-fetch';
 
 import RaisedButton from 'material-ui/RaisedButton';
-import Snackbar from 'material-ui/Snackbar';
 import Paper from 'material-ui/Paper';
 
 export class YAMLPanel extends React.Component {
@@ -12,8 +11,6 @@ export class YAMLPanel extends React.Component {
     super(props);
     this.state = {
       json: {loading: 'loading'},
-      shouldAlert: false,
-      message: ''
     };
     var that = this
     this.restoreDefault = this.restoreDefault.bind(this);
@@ -31,12 +28,12 @@ export class YAMLPanel extends React.Component {
       },
       body: JSON.stringify(this.state.json)
     }).catch(() => {
-      this.setState({shouldAlert: true, message: 'Error saving YAML file'})
+      this.props.notify('Error saving YAML file')
     }).then((res) => {
       if (res.status == 200) {
-        this.setState({shouldAlert: true, message: 'Saved YAML file'})
+        this.props.notify('Saved YAML file')
       } else {
-        this.setState({shouldAlert: true, message: 'Error saving YAML file'})
+        this.props.notify('Error saving YAML file')
       }
     });
   }
@@ -44,8 +41,11 @@ export class YAMLPanel extends React.Component {
   fetch(silent) {
     fetch('/default-mod-yaml').then((resp) => {
       return resp.json()
+    }).catch(() => {
+      this.props.notify('Error loading YAML file: default-mod.yml')
     }).then((json) => {
-      this.setState({json: json, shouldAlert: !silent, message: 'Loaded YAML file'})
+      this.setState({json: json})
+      this.props.notify('Loaded YAML file')
     });
   }
 
@@ -69,10 +69,6 @@ export class YAMLPanel extends React.Component {
     };
     return (
       <div className='yaml-page'>
-        <Snackbar open={this.state.shouldAlert} autoHideDuration={1000}
-            onRequestClose={() => { this.setState({shouldAlert: false}) }}
-            message={this.state.message} />
-
         <Paper style={{padding:'20px'}}>
           <div className='yaml-button-row'>
             <RaisedButton label="Restore " style={style} onTouchTap={this.restoreDefault}/>

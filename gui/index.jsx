@@ -48,6 +48,7 @@ class Components extends React.Component {
     this.fetchLogs = this.fetchLogs.bind(this);
     this.fetchProc = this.fetchProc.bind(this);
     this.fetchTorchData = this.fetchTorchData.bind(this);
+    this.notify = this.notify.bind(this);
 
     setInterval(() => {
       this.fetchTorchData()
@@ -60,8 +61,18 @@ class Components extends React.Component {
     }, 250)
   }
 
+  notify(message) {
+    this.setState({
+      shouldAlert: true,
+      message: message
+    });
+  }
+
   shouldComponentUpdate(nextProps, nextState) {
-    return (this.state.running != nextState.running)
+    let rerender = false
+    rerender = rerender || (this.state.running != nextState.running)
+    rerender = rerender || (this.state.shouldAlert!= nextState.shouldAlert)
+    return rerender
   }
 
   fetchLogs() {
@@ -103,19 +114,19 @@ class Components extends React.Component {
         <AppBar
             title={"Torch Song GUI " + (this.state.running? "(running)" : "(stopped)")}
             showMenuIconButton={false}/>
-        <Snackbar open={this.state.shouldAlert} autoHideDuration={1000}
+        <Snackbar open={this.state.shouldAlert} autoHideDuration={1500}
             onRequestClose={() => { this.setState({shouldAlert: false}) }}
             message={this.state.message} />
-        <SongbookPanel />
+        <SongbookPanel notify={this.notify}/>
         <Tabs>
           <Tab label={"Control"} >
-            <ControlPanel />
+            <ControlPanel notify={this.notify}/>
           </Tab>
           <Tab label={"Logs"} >
-            <LogPanel errorsOnly={false} />
+            <LogPanel errorsOnly={false} showControls={true} notify={this.notify}/>
           </Tab>
           <Tab label={"YAML parser"} >
-            <YAMLPanel />
+            <YAMLPanel notify={this.notify}/>
           </Tab>
         </Tabs>
       </div>
