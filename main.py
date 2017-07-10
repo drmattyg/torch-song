@@ -95,13 +95,16 @@ def main():
         logging.error(traceback.format_exc())
     finally:
         logging.info('Closing shop')
-        if sbm is not None:
-            sbm.kill(key)
-        if ts is not None:
-            ts.kill()
-        if cs_server is not None:
-            cs_server.kill()
-        socketEdgeHandler.close()
+        try:
+            if sbm is not None:
+                sbm.kill()
+            if ts is not None:
+                ts.kill()
+            if cs_server is not None:
+                cs_server.kill()
+            socketEdgeHandler.close()
+        except Exception as e:
+            print(e)
         sys.exit(2)
 
 

@@ -23,7 +23,7 @@ injectTapEventPlugin();
 
 const version = process.env.npm_package_version
 
-class Components extends React.Component {
+class Components extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -66,13 +66,6 @@ class Components extends React.Component {
       shouldAlert: true,
       message: message
     });
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    let rerender = false
-    rerender = rerender || (this.state.running != nextState.running)
-    rerender = rerender || (this.state.shouldAlert!= nextState.shouldAlert)
-    return rerender
   }
 
   fetchLogs() {
@@ -125,7 +118,7 @@ class Components extends React.Component {
           <Tab label={"Logs"} >
             <LogPanel errorsOnly={false} showControls={true} notify={this.notify}/>
           </Tab>
-          <Tab label={"YAML parser"} >
+          <Tab label={"Config"} >
             <YAMLPanel notify={this.notify}/>
           </Tab>
         </Tabs>

@@ -25,11 +25,13 @@ class TorchRequestHandler(BaseRequestHandler):
             if 'dir' in command:
                 self.server.torchsong.edges[command['id']].set_motor_state_external(
                         command['dir'], command['speed'])
+            if 'calibrate_single' in command:
+                self.server.torchsong.edges[command['id']].calibrate_external()
         if 'stop' in command:
             logging.info('Stopping current song')
             self.server.songbook_manager.request_stop(True)
         if 'play' in command:
-            logging.info('Restarting')
+            logging.info('Playing song')
             self.server.songbook_manager.request_play()
         if 'next' in command:
             logging.info('Next song')

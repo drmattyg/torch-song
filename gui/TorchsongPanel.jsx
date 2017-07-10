@@ -4,7 +4,7 @@ import {render} from 'react-dom';
 import 'whatwg-fetch';
 import RaisedButton from 'material-ui/RaisedButton';
 
-export class TorchsongPanel extends React.Component {
+export class TorchsongPanel extends React.PureComponent {
   constructor(props) {
     super(props);
     this.post = this.post.bind(this);

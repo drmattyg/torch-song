@@ -8,7 +8,7 @@ import Paper from 'material-ui/Paper';
 
 import {ColorWheel} from './Common.jsx'
 
-export class LogPanel extends React.Component {
+export class LogPanel extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -79,7 +79,7 @@ export class LogPanel extends React.Component {
   }
 };
 
-class LogRecord extends React.Component {
+class LogRecord extends React.PureComponent {
   constructor(props) {
     super(props)
   }

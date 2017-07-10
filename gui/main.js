@@ -128,6 +128,7 @@ app.post('/default-mod-yaml', function (req, res) {
   });
 });
 
+// Process control
 proc = null;
 path = __dirname + '/..'
 app.post('/proc', function (req, res) {
@@ -158,7 +159,6 @@ app.post('/proc', function (req, res) {
       if (proc) {
         console.log('stopping process')
         proc.kill('SIGTERM')
-        proc = null;
       }
     } else if (json['proc'] == 'estop') {
       if (proc) {
@@ -174,26 +174,19 @@ app.post('/proc', function (req, res) {
           console.log(data.toString());
         });
 
-        proc2 = null;
+        proc2.on('exit', function (code) {
+          proc2 = null;
+        });
       }
     }
   }
+  res.send();
 });
 
 app.get('/proc', function (req, res) {
   let s = {state: null}
   s.state = proc ? true : false;
   res.send(s);
-});
-
-
-
-// Send state
-app.post('/post', function(req, res) {
-  if (sender_ip) {
-    //server.send(JSON.stringify(req.body), udp_port_out, sender_ip);
-  }
-  res.send();
 });
 
 app.listen(web_server_port, function () {

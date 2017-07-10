@@ -14,7 +14,7 @@ import {Label, SimpleToggle} from './Widgets.jsx'
 
 import {ColorWheel} from './Common.jsx'
 
-export class SongbookPanel extends React.Component {
+export class SongbookPanel extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
