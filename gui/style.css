@@ -201,6 +201,14 @@ h2 {
 .logs {
   height: 300px;
   overflow-y: scroll;
+  border: 1px solid #333;
+  padding: 5px;
+}
+
+
+.control-logs .logs {
+  height: 100px;
+  overflow-y: hidden;
 }
 
 .log-record {

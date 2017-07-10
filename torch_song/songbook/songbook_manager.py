@@ -22,6 +22,7 @@ class SongbookManager:
 
         self.kill_signal = Event()
         self.is_stopped = Event()
+        self.is_stopped.set()
 
     def set_mode(self, mode):
         if (mode == 'manual' or mode == 'shuffle' or mode == 'inorder' or mode =='icosahedron'):
@@ -65,10 +66,11 @@ class SongbookManager:
             return [0, 0]
 
     def kill(self):
-        logging.info('Stopping songbook manager')
-        self.kill_signal.set()
-        if hasattr(self, 'runner'):
-            self.runner.request_stop()
+        if (not self.kill_signal.is_set()):
+            logging.info('Stopping songbook manager')
+            self.kill_signal.set()
+            if hasattr(self, 'runner'):
+                self.runner.request_stop()
 
     def __del__(self):
         self.kill()

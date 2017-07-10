@@ -65,11 +65,9 @@ export class LogPanel extends React.PureComponent {
           <div className='log-button-row' style={{display:showControls}}>
             <RaisedButton label="Clear" style={style} onTouchTap={this.clear}/>
           </div>
-          <hr />
-            <div className="logs">
-              { this.renderLogRecords(this.state.logs, this.props.errorsOnly) }
-            </div>
-          <hr />
+          <div className="logs">
+            { this.renderLogRecords(this.state.logs, this.props.errorsOnly) }
+          </div>
           <div className='log-button-row' style={{display:showControls}}>
             <RaisedButton label="Clear" style={style} onTouchTap={this.clear}/>
           </div>

@@ -69,6 +69,7 @@ def main():
     ts = None
     sbm = None
     cs_server = None
+    error_code = 0
 
     try:
         # Create torch song
@@ -93,6 +94,7 @@ def main():
         logging.info('Received ctrl-c, cleaning up')
     except Exception as e:
         logging.error(traceback.format_exc())
+        error_code = 1
     finally:
         logging.info('Closing shop')
         try:
@@ -105,7 +107,7 @@ def main():
             socketEdgeHandler.close()
         except Exception as e:
             print(e)
-        sys.exit(2)
+        sys.exit(error_code)
 
 
 if __name__ == '__main__':

@@ -57,7 +57,6 @@ class TorchSong:
     def home(self):
         logging.info('Homing')
         run_parallel('home', self.edges.values())
-        logging.info('Finished Homing')
 
     def calibrate(self):
         logging.info('Starting calibration')

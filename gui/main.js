@@ -140,18 +140,16 @@ app.post('/proc', function (req, res) {
         proc = spawn('/usr/bin/env', ['python', 'main.py'], {cwd:path} )
 
         proc.stdout.on('data', function (data) {
-          console.log(data.toString());
+          process.stdout.write(data.toString());
         });
 
         proc.stderr.on('data', function (data) {
-          console.log(data.toString());
+          process.stdout.write(data.toString());
         });
 
         proc.on('exit', function (code) {
-          if (code) {
-            console.log('child process exited with code ' + code.toString());
-            proc = null
-          }
+          console.log('child process exited with code ' + code.toString());
+          proc = null
         });
 
       }
@@ -167,11 +165,11 @@ app.post('/proc', function (req, res) {
         proc = null;
         proc2 = spawn('/usr/bin/env', ['python', 'default_io.py'], {cwd:path} )
         proc2.stdout.on('data', function (data) {
-          console.log(data.toString());
+          process.stdout.write(data.toString());
         });
 
         proc2.stderr.on('data', function (data) {
-          console.log(data.toString());
+          process.stdout.write(data.toString());
         });
 
         proc2.on('exit', function (code) {

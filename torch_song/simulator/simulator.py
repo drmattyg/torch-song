@@ -96,6 +96,7 @@ class SimEdge(AbstractEdge):
         self.x_offset = 0
         super(self.__class__, self).__init__(id_val)
         self._runner_thread.start()
+        logging.info('Starting sim-edge %d' % (self.id), extra={'edge_id': self.id})
 
     def _runner(self):
         while self._run_thread.is_set():

@@ -113,6 +113,9 @@ class Components extends React.PureComponent {
         <SongbookPanel notify={this.notify}/>
         <Tabs>
           <Tab label={"Control"} >
+            <div className="control-logs">
+              <LogPanel errorsOnly={false} showControls={false} notify={this.notify}/>
+            </div>
             <ControlPanel notify={this.notify}/>
           </Tab>
           <Tab label={"Logs"} >
