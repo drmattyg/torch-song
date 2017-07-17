@@ -302,50 +302,94 @@ songbook:
       - edge: 5
         flame: 1
         dir: 0
-    comment: '(00:01:08.5) Oh lord, my god I pray that these things never [end:] '
-# left off here    
+    comment: '(00:01:08.5) Oh lord, my god I pray that these things never [end:] ' 
   - start_at: 71204
     time: 2618
     edges:
-      - edge: 0
-        flame: 0
+      - edge: 3
+        flame: 1
         dir: 1
+        distance: 0.5
+      - edge: 4
+        dir: 0
+        flame: 0
+      - edge: 5
+        dir: 0
+        flame: 0
     comment: '(00:01:11.2) The [sand] and the sea The rush of the water '
   - start_at: 73822
     time: 2879
     edges:
-      - edge: 0
-        flame: 0
+      - edge: 4
+        flame: 1
         dir: 1
+        distance: 0.5
+      - edge: 1
+        flame: 1
+        dir: -1
+        distance: 0.5
     comment: '(00:01:13.8) The sand and the [sea] The rush of the water '
   - start_at: 76701
     time: 2694
     edges:
-      - edge: 0
-        flame: 0
+      - edge: 3
+        flame: 1
         dir: 1
+        distance: 0.5
+      - edge: 8
+        dir: -1
+        distance: 0.5
+        flame: 1
+      - edge: 1
+        dir: 0
+        flame: 0
     comment: '(00:01:16.7) The sand and the sea The [rush] of the water '
   - start_at: 79395
     time: 2757
     edges:
-      - edge: 0
+      - edge: 3
         flame: 0
+        dir: 0
+      - edge: 4
         dir: 1
+        flame: 1
+        distance: 0.5
+      - edge: 2
+        dir: 1
+        distance: 0.5
+        # left off here
     comment: '(00:01:19.3) The sand and the sea The rush of the [water] '
+
   - start_at: 82152
     time: 2456
     edges:
-      - edge: 0
+      - edge: 2
         flame: 0
+        dir: 0
+      - edge: 4
+        dir: 0
+        flame: 0
+      - edge: 5
         dir: 1
+        flame: 1
+        distance: 0.5
+      - edge: 8
+        dir: -1
+        distance: 0.5
+        flame: 1
     comment: '(00:01:22.1) The [crash] of the heavens, the prayer of the heart'
+
   - start_at: 84608
     time: 3123
     edges:
-      - edge: 0
+      - edge: 8
         flame: 0
+        dir: 0
+      - edge: 6
         dir: 1
+        distance: 0.5
     comment: '(00:01:24.6) The crash of the [heavens,] the prayer of the heart'
+        # left off here; moving random halves every measure
   - start_at: 87731
     time: 2374
     edges:

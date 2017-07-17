@@ -23,11 +23,10 @@ def sb_entry(edge, t, run_time, dist, direction=1):
         },
         {
             'start_at': t + run_time*dist,
-            'time': TIME_MIN*(1 - dist),
+            'time': 100,
             'edges': [{
                 'edge': edge,
-                'dir': direction,
-                'distance': 1 - dist,
+                'dir': 0,
                 'flame': 0
             }]
         }
@@ -46,12 +45,24 @@ for i in range(NUM_CYCLES):
         if not edges[edge]['running']:
             break
     dist = random.choice(DIST_OPTS)
+    if e['pos'] == 1:
+        direction = -1
+    elif e['pos'] == 0:
+        direction = 1
+    else:
+        direction = 1 - 2*random.choice([0, 1])
+    end_pos = e['pos'] + direction*dist
+    if end_pos < 0:
+        end_pos = 0
+        dist = e['pos']
+    if end_pos > 1:
+        end_pos = 1
+        dist = 1 - e['pos']
     run_time = random.randint(TIME_MIN, TIME_MAX)
-    direction = 1 - 2*edges[edge]['pos']
     songbook += sb_entry(edge, t, run_time, dist, direction=direction)
     edges[edge]['running'] = True
     edges[edge]['stop_at'] = t + run_time
-    edges[edge]['pos'] = int((direction + 1)/2)
+    edges[edge]['pos'] = end_pos
     t += random.randint(int(TIME_MIN * DUTY_CYCLE), int(TIME_MIN * DUTY_CYCLE) + int(MEAN_TIME*DUTY_CYCLE))
 
 songbook = {
