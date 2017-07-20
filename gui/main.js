@@ -148,10 +148,13 @@ app.post('/proc', function (req, res) {
         });
 
         proc.on('exit', function (code) {
-          console.log('child process exited with code ' + code.toString());
-          proc = null
+          if (code) {
+            console.log('child process exited with code ' + code.toString());
+          } else {
+            console.log('child process exited');
+          }
+          proc = null;
         });
-
       }
     } else if (json['proc'] == 'normal_stop') {
       if (proc) {
