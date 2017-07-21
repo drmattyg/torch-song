@@ -8,7 +8,7 @@ import Paper from 'material-ui/Paper';
 
 import {ColorWheel} from './Common.jsx'
 
-export class LogPanel extends React.Component {
+export class LogPanel extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -33,12 +33,12 @@ export class LogPanel extends React.Component {
       },
       body: JSON.stringify({})
     }).catch(() => {
-      this.setState({shouldAlert: true, message: 'Error clearing logs'})
+      this.props.notify('Error clearing logs')
     }).then((res) => {
       if (res.status == 200) {
-        this.setState({shouldAlert: true, message: 'Cleared logs'})
+        this.props.notify('Cleared logs')
       } else {
-        this.setState({shouldAlert: true, message: 'Error clearing logs'})
+        this.props.notify('Error clearing logs')
       }
     });
   }
@@ -58,18 +58,17 @@ export class LogPanel extends React.Component {
     const style = {
       margin: 10
     };
+    const showControls = this.props.showControls ? 'block' : 'none'
     return (
       <div className='log-page'>
         <Paper style={{padding:'20px'}}>
-          <div className='log-button-row'>
+          <div className='log-button-row' style={{display:showControls}}>
             <RaisedButton label="Clear" style={style} onTouchTap={this.clear}/>
           </div>
-          <hr />
-            <div className="logs">
-              { this.renderLogRecords(this.state.logs, this.props.errorsOnly) }
-            </div>
-          <hr />
-          <div className='log-button-row'>
+          <div className="logs">
+            { this.renderLogRecords(this.state.logs, this.props.errorsOnly) }
+          </div>
+          <div className='log-button-row' style={{display:showControls}}>
             <RaisedButton label="Clear" style={style} onTouchTap={this.clear}/>
           </div>
         </Paper>
@@ -78,7 +77,7 @@ export class LogPanel extends React.Component {
   }
 };
 
-class LogRecord extends React.Component {
+class LogRecord extends React.PureComponent {
   constructor(props) {
     super(props)
   }

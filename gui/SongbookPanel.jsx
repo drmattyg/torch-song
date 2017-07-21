@@ -14,7 +14,7 @@ import {Label, SimpleToggle} from './Widgets.jsx'
 
 import {ColorWheel} from './Common.jsx'
 
-export class SongbookPanel extends React.Component {
+export class SongbookPanel extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -58,22 +58,33 @@ export class SongbookPanel extends React.Component {
       },
       body: JSON.stringify(command)
     }).catch(() => {
-      console.log('Error sending JSON command')
+      this.props.notify('Error sending JSON command')
     }).then((res) => {
       if (res.status == 200) {
-        console.log('sent command')
       }
     });
   }
 
-  sendCalibrate() { this.post('control', {calibrate: true})}
+  sendCalibrate() {
+    this.post('control', {calibrate: true})
+    this.props.notify('Calibrating')
+  }
   sendRewind() { this.post('control', {prev: true})}
   sendPlayStop() { this.post('control', {stop: true})}
   sendPlay() { this.post('control', {play: true})}
   sendFastForward() { this.post('control', {next: true})}
-  sendRun() { this.post('proc', {proc: 'start'})}
-  sendStop() { this.post('proc', {proc: 'normal_stop'})}
-  sendEstop() { this.post('proc', {proc: 'estop'})}
+  sendRun() {
+    this.post('proc', {proc: 'start'})
+    this.props.notify('Starting Torchsong')
+  }
+  sendStop() {
+    this.post('proc', {proc: 'normal_stop'})
+    this.props.notify('Stopping Torchsong')
+  }
+  sendEstop() {
+    this.post('proc', {proc: 'estop'})
+    this.props.notify('Hard stopping Torchsong')
+  }
 
   render() {
     const style = {
@@ -113,16 +124,32 @@ export class SongbookPanel extends React.Component {
           <div className="song-controls-outter">
             <div className="song-controls-inner">
               <div className="song-control">
-                <IconButton iconClassName="material-icons" onTouchTap={this.sendRewind}>fast_rewind</IconButton>
+                <IconButton iconClassName="material-icons"
+                  onTouchTap={this.sendRewind}
+                  hoveredStyle={{backgroundColor: '#eee'}}>
+                  fast_rewind
+                </IconButton>
               </div>
               <div className="song-control">
-                <IconButton iconClassName="material-icons" onTouchTap={this.sendPlayStop}>stop</IconButton>
+                <IconButton iconClassName="material-icons"
+                  onTouchTap={this.sendPlayStop}
+                  hoveredStyle={{backgroundColor: '#eee'}}>
+                  stop
+                </IconButton>
               </div>
               <div className="song-control">
-                <IconButton iconClassName="material-icons" onTouchTap={this.sendPlay}>play_arrow</IconButton>
+                <IconButton iconClassName="material-icons"
+                  onTouchTap={this.sendPlay}
+                  hoveredStyle={{backgroundColor: '#eee'}}>
+                  play_arrow
+                </IconButton>
               </div>
               <div className="song-control">
-                <IconButton iconClassName="material-icons" onTouchTap={this.sendFastForward}>fast_forward</IconButton>
+                <IconButton iconClassName="material-icons"
+                  onTouchTap={this.sendFastForward}
+                  hoveredStyle={{backgroundColor: '#eee'}}>
+                  fast_forward
+                </IconButton>
               </div>
             </div>
           </div>

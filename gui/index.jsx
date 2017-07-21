@@ -23,7 +23,7 @@ injectTapEventPlugin();
 
 const version = process.env.npm_package_version
 
-class Components extends React.Component {
+class Components extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -48,6 +48,7 @@ class Components extends React.Component {
     this.fetchLogs = this.fetchLogs.bind(this);
     this.fetchProc = this.fetchProc.bind(this);
     this.fetchTorchData = this.fetchTorchData.bind(this);
+    this.notify = this.notify.bind(this);
 
     setInterval(() => {
       this.fetchTorchData()
@@ -60,8 +61,11 @@ class Components extends React.Component {
     }, 250)
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    return (this.state.running != nextState.running)
+  notify(message) {
+    this.setState({
+      shouldAlert: true,
+      message: message
+    });
   }
 
   fetchLogs() {
@@ -103,19 +107,22 @@ class Components extends React.Component {
         <AppBar
             title={"Torch Song GUI " + (this.state.running? "(running)" : "(stopped)")}
             showMenuIconButton={false}/>
-        <Snackbar open={this.state.shouldAlert} autoHideDuration={1000}
+        <Snackbar open={this.state.shouldAlert} autoHideDuration={1500}
             onRequestClose={() => { this.setState({shouldAlert: false}) }}
             message={this.state.message} />
-        <SongbookPanel />
+        <SongbookPanel notify={this.notify}/>
         <Tabs>
           <Tab label={"Control"} >
-            <ControlPanel />
+            <div className="control-logs">
+              <LogPanel errorsOnly={false} showControls={false} notify={this.notify}/>
+            </div>
+            <ControlPanel notify={this.notify}/>
           </Tab>
           <Tab label={"Logs"} >
-            <LogPanel errorsOnly={false} />
+            <LogPanel errorsOnly={false} showControls={true} notify={this.notify}/>
           </Tab>
-          <Tab label={"YAML parser"} >
-            <YAMLPanel />
+          <Tab label={"Config"} >
+            <YAMLPanel notify={this.notify}/>
           </Tab>
         </Tabs>
       </div>

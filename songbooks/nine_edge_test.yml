@@ -4,7 +4,7 @@ songbook:
     time: 6000
     edges:
       - edge: 1
-        flame: 1
+        flame: 0
         dir: 1
       - edge: 2
         flame: 0

@@ -34,6 +34,8 @@ class EdgeStreamHandler(logging.StreamHandler):
 
     def format(self, record):
         color_id = record.__dict__.get('edge_id', 0)
+        if (record.levelname == 'ERROR'):
+            color_id = 9
         text = logging.StreamHandler.format(self, record)
         color = self.colormap[color_id]
         return color + text + self.DEFAULT

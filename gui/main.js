@@ -128,6 +128,7 @@ app.post('/default-mod-yaml', function (req, res) {
   });
 });
 
+// Process control
 proc = null;
 path = __dirname + '/..'
 app.post('/proc', function (req, res) {
@@ -139,25 +140,26 @@ app.post('/proc', function (req, res) {
         proc = spawn('/usr/bin/env', ['python', 'main.py'], {cwd:path} )
 
         proc.stdout.on('data', function (data) {
-          console.log(data.toString());
+          process.stdout.write(data.toString());
         });
 
         proc.stderr.on('data', function (data) {
-          console.log(data.toString());
+          process.stdout.write(data.toString());
         });
 
         proc.on('exit', function (code) {
           if (code) {
             console.log('child process exited with code ' + code.toString());
+          } else {
+            console.log('child process exited');
           }
+          proc = null;
         });
-
       }
     } else if (json['proc'] == 'normal_stop') {
       if (proc) {
         console.log('stopping process')
         proc.kill('SIGTERM')
-        proc = null;
       }
     } else if (json['proc'] == 'estop') {
       if (proc) {
@@ -166,33 +168,26 @@ app.post('/proc', function (req, res) {
         proc = null;
         proc2 = spawn('/usr/bin/env', ['python', 'default_io.py'], {cwd:path} )
         proc2.stdout.on('data', function (data) {
-          console.log(data.toString());
+          process.stdout.write(data.toString());
         });
 
         proc2.stderr.on('data', function (data) {
-          console.log(data.toString());
+          process.stdout.write(data.toString());
         });
 
-        proc2 = null;
+        proc2.on('exit', function (code) {
+          proc2 = null;
+        });
       }
     }
   }
+  res.send();
 });
 
 app.get('/proc', function (req, res) {
   let s = {state: null}
   s.state = proc ? true : false;
   res.send(s);
-});
-
-
-
-// Send state
-app.post('/post', function(req, res) {
-  if (sender_ip) {
-    //server.send(JSON.stringify(req.body), udp_port_out, sender_ip);
-  }
-  res.send();
 });
 
 app.listen(web_server_port, function () {

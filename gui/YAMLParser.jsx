@@ -4,16 +4,13 @@ import {render} from 'react-dom';
 import 'whatwg-fetch';
 
 import RaisedButton from 'material-ui/RaisedButton';
-import Snackbar from 'material-ui/Snackbar';
 import Paper from 'material-ui/Paper';
 
-export class YAMLPanel extends React.Component {
+export class YAMLPanel extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
       json: {loading: 'loading'},
-      shouldAlert: false,
-      message: ''
     };
     var that = this
     this.restoreDefault = this.restoreDefault.bind(this);
@@ -31,12 +28,12 @@ export class YAMLPanel extends React.Component {
       },
       body: JSON.stringify(this.state.json)
     }).catch(() => {
-      this.setState({shouldAlert: true, message: 'Error saving YAML file'})
+      this.props.notify('Error saving YAML file')
     }).then((res) => {
       if (res.status == 200) {
-        this.setState({shouldAlert: true, message: 'Saved YAML file'})
+        this.props.notify('Saved YAML file')
       } else {
-        this.setState({shouldAlert: true, message: 'Error saving YAML file'})
+        this.props.notify('Error saving YAML file')
       }
     });
   }
@@ -44,8 +41,11 @@ export class YAMLPanel extends React.Component {
   fetch(silent) {
     fetch('/default-mod-yaml').then((resp) => {
       return resp.json()
+    }).catch(() => {
+      this.props.notify('Error loading YAML file: default-mod.yml')
     }).then((json) => {
-      this.setState({json: json, shouldAlert: !silent, message: 'Loaded YAML file'})
+      this.setState({json: json})
+      this.props.notify('Loaded YAML file')
     });
   }
 
@@ -69,23 +69,19 @@ export class YAMLPanel extends React.Component {
     };
     return (
       <div className='yaml-page'>
-        <Snackbar open={this.state.shouldAlert} autoHideDuration={1000}
-            onRequestClose={() => { this.setState({shouldAlert: false}) }}
-            message={this.state.message} />
-
         <Paper style={{padding:'20px'}}>
           <div className='yaml-button-row'>
-            <RaisedButton label="Restore " style={style} onTouchTap={this.restoreDefault}/>
-            <RaisedButton label="Load" style={style} onTouchTap={this.fetch}/>
-            <RaisedButton label="Submit" style={style} onTouchTap={this.post}/>
+            <RaisedButton label="Default" style={style} onTouchTap={this.restoreDefault}/>
+            <RaisedButton label="Reload" style={style} onTouchTap={this.fetch}/>
+            <RaisedButton label="Save" style={style} onTouchTap={this.post}/>
           </div>
           <hr />
           <ObjectTreeEditor key={-1} tree={this.state.json} level={0} notify={this.notify.bind(this)}/>
           <hr />
           <div className='yaml-button-row'>
-            <RaisedButton label="Restore " style={style} onTouchTap={this.restoreDefault}/>
-            <RaisedButton label="Load" style={style} onTouchTap={this.fetch}/>
-            <RaisedButton label="Submit" style={style} onTouchTap={this.post}/>
+            <RaisedButton label="Default" style={style} onTouchTap={this.restoreDefault}/>
+            <RaisedButton label="Reload" style={style} onTouchTap={this.fetch}/>
+            <RaisedButton label="Save" style={style} onTouchTap={this.post}/>
           </div>
         </Paper>
       </div>
@@ -102,7 +98,7 @@ const pad = function(spaces) {
   return str;
 };
 
-class KeyStringEditor extends React.Component {
+class KeyStringEditor extends React.PureComponent {
   constructor(props) {
     super(props)
     this.state = {val: this.props.parent[this.props.k]};
@@ -131,7 +127,7 @@ class KeyStringEditor extends React.Component {
 
 let uniqueId = 1;
 
-export class ObjectTreeEditor extends React.Component {
+export class ObjectTreeEditor extends React.PureComponent {
   constructor(props) {
     super(props)
     this.nextLevel = this.props.level + 1

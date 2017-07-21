@@ -66,37 +66,48 @@ def main():
     logger.addHandler(streamHandler)
     logger.addHandler(socketEdgeHandler)
 
-    # Create torch song
-    ts = TorchSong(config=config, num_edges=config['num_edges'], sim=sim, verbose=verbose)
-    sbm = SongbookManager(songbooks, ts, config['songbook_mode'])
-
-    # Start TorchSong server
-    cs_local_port = config['control_server']['local_port']
-    cs_remote_port = config['control_server']['remote_port']
-    cs_server = TorchControlServer(cs_local_port, cs_remote_port, ts, sbm)
-
-    cs_server_thread = Thread(target=cs_server.serve_forever)
-    cs_server_thread.daemon = True
-    cs_server_thread.start()
-
-    signal.signal(signal.SIGTERM, lambda sig, frame: sbm.kill())
+    ts = None
+    sbm = None
+    cs_server = None
+    error_code = 0
 
     try:
+        # Create torch song
+        ts = TorchSong(config=config, num_edges=config['num_edges'], sim=sim, verbose=verbose)
+        sbm = SongbookManager(songbooks, ts, config['songbook_mode'])
+
+        # Start TorchSong server
+        cs_local_port = config['control_server']['local_port']
+        cs_remote_port = config['control_server']['remote_port']
+        cs_server = TorchControlServer(cs_local_port, cs_remote_port, ts, sbm)
+
+        cs_server_thread = Thread(target=cs_server.serve_forever)
+        cs_server_thread.daemon = True
+        cs_server_thread.start()
+
+        signal.signal(signal.SIGTERM, lambda sig, frame: sbm.kill())
+
         if (calibrate):
             ts.calibrate()
         sbm.run()
     except KeyboardInterrupt:
         logging.info('Received ctrl-c, cleaning up')
     except Exception as e:
-        logging.error(e)
-        traceback.print_exc()
+        logging.error(traceback.format_exc())
+        error_code = 1
     finally:
         logging.info('Closing shop')
-        sbm.kill()
-        socketEdgeHandler.close()
-        ts.kill()
-        cs_server.kill()
-        sys.exit(2)
+        try:
+            if sbm is not None:
+                sbm.kill()
+            if ts is not None:
+                ts.kill()
+            if cs_server is not None:
+                cs_server.kill()
+            socketEdgeHandler.close()
+        except Exception as e:
+            print(e)
+        sys.exit(error_code)
 
 
 if __name__ == '__main__':

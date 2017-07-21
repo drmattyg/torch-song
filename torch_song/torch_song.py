@@ -38,12 +38,8 @@ class TorchSong:
         else:
             self.edges = {i: SimEdge(i, 1000, verbose) for i in range(1, num_edges + 1)}
 
-        try:
-            self.load_calibration()
-            logging.info('Loaded calibration')
-        except Exception as e:
-            logging.error('Failed to load calibration. Try recalibrating. Error:' +  str(e))
-
+        self.load_calibration()
+        logging.info('Loaded calibration')
         # Hook up command mux
         for e in self.edges.items():
             self.edges[e[0]] = EdgeControlMux(e[1])
@@ -54,11 +50,12 @@ class TorchSong:
             e.set_igniter_state(0)
 
     def kill(self):
-        logging.info('Shutting down hardware')
+        logging.info('Shutting down torchsong')
         for e in self.edges.values():
             e.kill()
 
     def home(self):
+        logging.info('Homing')
         run_parallel('home', self.edges.values())
 
     def calibrate(self):
@@ -71,8 +68,9 @@ class TorchSong:
         with open(self.cal_file, "r") as fp:
             cal = json.load(fp)
             for e in self.edges.items():
-                if (cal[str(e[0])]):
-                    e[1].get_calibration().deserialize(cal[str(e[0])])
+                key = str(e[0])
+                if key in cal:
+                    e[1].get_calibration().deserialize(cal[key])
 
     def save_calibration(self):
         cal = {}

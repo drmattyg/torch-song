@@ -13,7 +13,7 @@ export class Label extends React.Component {
 
   render() {
     return <TextField disabled={true} floatingLabelText={this.props.label}
-        value={this.props.value} underlineShow={false} />
+        value={this.props.value} underlineShow={false} onChange={function(){ }}/>
   }
 }
 

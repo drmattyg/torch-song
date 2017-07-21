@@ -68,7 +68,7 @@ class AbstractEdge(metaclass=ABCMeta):
             return True
 
         self.set_motor_state(-1, 90)
-        func = try_decorator(2)(self.get_reverse_limit_switch_state)
+        func = try_decorator(10)(self.get_reverse_limit_switch_state)
         return func()
 
     @abstractmethod

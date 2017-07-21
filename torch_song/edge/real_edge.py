@@ -43,11 +43,13 @@ class RealEdge(AbstractEdge):
 
         # Safety params
         self.time_of_last_limit_switch = time()
-        self.STALL_TIME = 10
 
         if calibration is None:
             # insert a default calibration
             self.set_calibration(EdgeCalibration(self))
+
+        self.stall_time = 20
+        self.set_stall_time()
 
         # let limit switches settle
         try_decorator(timeout=5)(lambda:not all(self.get_limit_switch_state()))()
@@ -68,6 +70,11 @@ class RealEdge(AbstractEdge):
             self.motor_driver.get_dir_str())
         return s
 
+    def set_stall_time(self):
+        rev = self.get_calibration().get_cal_time(1, -1)
+        fwd = self.get_calibration().get_cal_time(1, 1)
+        self.stall_time = max(rev, fwd) * 2.0
+
     def loop(self):
         self.pleaseExit = False
 
@@ -80,7 +87,7 @@ class RealEdge(AbstractEdge):
 
             if (not last_cal_time == 0 and self.dir_request != 0):
                 add_pos = (now - prev_time) / last_cal_time
-                self.position += add_pos * self.dir_request
+                self.position += add_pos
                 if (self.position > 1):
                     self.position = 1
                 if (self.position < 0):
@@ -98,7 +105,8 @@ class RealEdge(AbstractEdge):
             if (any(self.get_limit_switch_state()) or self.motor_driver.get_speed() == 0):
                 self.time_of_last_limit_switch = time()
             if (self.motor_driver.get_speed() > 0 and
-                time()-self.time_of_last_limit_switch > self.STALL_TIME):
+                time()-self.time_of_last_limit_switch > self.stall_time):
+                logging.info('id:%d theoretically stalled' % (self.id), extra={'edge_id': self.id})
                 pass
                 #raise Exception('Stalled motor')
 
@@ -126,9 +134,12 @@ class RealEdge(AbstractEdge):
                     logging.info('Rev limit switch hit for id:%d' % (self.id), extra={'edge_id': self.id})
             elif (self.speed_request >= 0):
                     self.motor_driver.set_speed(self.speed_request)
-                    self.speed_request = -1
-                    last_cal_time = self.calibration.get_cal_time(self.speed_request, self.dir_request)
+                    if (self.speed_request is not 0):
+                        last_cal_time = self.calibration.get_cal_time(self.speed_request, self.dir_request)
+                    else:
+                        last_cal_time = 0
                     last_cal_time = last_cal_time * self.dir_request
+                    self.speed_request = -1
 
             self.lock.release()
 
@@ -176,6 +187,7 @@ class RealEdge(AbstractEdge):
     def calibrate(self):
         self._ignore_limit_switch(True)
         self.calibration.calibrate()
+        self.set_stall_time()
         self._ignore_limit_switch(False)
 
     def get_position(self):

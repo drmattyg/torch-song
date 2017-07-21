@@ -142,7 +142,6 @@ li {
   background-color: #eee;
   margin: auto;
   border: 1px solid #ccc;
-  margin-top: 40px;
 }
 
 .yaml-tree-label,
@@ -202,6 +201,14 @@ h2 {
 .logs {
   height: 300px;
   overflow-y: scroll;
+  border: 1px solid #333;
+  padding: 5px;
+}
+
+
+.control-logs .logs {
+  height: 100px;
+  overflow-y: hidden;
 }
 
 .log-record {
@@ -222,6 +229,7 @@ h2 {
 
 .edge-control h2 {
   padding: 10px;
+  margin-top: 0px;
   text-transform: uppercase;
   font-weight: 600;
 }
@@ -249,7 +257,6 @@ h2 {
 
 .song-process {
   top: -10px;
-  text-align: center;
 }
 
 .song-process-button {
@@ -257,7 +264,6 @@ h2 {
 }
 
 .song-controls-outter {
-  text-align: center;
 }
 
 .song-controls-inner {
@@ -285,9 +291,18 @@ h2 {
   display: none
 }
 
-@media (min-width: 768px) {
+@media (min-width: 736px) {
   #app {
-    width: 700px;
+    width: 735px;
+  }
+
+
+}
+
+@media (min-width: 1024px) {
+  #app {
+    margin-top: 40px;
+    width: 900px;
   }
 
   .song-process {
@@ -298,12 +313,6 @@ h2 {
     text-align: inherit;
   }
 
-}
-
-@media (min-width: 1024px) {
-  #app {
-    width: 900px;
-  }
 }
 
 

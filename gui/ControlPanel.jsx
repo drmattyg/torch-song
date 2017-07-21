@@ -12,7 +12,7 @@ import {SimpleToggle} from './Widgets.jsx'
 
 import {ColorWheel} from './Common.jsx'
 
-export class ControlPanel extends React.Component {
+export class ControlPanel extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -88,12 +88,14 @@ export class ControlPanel extends React.Component {
   }
 };
 
-export class EdgeControl extends React.Component {
+export class EdgeControl extends React.PureComponent {
   constructor(props) {
     super(props)
     this.sendOverride = this.sendOverride.bind(this)
     this.sendIgniter = this.sendIgniter.bind(this)
     this.sendValve = this.sendValve.bind(this)
+    this.sendCalibrate = this.sendCalibrate.bind(this)
+    this.sendStop = this.sendStop.bind(this)
     this.jogFwd = this.jog.bind(this, 1)
     this.jogRev = this.jog.bind(this, -1)
     this.rev = this.rev.bind(this)
@@ -120,6 +122,14 @@ export class EdgeControl extends React.Component {
   sendIgniter(e, s) {
     const id = this.props.edge_id
     this.props.post({id: id, igniter: s})
+  }
+  sendCalibrate(e) {
+    const id = this.props.edge_id
+    this.props.post({id: id, calibrate_single: true})
+  }
+  sendStop(e) {
+    const id = this.props.edge_id
+    this.props.post({id: id, dir: 0, speed: 0})
   }
   sendValve(e, s) {
     const id = this.props.edge_id
@@ -173,6 +183,16 @@ export class EdgeControl extends React.Component {
               <div className='edge-toggle'>
                 <SimpleToggle label='Valve' onToggle={this.sendValve} />
               </div>
+            </div>
+            <div className='edge-buttons'>
+              <RaisedButton className='edge-motor-button' label='CAL'
+                icon={<FontIcon className="material-icons">compare_arrows</FontIcon>}
+                onTouchTap={this.sendCalibrate}
+              />
+              <RaisedButton className='edge-motor-button' label=''
+                icon={<FontIcon className="material-icons">stop</FontIcon>}
+                onTouchTap={this.sendStop}
+              />
             </div>
             <div className='edge-buttons'>
               <RaisedButton className='edge-motor-button' label='<' onTouchTap={this.jogRev} />
