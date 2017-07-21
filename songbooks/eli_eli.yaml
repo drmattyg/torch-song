@@ -1,4 +1,6 @@
-version: 1
+version: 1.0
+title: Eli Eli
+author: Vanguard
 songbook:
   - start_at: 0
     time: 6000
@@ -303,162 +305,227 @@ songbook:
         flame: 1
         dir: 0
     comment: '(00:01:08.5) Oh lord, my god I pray that these things never [end:] ' 
+
   - start_at: 71204
-    time: 2618
+    time: 2500
     edges:
       - edge: 3
-        flame: 1
-        dir: 1
-        distance: 0.5
+        dir: 0
+        flame: 0
       - edge: 4
         dir: 0
         flame: 0
       - edge: 5
         dir: 0
-        flame: 0
+        flame: 0                
+
+      - edge: 6
+        flame: 1
+        dir: 1
+        distance: 0.5
+      - edge: 7
+        flame: 1
+        dir: 1
+        distance: 0.5
+      - edge: 8
+        flame: 1
+        dir: -1
+        distance: 0.5    
     comment: '(00:01:11.2) The [sand] and the sea The rush of the water '
   - start_at: 73822
-    time: 2879
+    time: 2500
     edges:
-      - edge: 4
-        flame: 1
-        dir: 1
-        distance: 0.5
-      - edge: 1
+      - edge: 6
         flame: 1
         dir: -1
         distance: 0.5
+      - edge: 7
+        flame: 1
+        dir: -1
+        distance: 0.5
+      - edge: 8
+        flame: 1
+        dir: 1
+        distance: 0.5 
     comment: '(00:01:13.8) The sand and the [sea] The rush of the water '
   - start_at: 76701
-    time: 2694
+    time: 2500
     edges:
-      - edge: 3
+      - edge: 6
         flame: 1
-        dir: 1
-        distance: 0.5
-      - edge: 8
         dir: -1
         distance: 0.5
+      - edge: 7
         flame: 1
-      - edge: 1
-        dir: 0
-        flame: 0
+        dir: -1
+        distance: 0.5
     comment: '(00:01:16.7) The sand and the sea The [rush] of the water '
   - start_at: 79395
-    time: 2757
+    time: 2500
     edges:
-      - edge: 3
-        flame: 0
-        dir: 0
-      - edge: 4
-        dir: 1
-        flame: 1
-        distance: 0.5
-      - edge: 2
-        dir: 1
-        distance: 0.5
-        # left off here
-    comment: '(00:01:19.3) The sand and the sea The rush of the [water] '
-
-  - start_at: 82152
-    time: 2456
-    edges:
-      - edge: 2
-        flame: 0
-        dir: 0
-      - edge: 4
-        dir: 0
-        flame: 0
-      - edge: 5
-        dir: 1
-        flame: 1
-        distance: 0.5
       - edge: 8
+        flame: 1
+        dir: -1
+        distance: 0.5 
+    comment: '(00:01:19.3) The sand and the sea The rush of the [water] '
+  - start_at: 82152
+    time: 2500
+    edges:
+      - edge: 6
+        flame: 0
+        dir: 1
+      - edge: 7
+        flame: 0
+        dir: 1
+      - edge: 8
+        flame: 0
+        dir: 0
+      - edge: 0
+        flame: 1
+        dir: 1
+        distance: 0.5
+      - edge: 1
+        flame: 1
+        dir: 1
+        distance: 0.5
+      - edge: 2
+        flame: 1
+        dir: -1
+        distance: 0.5          
+
+    comment: '(00:01:22.1) The [crash] of the heavens, the prayer of the heart'
+  - start_at: 84608
+    time: 2500
+    edges:
+      - edge: 0
+        flame: 1
         dir: -1
         distance: 0.5
+      - edge: 1
         flame: 1
-    comment: '(00:01:22.1) The [crash] of the heavens, the prayer of the heart'
-
-  - start_at: 84608
-    time: 3123
+        dir: -1
+        distance: 0.5
+      - edge: 2
+        flame: 1
+        dir: 1
+        distance: 0.5   
+    comment: '(00:01:24.6) The crash of the [heavens,] the prayer of the heart'
+  - start_at: 87731
+    time: 2500
     edges:
-      - edge: 8
+      - edge: 0
+        flame: 1
+        dir: 1
+        distance: 0.5
+      - edge: 1
+        flame: 1
+        dir: 1
+        distance: 0.5
+    comment: '(00:01:27.7) The crash of the heavens, the [prayer] of the heart'
+  - start_at: 90231
+    time: 2500
+    edges:
+      - edge: 2
+        flame: 1
+        dir: 1
+        distance: 0.5  
+    comment: '(00:01:30.1) The crash of the heavens, the prayer of the [heart]'
+    # ending starts here
+  - start_at: 93008
+    time: 5169
+    edges:
+      - edge: 0
+        flame: 1
+        dir: -1
+      - edge: 1
+        flame: 1
+        dir: -1
+      
+      - edge: 2
+        flame: 0
+        dir: -1     
+      # - edge: 1
+      #   flame: 0
+      #   dir: -1     
+      # - edge: 0
+      #   flame: 0
+      #   dir: -1
+        
+# preposition        
+      # - edge: 8
+      #   flame: 0
+      #   dir: 1                        
+    comment: '(00:01:33.0) The [sand] and the sea The rush of the water '
+  # - start_at: 95608
+  #   time: 2485
+  #   edges:
+  #     - edge: 0
+  #       flame: 0
+  #       dir: 1
+  #   comment: '(00:01:35.6) The sand and the [sea] The rush of the water '
+  - start_at: 98177
+    time: 5169
+    edges:
+      - edge: 0
+        flame: 0
+        dir: 0
+      - edge: 1
         flame: 0
         dir: 0
       - edge: 6
-        dir: 1
-        distance: 0.5
-    comment: '(00:01:24.6) The crash of the [heavens,] the prayer of the heart'
-        # left off here; moving random halves every measure
-  - start_at: 87731
-    time: 2374
-    edges:
-      - edge: 0
-        flame: 0
-        dir: 1
-    comment: '(00:01:27.7) The crash of the heavens, the [prayer] of the heart'
-  - start_at: 90105
-    time: 2903
-    edges:
-      - edge: 0
-        flame: 0
-        dir: 1
-    comment: '(00:01:30.1) The crash of the heavens, the prayer of the [heart]'
-  - start_at: 93008
-    time: 2600
-    edges:
-      - edge: 0
-        flame: 0
-        dir: 1
-    comment: '(00:01:33.0) The [sand] and the sea The rush of the water '
-  - start_at: 95608
-    time: 2485
-    edges:
-      - edge: 0
-        flame: 0
-        dir: 1
-    comment: '(00:01:35.6) The sand and the [sea] The rush of the water '
-  - start_at: 98093
-    time: 2664
-    edges:
-      - edge: 0
-        flame: 0
-        dir: 1
+        flame: 1
+        dir: -1
+      - edge: 7
+        flame: 1
+        dir: -1        
     comment: '(00:01:38.0) The sand and the sea The [rush] of the water '
-  - start_at: 100757
-    time: 2589
-    edges:
-      - edge: 0
-        flame: 0
-        dir: 1
-    comment: '(00:01:40.7) The sand and the sea The rush of the [water] '
+  # - start_at: 100757
+  #   time: 2589
+  #   edges:
+  #     - edge: 0
+  #       flame: 0
+  #       dir: 1
+  #   comment: '(00:01:40.7) The sand and the sea The rush of the [water] '
   - start_at: 103346
-    time: 2763
+    time: 7425.50
     edges:
-      - edge: 0
+      - edge: 6
         flame: 0
+        dir: 0
+      - edge: 7
+        flame: 0
+        dir: 0
+      - edge: 8
+        flame: 1
         dir: 1
     comment: '(00:01:43.3) The [crash] of the heavens, the prayer of the heart'
-  - start_at: 106109
-    time: 2973
+  # - start_at: 106109
+  #   time: 2973
+  #   edges:
+  #     - edge: 0
+  #       flame: 0
+  #       dir: 1
+  #   comment: '(00:01:46.1) The crash of the [heavens,] the prayer of the heart'
+  - start_at: 110771.50
+    time: 7425.50
     edges:
-      - edge: 0
-        flame: 0
+      - edge: 2
+        flame: 1
         dir: 1
-    comment: '(00:01:46.1) The crash of the [heavens,] the prayer of the heart'
-  - start_at: 109082
-    time: 4115
-    edges:
-      - edge: 0
+      - edge: 8
         flame: 0
-        dir: 1
+        dir: 0
     comment: '(00:01:49.0) The crash of the heavens, the [prayer] of the heart'
-  - start_at: 113197
-    time: (not set)
+  - start_at: 118197.00
+    time: 500
     edges:
-      - edge: 0
+      - edge: 2
         flame: 0
-        dir: 1
-    comment: '(00:01:53.1) The crash of the heavens, the prayer of the [heart]'
-author: my name here
-title: eli_eli.mp3
+        dir: 0
+  # - start_at: 113197
+  #   time: 4000
+  #   edges:
+  #     - edge: 0
+  #       flame: 0
+  #       dir: 1
+  #   comment: '(00:01:53.1) The crash of the heavens, the prayer of the [heart]'
