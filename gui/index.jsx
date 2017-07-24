@@ -191,6 +191,9 @@ class Components extends React.PureComponent {
             <LogPanel errorsOnly={false} showControls={true} notify={this.notify}/>
           </Tab>
           <Tab label={"Config"} >
+            <div className="control-logs">
+              <LogPanel errorsOnly={false} showControls={false} notify={this.notify}/>
+            </div>
             <YAMLPanel notify={this.notify} restart={this.sendRestart}/>
           </Tab>
         </Tabs>

@@ -5,6 +5,7 @@ import 'whatwg-fetch';
 
 import RaisedButton from 'material-ui/RaisedButton';
 import Paper from 'material-ui/Paper';
+import {ColorWheel} from './Common.jsx'
 
 export class YAMLPanel extends React.PureComponent {
   constructor(props) {
@@ -28,12 +29,12 @@ export class YAMLPanel extends React.PureComponent {
       },
       body: JSON.stringify(this.state.json)
     }).catch(() => {
-      this.props.notify('Error saving YAML file')
+      this.props.notify('Error saving configuration')
     }).then((res) => {
       if (res.status == 200) {
-        this.props.notify('Saved YAML file')
+        this.props.notify('Saved configuration')
       } else {
-        this.props.notify('Error saving YAML file')
+        this.props.notify('Error saving configuration')
       }
     });
   }
@@ -42,10 +43,10 @@ export class YAMLPanel extends React.PureComponent {
     fetch('/default-mod-yaml').then((resp) => {
       return resp.json()
     }).catch(() => {
-      this.props.notify('Error loading YAML file: default-mod.yml')
+      this.props.notify('Error loading configuration: default-mod.yml')
     }).then((json) => {
       this.setState({json: json})
-      this.props.notify('Loaded YAML file')
+      this.props.notify('Loaded configuration')
     });
   }
 
@@ -53,6 +54,7 @@ export class YAMLPanel extends React.PureComponent {
     fetch('/default-yaml').then((resp) => {
       return resp.json()
     }).then((json) => {
+      this.props.notify('Loaded default configuration: default.yml')
       this.setState({json: json}, function() {
         this.post()
       })
@@ -64,19 +66,27 @@ export class YAMLPanel extends React.PureComponent {
     this.props.restart()
   }
 
-  enableEdge(e, state) {
-
+  enableEdge(id, e) {
+    let json = this.state.json
+    json['edges'].forEach((item, i) => {
+      if (item.id == id) {
+        let enabledState = json['edges'][i].enabled
+        json['edges'][i].enabled = !enabledState
+        this.setState({json: json})
+        this.forceUpdate()
+        this.saveAndRestart()
+      }
+    });
   }
 
-  renderEdgeDisables(json) {
+  renderEdgeDisables(json, style) {
     if (json['edges']) {
       return json.edges.map((item) => {
         let label = item.enabled ? 'Disable ' : 'Enable '
         label += item.id
-        let newState = Object.create(item)
-        newState.enabled = !newState.enabled
         return (
-          <RaisedButton key={item.id} label={label} onTouchTap={this.enableEdge}/>
+          <RaisedButton labelColor={ColorWheel[item.id]} key={item.id} label={label}
+              onTouchTap={this.enableEdge.bind(this, item.id)} style={style}/>
         )
       })
     } else {
@@ -93,19 +103,16 @@ export class YAMLPanel extends React.PureComponent {
       <div className='yaml-page'>
         <Paper style={{padding:'20px'}}>
           <div className='yaml-button-row'>
-            { this.renderEdgeDisables(this.state.json) }
-            <RaisedButton label="Default" style={style} onTouchTap={this.restoreDefault}/>
-            <RaisedButton label="Reload" style={style} onTouchTap={this.fetch}/>
-            <RaisedButton label="Save" style={style} onTouchTap={this.post}/>
+            { this.renderEdgeDisables(this.state.json, style) }
+            <RaisedButton label="Default Config" style={style} onTouchTap={this.restoreDefault}/>
           </div>
           <hr />
           <ObjectTreeEditor key={-1} tree={this.state.json} level={0}
               cb={this.saveAndRestart.bind(this)}/>
           <hr />
           <div className='yaml-button-row'>
-            <RaisedButton label="Default" style={style} onTouchTap={this.restoreDefault}/>
-            <RaisedButton label="Reload" style={style} onTouchTap={this.fetch}/>
-            <RaisedButton label="Save" style={style} onTouchTap={this.post}/>
+            { this.renderEdgeDisables(this.state.json, style) }
+            <RaisedButton label="Default Config" style={style} onTouchTap={this.restoreDefault}/>
           </div>
         </Paper>
       </div>

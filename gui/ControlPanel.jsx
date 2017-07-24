@@ -33,12 +33,11 @@ export class ControlPanel extends React.PureComponent {
       },
       body: JSON.stringify(command)
     }).catch(() => {
-      console.log('error sending command')
+      this.props.notify('Error sending command')
     }).then((res) => {
       if (res.status == 200) {
-        console.log('sent command')
       } else {
-        console.log('error sending command')
+        this.props.notify('Error sending command')
       }
     });
   }
