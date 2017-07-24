@@ -26,9 +26,6 @@ export class SongbookPanel extends React.PureComponent {
     this.sendPlayStop = this.sendPlayStop.bind(this);
     this.sendPlay= this.sendPlay.bind(this);
     this.sendFastForward = this.sendFastForward.bind(this);
-    this.sendRun = this.sendRun.bind(this);
-    this.sendStop= this.sendStop.bind(this);
-    this.sendEstop= this.sendEstop.bind(this);
 
     setInterval(() => {
       if (window.torchData) {
@@ -73,18 +70,6 @@ export class SongbookPanel extends React.PureComponent {
   sendPlayStop() { this.post('control', {stop: true})}
   sendPlay() { this.post('control', {play: true})}
   sendFastForward() { this.post('control', {next: true})}
-  sendRun() {
-    this.post('proc', {proc: 'start'})
-    this.props.notify('Starting Torchsong')
-  }
-  sendStop() {
-    this.post('proc', {proc: 'normal_stop'})
-    this.props.notify('Stopping Torchsong')
-  }
-  sendEstop() {
-    this.post('proc', {proc: 'estop'})
-    this.props.notify('Hard stopping Torchsong')
-  }
 
   render() {
     const style = {
@@ -99,13 +84,13 @@ export class SongbookPanel extends React.PureComponent {
               className="song-process-button"
               label="RUN"
               icon={<FontIcon className="material-icons">directions_run</FontIcon>}
-              onTouchTap={this.sendRun}
+              onTouchTap={this.props.run}
             />
             <RaisedButton
               className="song-process-button"
               label="STOP"
               icon={<FontIcon className="material-icons">accessibility</FontIcon>}
-              onTouchTap={this.sendStop}
+              onTouchTap={this.props.stop}
             />
             <RaisedButton
               className="song-process-button"
@@ -117,7 +102,7 @@ export class SongbookPanel extends React.PureComponent {
               className="song-process-button"
               label="KILL"
               icon={<FontIcon className="material-icons">error</FontIcon>}
-              onTouchTap={this.sendEstop}
+              onTouchTap={this.props.estop}
             />
           </div>
           <h2>Songbook Control</h2>

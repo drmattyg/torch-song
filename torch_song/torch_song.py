@@ -24,6 +24,9 @@ class TorchSong:
 
         logging.info('Welcome to Torchsong')
 
+        self.edges = dict()
+        edge_count = 0
+
         # Build edges
         if (not sim and not force_sim):
             self.io = dict()
@@ -34,9 +37,22 @@ class TorchSong:
                 mcps[m['id']] = mcp
             self.io['mcp23017'] = mcps
 
-            self.edges = {i: RealEdge(i, self.io, self.config, verbose) for i in range(1, num_edges + 1)}
+            for e in self.config['edges']:
+                if e['enabled'] is True:
+                    id = e['id']
+                    self.edges[id] = RealEdge(id, self.io, self.config, verbose)
+                edge_count += 1
+                if edge_count >= num_edges:
+                    break
+
         else:
-            self.edges = {i: SimEdge(i, 1000, verbose) for i in range(1, num_edges + 1)}
+            for e in self.config['edges']:
+                if e['enabled'] is True:
+                    id = e['id']
+                    self.edges[id] = SimEdge(id, 1000, verbose)
+                edge_count += 1
+                if edge_count >= num_edges:
+                    break
 
         self.load_calibration()
         logging.info('Loaded calibration')

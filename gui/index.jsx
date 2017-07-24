@@ -15,7 +15,6 @@ import {YAMLPanel} from './YAMLParser.jsx';
 import {LogPanel} from './LogViewer.jsx';
 import {ControlPanel} from './ControlPanel.jsx';
 import {SongbookPanel} from './SongbookPanel.jsx';
-import {TorchsongPanel} from './TorchsongPanel.jsx';
 
 // require to make Tabs work
 const injectTapEventPlugin = require("react-tap-event-plugin");
@@ -49,6 +48,15 @@ class Components extends React.PureComponent {
     this.fetchProc = this.fetchProc.bind(this);
     this.fetchTorchData = this.fetchTorchData.bind(this);
     this.notify = this.notify.bind(this);
+    this.sendRun = this.sendRun.bind(this);
+    this.sendStop = this.sendStop.bind(this);
+    this.sendEstop = this.sendEstop.bind(this);
+    this.sendRestart = this.sendRestart.bind(this);
+    this.post = this.post.bind(this);
+    this.snackBarClose = this.snackBarClose.bind(this);
+
+
+    this.messageQueue = [];
 
     setInterval(() => {
       this.fetchTorchData()
@@ -62,10 +70,14 @@ class Components extends React.PureComponent {
   }
 
   notify(message) {
-    this.setState({
-      shouldAlert: true,
-      message: message
-    });
+    if (!this.state.shouldAlert) {
+      this.setState({
+        shouldAlert: true,
+        message: message
+      });
+    } else {
+      this.messageQueue.push(message)
+    }
   }
 
   fetchLogs() {
@@ -101,6 +113,62 @@ class Components extends React.PureComponent {
     });
   }
 
+  post(url, command, cb) {
+    fetch('/' + url, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(command)
+    }).catch(() => {
+      this.notify('Error sending JSON command')
+    }).then((res) => {
+      if (res.status == 200) {
+        if (cb)
+          cb()
+      }
+    });
+  }
+
+  sendRun() {
+    console.log('here')
+    this.post('proc', {proc: 'start'})
+    this.notify('Starting Torchsong')
+  }
+  sendStop() {
+    this.post('proc', {proc: 'normal_stop'})
+    this.notify('Stopping Torchsong')
+  }
+  sendEstop() {
+    this.post('proc', {proc: 'estop'})
+    this.notify('Hard stopping Torchsong')
+  }
+  sendRestart() {
+    if (this.state.running) {
+      this.post('proc', {proc: 'estop'}, () => {
+        setTimeout(() => {
+          this.post('proc', {proc: 'start'})
+          this.notify('Restarting Torchsong')
+        }, 1000)
+      })
+    }
+  }
+
+  snackBarClose() {
+    if (this.messageQueue.length == 0) {
+      this.setState({
+        shouldAlert: false,
+        message: ''
+      });
+    } else {
+      this.setState({
+        shouldAlert: true,
+        message: this.messageQueue.shift()
+      });
+    }
+  }
+
   render() {
     return (
       <div>
@@ -108,9 +176,10 @@ class Components extends React.PureComponent {
             title={"Torch Song GUI " + (this.state.running? "(running)" : "(stopped)")}
             showMenuIconButton={false}/>
         <Snackbar open={this.state.shouldAlert} autoHideDuration={1500}
-            onRequestClose={() => { this.setState({shouldAlert: false}) }}
+            onRequestClose={this.snackBarClose}
             message={this.state.message} />
-        <SongbookPanel notify={this.notify}/>
+        <SongbookPanel notify={this.notify} run={this.sendRun} stop={this.sendStop}
+            estop={this.sendEstop} />
         <Tabs>
           <Tab label={"Control"} >
             <div className="control-logs">
@@ -122,7 +191,7 @@ class Components extends React.PureComponent {
             <LogPanel errorsOnly={false} showControls={true} notify={this.notify}/>
           </Tab>
           <Tab label={"Config"} >
-            <YAMLPanel notify={this.notify}/>
+            <YAMLPanel notify={this.notify} restart={this.sendRestart}/>
           </Tab>
         </Tabs>
       </div>

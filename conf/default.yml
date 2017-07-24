@@ -6,6 +6,25 @@ logging:
 control_server:
   local_port: 4002
   remote_port: 3002
+edges:
+  - id: 1
+    enabled: true
+  - id: 2
+    enabled: true
+  - id: 3
+    enabled: false
+  - id: 4
+    enabled: true
+  - id: 5
+    enabled: true
+  - id: 6
+    enabled: true
+  - id: 7
+    enabled: true
+  - id: 8
+    enabled: true
+  - id: 9
+    enabled: true
 io:
   mcp23017:
     - id: 1
@@ -99,7 +118,7 @@ subsystems:
       end_mcp_io: 11
     - id: 9
       beg_mcp_id: 1
-      end_mcp_id: 2
+      end_mcp_id: 1
       beg_mcp_io: 8
       end_mcp_io: 9
   motors:
