@@ -12,7 +12,7 @@ edges:
   - id: 2
     enabled: true
   - id: 3
-    enabled: false
+    enabled: true
   - id: 4
     enabled: true
   - id: 5

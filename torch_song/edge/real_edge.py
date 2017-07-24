@@ -48,7 +48,6 @@ class RealEdge(AbstractEdge):
             # insert a default calibration
             self.set_calibration(EdgeCalibration(self))
 
-        self.stall_time = 20
         self.set_stall_time()
 
         # let limit switches settle
@@ -210,6 +209,9 @@ class RealEdge(AbstractEdge):
         self.igniter.set_state(0)
         self.pleaseExit = True
         self.runner.join(5000)
+
+    def is_healthy(self):
+        return self.runner.is_alive()
 
     def __del__(self):
         self.kill()

@@ -28,9 +28,9 @@ def run_parallel(function_str, iterable):
             fcn = getattr(item, function_str)
             fcn()
         except Exception as e:
+            event.set()
             logging.error(e)
             traceback.print_exc()
-            event.set()
 
     for i in iterable:
         event = Event()
@@ -42,7 +42,7 @@ def run_parallel(function_str, iterable):
     for r in runners:
         r.start()
 
-    done = lambda: any(map(lambda r: not r.isAlive(), runners))
+    done = lambda: not any(map(lambda r: r.isAlive(), runners))
     is_exc = lambda: any(map(lambda e: e.is_set(), events))
 
     while (not done()):

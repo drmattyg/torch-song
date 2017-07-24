@@ -68,8 +68,11 @@ class AbstractEdge(metaclass=ABCMeta):
             return True
 
         self.set_motor_state(-1, 90)
-        func = try_decorator(10)(self.get_reverse_limit_switch_state)
-        return func()
+        func = try_decorator(15)(self.get_reverse_limit_switch_state)
+        result = func()
+        if result is False:
+            raise Exception('Failed to home on id:' + str(self.id))
+        return result
 
     @abstractmethod
     def get_position(self):
@@ -81,4 +84,8 @@ class AbstractEdge(metaclass=ABCMeta):
 
     @abstractmethod
     def get_calibration(self):
+        raise NotImplementedError()
+
+    @abstractmethod
+    def is_healthy(self):
         raise NotImplementedError()
