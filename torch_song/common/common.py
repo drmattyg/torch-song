@@ -19,7 +19,7 @@ def try_decorator(timeout=15):
 
 # Run function (as a named string) on every item in iterable in parallel.
 # Pass exceptions back to caller
-def run_parallel(function_str, iterable):
+def run_parallel(function_str, iterable, exception_str):
     runners = []
     events = []
 
@@ -31,6 +31,11 @@ def run_parallel(function_str, iterable):
             event.set()
             logging.error(e)
             traceback.print_exc()
+            try:
+                fcn = getattr(item, exception_str)
+                fcn()
+            except Exception:
+                pass
 
     for i in iterable:
         event = Event()
@@ -47,11 +52,14 @@ def run_parallel(function_str, iterable):
 
     while (not done()):
         if (is_exc()):
-            raise Exception('error calling:', function_str)
+            #raise Exception('error calling:', function_str)
+            pass
         time.sleep(.1)
 
     if (is_exc()):
-        raise Exception('error calling:', function_str)
+        #raise Exception('error calling:', function_str)
+            pass
+
 
     for r in runners:
         r.join()

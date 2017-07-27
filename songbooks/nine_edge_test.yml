@@ -60,4 +60,34 @@ songbook:
       - edge: 9
         flame: 1
         dir: -1
+  - start_at: 12000
+    time: 6000
+    edges:
+      - edge: 1
+        flame: 0
+        dir: 1
+      - edge: 2
+        flame: 0
+        dir: 1
+      - edge: 3
+        flame: 0
+        dir: 1
+      - edge: 4
+        flame: 0
+        dir: 1
+      - edge: 5
+        flame: 0
+        dir: 1
+      - edge: 6
+        flame: 0
+        dir: 1
+      - edge: 7
+        flame: 0
+        dir: 1
+      - edge: 8
+        flame: 0
+        dir: 1
+      - edge: 9
+        flame: 0
+        dir: 1
 

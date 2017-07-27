@@ -9,22 +9,31 @@ control_server:
 edges:
   - id: 1
     enabled: true
+    motors_enabled: true
   - id: 2
     enabled: true
+    motors_enabled: true
   - id: 3
     enabled: true
+    motors_enabled: true
   - id: 4
     enabled: true
+    motors_enabled: true
   - id: 5
     enabled: true
+    motors_enabled: true
   - id: 6
     enabled: true
+    motors_enabled: true
   - id: 7
     enabled: true
+    motors_enabled: true
   - id: 8
     enabled: true
+    motors_enabled: true
   - id: 9
     enabled: true
+    motors_enabled: true
 io:
   mcp23017:
     - id: 1

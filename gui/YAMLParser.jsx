@@ -79,6 +79,19 @@ export class YAMLPanel extends React.PureComponent {
     });
   }
 
+  enableEdgeMotors(id, e) {
+    let json = this.state.json
+    json['edges'].forEach((item, i) => {
+      if (item.id == id) {
+        let enabledState = json['edges'][i].motors_enabled
+        json['edges'][i].motors_enabled = !enabledState
+        this.setState({json: json})
+        this.forceUpdate()
+        this.saveAndRestart()
+      }
+    });
+  }
+
   renderEdgeDisables(json, style) {
     if (json['edges']) {
       return json.edges.map((item) => {
@@ -94,6 +107,20 @@ export class YAMLPanel extends React.PureComponent {
     }
   }
 
+  renderEdgeDisableMotors(json, style) {
+    if (json['edges']) {
+      return json.edges.map((item) => {
+        let label = item.motors_enabled ? 'Disable Motor' : 'Enable Motor '
+        label += item.id
+        return (
+          <RaisedButton labelColor={ColorWheel[item.id]} key={item.id} label={label}
+              onTouchTap={this.enableEdgeMotors.bind(this, item.id)} style={style}/>
+        )
+      })
+    } else {
+      return
+    }
+  }
 
   render() {
     const style = {
@@ -104,6 +131,11 @@ export class YAMLPanel extends React.PureComponent {
         <Paper style={{padding:'20px'}}>
           <div className='yaml-button-row'>
             { this.renderEdgeDisables(this.state.json, style) }
+          </div>
+          <div className='yaml-button-row'>
+            { this.renderEdgeDisableMotors(this.state.json, style) }
+          </div>
+          <div className='yaml-button-row'>
             <RaisedButton label="Default Config" style={style} onTouchTap={this.restoreDefault}/>
           </div>
           <hr />
@@ -112,6 +144,11 @@ export class YAMLPanel extends React.PureComponent {
           <hr />
           <div className='yaml-button-row'>
             { this.renderEdgeDisables(this.state.json, style) }
+          </div>
+          <div className='yaml-button-row'>
+            { this.renderEdgeDisableMotors(this.state.json, style) }
+          </div>
+          <div className='yaml-button-row'>
             <RaisedButton label="Default Config" style={style} onTouchTap={this.restoreDefault}/>
           </div>
         </Paper>

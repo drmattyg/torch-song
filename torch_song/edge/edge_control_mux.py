@@ -2,10 +2,11 @@ import logging
 from torch_song.edge import AbstractEdge
 
 class EdgeControlMux(AbstractEdge):
-    def __init__(self, edge):
+    def __init__(self, edge, edge_config):
         super().__init__(edge.id)
         self.override = False
         self.edge = edge
+        self.edge_config = edge_config
 
     def set_override(self, override):
         msg = "Enabled override" if override else "Disabled override"
@@ -14,7 +15,8 @@ class EdgeControlMux(AbstractEdge):
 
     def set_motor_state(self, direction, speed):
         if (not self.override):
-            self.edge.set_motor_state(direction, speed)
+            if self.edge_config['motors_enabled'] is True:
+                self.edge.set_motor_state(direction, speed)
 
     def set_motor_state_external(self, direction, speed):
         if (self.override):
@@ -58,6 +60,9 @@ class EdgeControlMux(AbstractEdge):
 
     def get_calibration(self):
         return self.edge.calibration
+
+    def is_healthy(self):
+        return self.edge.is_healthy()
 
     def kill(self):
         self.edge.kill()

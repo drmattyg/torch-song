@@ -58,7 +58,8 @@ class TorchSong:
         logging.info('Loaded calibration')
         # Hook up command mux
         for e in self.edges.items():
-            self.edges[e[0]] = EdgeControlMux(e[1])
+            # FIXME
+            self.edges[e[0]] = EdgeControlMux(e[1], self.config['edges'][e[0] - 1])
 
     def turn_off(self):
         for e in self.edges.values():
@@ -72,11 +73,11 @@ class TorchSong:
 
     def home(self):
         logging.info('Homing')
-        run_parallel('home', self.edges.values())
+        run_parallel('home', self.edges.values(), 'kill')
 
     def calibrate(self):
         logging.info('Starting calibration')
-        run_parallel('calibrate', self.edges.values())
+        run_parallel('calibrate', self.edges.values(), 'kill')
         self.save_calibration()
         logging.info('Finished and saved calibration')
 
