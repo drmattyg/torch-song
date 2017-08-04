@@ -75,6 +75,22 @@ class TorchSong:
         logging.info('Homing')
         run_parallel('home', self.edges.values(), 'kill')
 
+    def go_middle(self):
+        logging.info('Going to the middle')
+        run_parallel('go_middle', self.edges.values(), 'kill')
+
+    def puff(self, t = 3):
+        logging.info('Puffing')
+        for e in self.edges.values():
+            e.set_igniter_state(1)
+        time.sleep(4)
+        for e in self.edges.values():
+            e.set_valve_state(1)
+        time.sleep(t)
+        for e in self.edges.values():
+            e.set_igniter_state(0)
+            e.set_valve_state(0)
+
     def calibrate(self):
         logging.info('Starting calibration')
         run_parallel('calibrate', self.edges.values(), 'kill')

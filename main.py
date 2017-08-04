@@ -14,7 +14,7 @@ from threading import Thread
 from torch_song.torch_song import TorchSong
 from torch_song.songbook.songbook_manager import SongbookManager
 from torch_song.server.control_udp_server import TorchControlServer
-from torch_song.isocahedron import IsoInterface
+from torch_song.icosahedron.icosahedron import Icosahedron
 from torch_song.edge.edge_handlers import *
 
 songbooks = [

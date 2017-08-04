@@ -107,9 +107,6 @@ class SimEdge(AbstractEdge):
             self.position += self.motor_direction * \
                              (SimEdge.SLEEP_TIME / self.calibration_time) * self.motor_speed / 100.0
 
-            if self.motor_speed is 90:
-                if random.random() > .999:
-                    raise Exception('random bullshit')
             if self.position <= 0:
                 self.position = 0
                 self.limit_switches[0] = True
