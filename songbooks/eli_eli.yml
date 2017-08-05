@@ -1,6 +1,7 @@
 version: 1.0
 title: Eli Eli
 author: Vanguard
+mp3: 'music/eli_eli.mp3'
 songbook:
   - start_at: 0
     time: 6000

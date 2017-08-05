@@ -20,7 +20,7 @@ from torch_song.edge.edge_handlers import *
 songbooks = [
     #'songbooks/three_edge_chaser.yml',
     #'songbooks/points_of_light.yml'
-    'songbooks/nine_edge_test.yml'
+    'songbooks/eli_eli.yml'
 ]
 
 def main():

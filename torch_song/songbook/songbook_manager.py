@@ -3,14 +3,17 @@ from threading import Event
 import logging
 import itertools
 import random
+
 from torch_song.songbook import Songbook
 from torch_song.songbook import SongbookRunner
+from torch_song.sound.sound import Sound
 from os import path
 
 class SongbookManager:
     def __init__(self, songbooks, torchsong, mode='manual'):
         self.songbooks = songbooks
         self.torchsong = torchsong
+        self.sound_module = Sound()
 
         self.set_mode(mode)
 
@@ -89,7 +92,7 @@ class SongbookManager:
                 self.next_song_request.clear()
                 self.last_up = self.next_up
                 sb = Songbook(self.next_up, self.torchsong)
-                self.runner = SongbookRunner(sb, self.torchsong)
+                self.runner = SongbookRunner(sb, self.torchsong, self.sound_module)
                 self.next_up = next(self.songbook_iterator)
                 self.runner.run()
                 self.torchsong.turn_off()
@@ -98,7 +101,7 @@ class SongbookManager:
                 self.next_song_request.clear()
                 self.last_up = self.next_up
                 sb = Songbook(self.next_up, self.torchsong)
-                self.runner = SongbookRunner(sb, self.torchsong)
+                self.runner = SongbookRunner(sb, self.torchsong, self.sound_module)
                 self.next_up = random.choice(self.songbooks)
                 self.runner.run()
                 self.torchsong.turn_off()
@@ -120,7 +123,7 @@ class SongbookManager:
                     self.torchsong.home()
                     self.next_up = random.choice(self.songbooks)
                     sb = Songbook(self.next_up, self.torchsong)
-                    self.runner = SongbookRunner(sb, self.torchsong)
+                    self.runner = SongbookRunner(sb, self.torchsong, self.sound_module)
                     self.runner.run()
                     self.torchsong.turn_off()
 

@@ -41,7 +41,7 @@ export class SongbookPanel extends React.PureComponent {
   formatSongTime(time) {
     let minutes = Math.floor(time / 1000 / 60).toFixed(0);
     if (minutes < 10) minutes = '0' + minutes;
-    let seconds = Math.floor(time / 1000).toFixed(0);
+    let seconds = Math.floor(time / 1000).toFixed(0) % 60;
     if (seconds < 10) seconds = '0' + seconds;
     return minutes + ':' + seconds
   }
