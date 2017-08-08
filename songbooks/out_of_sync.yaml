@@ -1,0 +1,483 @@
+version: 1.0
+author: Vanguard
+songbook:
+  - start_at: 0
+    time: 6000
+    edges:
+     - edge: 6
+       flame: 1
+       dir: 1
+  - start_at: 6000
+    time: 6000
+    edges:
+     - edge: 0
+       flame: 1
+       dir: 1
+     - edge: 6
+       flame: 0
+       dir: 0
+  - start_at: 12000
+    time: 6000
+    edges:
+     - edge: 0
+       flame: 1
+       dir: -1
+  - start_at: 18000
+    time: 6000
+    edges:
+     - edge: 6
+       flame: 1
+       dir: -1
+     - edge: 0
+       flame: 0
+       dir: 0
+  - start_at: 24000
+    time: 6000
+    edges:
+     - edge: 6
+       flame: 1
+       dir: 1
+  - start_at: 30000
+    time: 6000
+    edges:
+     - edge: 0
+       flame: 1
+       dir: 1
+     - edge: 6
+       flame: 0
+       dir: 0
+  - start_at: 36000
+    time: 6000
+    edges:
+     - edge: 0
+       flame: 1
+       dir: -1
+  - start_at: 42000
+    time: 6000
+    edges:
+     - edge: 6
+       flame: 1
+       dir: -1
+     - edge: 0
+       flame: 0
+       dir: 0
+  - start_at: 48000
+    time: 6000
+    edges:
+     - edge: 6
+       flame: 1
+       dir: 1
+  - start_at: 54000
+    time: 6000
+    edges:
+     - edge: 0
+       flame: 1
+       dir: 1
+     - edge: 6
+       flame: 0
+       dir: 0
+  - start_at: 60000
+    time: 6000
+    edges:
+     - edge: 0
+       flame: 1
+       dir: -1
+  - start_at: 66000
+    time: 6000
+    edges:
+     - edge: 6
+       flame: 1
+       dir: -1
+     - edge: 0
+       flame: 0
+       dir: 0
+  - start_at: 72000
+    time: 6000
+    edges:
+     - edge: 6
+       flame: 1
+       dir: 1
+  - start_at: 78000
+    time: 6000
+    edges:
+     - edge: 0
+       flame: 1
+       dir: 1
+     - edge: 6
+       flame: 0
+       dir: 0
+  - start_at: 84000
+    time: 6000
+    edges:
+     - edge: 0
+       flame: 1
+       dir: -1
+  - start_at: 90000
+    time: 6000
+    edges:
+     - edge: 6
+       flame: 1
+       dir: -1
+     - edge: 0
+       flame: 0
+       dir: 0
+  - start_at: 96000
+    time: 6000
+    edges:
+     - edge: 6
+       flame: 1
+       dir: 1
+  - start_at: 102000
+    time: 6000
+    edges:
+     - edge: 0
+       flame: 1
+       dir: 1
+     - edge: 6
+       flame: 0
+       dir: 0
+  - start_at: 108000
+    time: 6000
+    edges:
+     - edge: 0
+       flame: 1
+       dir: -1
+  - start_at: 114000
+    time: 6000
+    edges:
+     - edge: 6
+       flame: 1
+       dir: -1
+     - edge: 0
+       flame: 0
+       dir: 0
+  - start_at: 1000
+    time: 8000
+    edges:
+     - edge: 8
+       flame: 1
+       dir: 1
+  - start_at: 9000
+    time: 8000
+    edges:
+     - edge: 8
+       flame: 0
+       dir: 0
+     - edge: 2
+       flame: 1
+       dir: 1
+  - start_at: 17000
+    time: 8000
+    edges:
+     - edge: 2
+       flame: 1
+       dir: -1
+  - start_at: 25000
+    time: 8000
+    edges:
+     - edge: 2
+       flame: 0
+       dir: 0
+     - edge: 8
+       flame: 1
+       dir: -1
+  - start_at: 33000
+    time: 8000
+    edges:
+     - edge: 8
+       flame: 1
+       dir: 1
+  - start_at: 41000
+    time: 8000
+    edges:
+     - edge: 8
+       flame: 0
+       dir: 0
+     - edge: 2
+       flame: 1
+       dir: 1
+  - start_at: 49000
+    time: 8000
+    edges:
+     - edge: 2
+       flame: 1
+       dir: -1
+  - start_at: 57000
+    time: 8000
+    edges:
+     - edge: 2
+       flame: 0
+       dir: 0
+     - edge: 8
+       flame: 1
+       dir: -1
+  - start_at: 65000
+    time: 8000
+    edges:
+     - edge: 8
+       flame: 1
+       dir: 1
+  - start_at: 73000
+    time: 8000
+    edges:
+     - edge: 8
+       flame: 0
+       dir: 0
+     - edge: 2
+       flame: 1
+       dir: 1
+  - start_at: 81000
+    time: 8000
+    edges:
+     - edge: 2
+       flame: 1
+       dir: -1
+  - start_at: 89000
+    time: 8000
+    edges:
+     - edge: 2
+       flame: 0
+       dir: 0
+     - edge: 8
+       flame: 1
+       dir: -1
+  - start_at: 97000
+    time: 8000
+    edges:
+     - edge: 8
+       flame: 1
+       dir: 1
+  - start_at: 105000
+    time: 8000
+    edges:
+     - edge: 8
+       flame: 0
+       dir: 0
+     - edge: 2
+       flame: 1
+       dir: 1
+  - start_at: 113000
+    time: 8000
+    edges:
+     - edge: 2
+       flame: 1
+       dir: -1
+  - start_at: 121000
+    time: 8000
+    edges:
+     - edge: 2
+       flame: 0
+       dir: 0
+     - edge: 8
+       flame: 1
+       dir: -1
+  - start_at: 2000
+    time: 10000
+    edges:
+     - edge: 7
+       flame: 1
+       dir: 1
+  - start_at: 12000
+    time: 10000
+    edges:
+     - edge: 7
+       flame: 0
+       dir: 0
+     - edge: 1
+       flame: 1
+       dir: 1
+  - start_at: 22000
+    time: 10000
+    edges:
+     - edge: 1
+       flame: 1
+       dir: -1
+  - start_at: 32000
+    time: 10000
+    edges:
+     - edge: 1
+       flame: 0
+       dir: 0
+     - edge: 7
+       flame: 1
+       dir: -1
+  - start_at: 42000
+    time: 10000
+    edges:
+     - edge: 7
+       flame: 1
+       dir: 1
+  - start_at: 52000
+    time: 10000
+    edges:
+     - edge: 7
+       flame: 0
+       dir: 0
+     - edge: 1
+       flame: 1
+       dir: 1
+  - start_at: 62000
+    time: 10000
+    edges:
+     - edge: 1
+       flame: 1
+       dir: -1
+  - start_at: 72000
+    time: 10000
+    edges:
+     - edge: 1
+       flame: 0
+       dir: 0
+     - edge: 7
+       flame: 1
+       dir: -1
+  - start_at: 82000
+    time: 10000
+    edges:
+     - edge: 7
+       flame: 1
+       dir: 1
+  - start_at: 92000
+    time: 10000
+    edges:
+     - edge: 7
+       flame: 0
+       dir: 0
+     - edge: 1
+       flame: 1
+       dir: 1
+  - start_at: 102000
+    time: 10000
+    edges:
+     - edge: 1
+       flame: 1
+       dir: -1
+  - start_at: 112000
+    time: 10000
+    edges:
+     - edge: 1
+       flame: 0
+       dir: 0
+     - edge: 7
+       flame: 1
+       dir: -1
+  - start_at: 0
+    time: 7500
+    edges:
+     - edge: 3
+       flame: 1
+       dir: 1
+  - start_at: 7500
+    time: 7500
+    edges:
+     - edge: 3
+       flame: 0
+       dir: 0
+     - edge: 4
+       flame: 1
+       dir: 1
+  - start_at: 15000
+    time: 7500
+    edges:
+     - edge: 4
+       flame: 0
+       dir: 0
+     - edge: 5
+       flame: 1
+       dir: 1
+  - start_at: 22500
+    time: 7500
+    edges:
+     - edge: 5
+       flame: 1
+       dir: -1
+  - start_at: 30000
+    time: 7500
+    edges:
+     - edge: 5
+       flame: 0
+       dir: 0
+     - edge: 4
+       flame: 1
+       dir: -1
+  - start_at: 37500
+    time: 7500
+    edges:
+     - edge: 4
+       flame: 0
+       dir: 0
+     - edge: 3
+       flame: 1
+       dir: -1
+  - start_at: 45000
+    time: 7500
+    edges:
+     - edge: 3
+       flame: 1
+       dir: 1
+  - start_at: 52500
+    time: 7500
+    edges:
+     - edge: 3
+       flame: 0
+       dir: 0
+     - edge: 4
+       flame: 1
+       dir: 1
+  - start_at: 60000
+    time: 7500
+    edges:
+     - edge: 4
+       flame: 0
+       dir: 0
+     - edge: 5
+       flame: 1
+       dir: 1
+  - start_at: 67500
+    time: 7500
+    edges:
+     - edge: 5
+       flame: 1
+       dir: -1
+  - start_at: 75000
+    time: 7500
+    edges:
+     - edge: 5
+       flame: 0
+       dir: 0
+     - edge: 4
+       flame: 1
+       dir: -1
+  - start_at: 82500
+    time: 7500
+    edges:
+     - edge: 4
+       flame: 0
+       dir: 0
+     - edge: 3
+       flame: 1
+       dir: -1
+  - start_at: 90000
+    time: 7500
+    edges:
+     - edge: 3
+       flame: 1
+       dir: 1
+  - start_at: 97500
+    time: 7500
+    edges:
+     - edge: 3
+       flame: 0
+       dir: 0
+     - edge: 4
+       flame: 1
+       dir: 1
+  - start_at: 105000
+    time: 7500
+    edges:
+     - edge: 4
+       flame: 0
+       dir: 0
+     - edge: 5
+       flame: 1
+       dir: 1
