@@ -5,6 +5,7 @@ import 'whatwg-fetch';
 
 import RaisedButton from 'material-ui/RaisedButton';
 import Paper from 'material-ui/Paper';
+import {ColorWheel} from './Common.jsx'
 
 export class YAMLPanel extends React.PureComponent {
   constructor(props) {
@@ -28,12 +29,12 @@ export class YAMLPanel extends React.PureComponent {
       },
       body: JSON.stringify(this.state.json)
     }).catch(() => {
-      this.props.notify('Error saving YAML file')
+      this.props.notify('Error saving configuration')
     }).then((res) => {
       if (res.status == 200) {
-        this.props.notify('Saved YAML file')
+        this.props.notify('Saved configuration')
       } else {
-        this.props.notify('Error saving YAML file')
+        this.props.notify('Error saving configuration')
       }
     });
   }
@@ -42,10 +43,10 @@ export class YAMLPanel extends React.PureComponent {
     fetch('/default-mod-yaml').then((resp) => {
       return resp.json()
     }).catch(() => {
-      this.props.notify('Error loading YAML file: default-mod.yml')
+      this.props.notify('Error loading configuration: default-mod.yml')
     }).then((json) => {
       this.setState({json: json})
-      this.props.notify('Loaded YAML file')
+      this.props.notify('Loaded configuration')
     });
   }
 
@@ -53,14 +54,72 @@ export class YAMLPanel extends React.PureComponent {
     fetch('/default-yaml').then((resp) => {
       return resp.json()
     }).then((json) => {
+      this.props.notify('Loaded default configuration: default.yml')
       this.setState({json: json}, function() {
         this.post()
       })
     });
   }
 
-  notify() {
+  saveAndRestart() {
+    this.post()
+    this.props.restart()
+  }
 
+  enableEdge(id, e) {
+    let json = this.state.json
+    json['edges'].forEach((item, i) => {
+      if (item.id == id) {
+        let enabledState = json['edges'][i].enabled
+        json['edges'][i].enabled = !enabledState
+        this.setState({json: json})
+        this.forceUpdate()
+        this.saveAndRestart()
+      }
+    });
+  }
+
+  enableEdgeMotors(id, e) {
+    let json = this.state.json
+    json['edges'].forEach((item, i) => {
+      if (item.id == id) {
+        let enabledState = json['edges'][i].motors_enabled
+        json['edges'][i].motors_enabled = !enabledState
+        this.setState({json: json})
+        this.forceUpdate()
+        this.saveAndRestart()
+      }
+    });
+  }
+
+  renderEdgeDisables(json, style) {
+    if (json['edges']) {
+      return json.edges.map((item) => {
+        let label = item.enabled ? 'Disable ' : 'Enable '
+        label += item.id
+        return (
+          <RaisedButton labelColor={ColorWheel[item.id]} key={item.id} label={label}
+              onTouchTap={this.enableEdge.bind(this, item.id)} style={style}/>
+        )
+      })
+    } else {
+      return
+    }
+  }
+
+  renderEdgeDisableMotors(json, style) {
+    if (json['edges']) {
+      return json.edges.map((item) => {
+        let label = item.motors_enabled ? 'Disable Motor' : 'Enable Motor '
+        label += item.id
+        return (
+          <RaisedButton labelColor={ColorWheel[item.id]} key={item.id} label={label}
+              onTouchTap={this.enableEdgeMotors.bind(this, item.id)} style={style}/>
+        )
+      })
+    } else {
+      return
+    }
   }
 
   render() {
@@ -71,17 +130,26 @@ export class YAMLPanel extends React.PureComponent {
       <div className='yaml-page'>
         <Paper style={{padding:'20px'}}>
           <div className='yaml-button-row'>
-            <RaisedButton label="Default" style={style} onTouchTap={this.restoreDefault}/>
-            <RaisedButton label="Reload" style={style} onTouchTap={this.fetch}/>
-            <RaisedButton label="Save" style={style} onTouchTap={this.post}/>
+            { this.renderEdgeDisables(this.state.json, style) }
+          </div>
+          <div className='yaml-button-row'>
+            { this.renderEdgeDisableMotors(this.state.json, style) }
+          </div>
+          <div className='yaml-button-row'>
+            <RaisedButton label="Default Config" style={style} onTouchTap={this.restoreDefault}/>
           </div>
           <hr />
-          <ObjectTreeEditor key={-1} tree={this.state.json} level={0} notify={this.notify.bind(this)}/>
+          <ObjectTreeEditor key={-1} tree={this.state.json} level={0}
+              cb={this.saveAndRestart.bind(this)}/>
           <hr />
           <div className='yaml-button-row'>
-            <RaisedButton label="Default" style={style} onTouchTap={this.restoreDefault}/>
-            <RaisedButton label="Reload" style={style} onTouchTap={this.fetch}/>
-            <RaisedButton label="Save" style={style} onTouchTap={this.post}/>
+            { this.renderEdgeDisables(this.state.json, style) }
+          </div>
+          <div className='yaml-button-row'>
+            { this.renderEdgeDisableMotors(this.state.json, style) }
+          </div>
+          <div className='yaml-button-row'>
+            <RaisedButton label="Default Config" style={style} onTouchTap={this.restoreDefault}/>
           </div>
         </Paper>
       </div>
@@ -103,15 +171,37 @@ class KeyStringEditor extends React.PureComponent {
     super(props)
     this.state = {val: this.props.parent[this.props.k]};
     this.handleChange = this.handleChange.bind(this);
+    this.handleBlur = this.handleBlur.bind(this);
+    this.handleKeyPress = this.handleKeyPress.bind(this);
+    this.handleFocus = this.handleFocus.bind(this);
   }
   handleChange(event) {
     if (isNaN(event.target.value)) {
-      this.props.parent[this.props.k] = event.target.value
+      const bool =
+          event.target.value == 'true' ? true : (event.target.value == 'false' ? false : null)
+      if (bool !== null) {
+        this.props.parent[this.props.k] = bool
+      } else {
+        this.props.parent[this.props.k] = event.target.value
+      }
     } else {
       this.props.parent[this.props.k] = Number(event.target.value)
     }
     this.setState({val: event.target.value})
-    this.props.notify()
+  }
+  handleBlur(e) {
+    if (e.target.value != this.oldInput) {
+      this.props.cb()
+    }
+  }
+  handleFocus(e) {
+    this.oldInput = e.target.value
+  }
+  handleKeyPress(e) {
+    var code = (e.keyCode ? e.keyCode : e.which)
+    if(code == 13) {
+      this.props.cb()
+    }
   }
   render () {
     return (
@@ -119,7 +209,9 @@ class KeyStringEditor extends React.PureComponent {
         <label className='yaml-form-label'>
           <span className='yaml-form-dots'>{pad(this.props.level)}</span>{this.props.k}:
         </label>
-        <input className='yaml-form-input' type='text' value={this.state.val} onChange={this.handleChange} />
+        <input className='yaml-form-input' type='text' value={this.state.val}
+          onChange={this.handleChange} onBlur={this.handleBlur} onKeyPress={this.handleKeyPress}
+          onFocus={this.handleFocus} />
       </div>
     )
   }
@@ -143,11 +235,12 @@ export class ObjectTreeEditor extends React.PureComponent {
             <label className='yaml-tree-label'>
               <span className='yaml-form-dots'>{pad(this.props.level)}</span>{key}
             </label>
-            <ObjectTreeEditor tree={objs[key]} level={this.nextLevel} notify={this.props.notify}/>
+            <ObjectTreeEditor tree={objs[key]} level={this.nextLevel} cb={this.props.cb}/>
           </div>
         )
       } else {
-        return <KeyStringEditor key={uniqueId} level={this.props.level} k={key} parent={objs} notify={this.props.notify}/>
+        return <KeyStringEditor key={uniqueId} level={this.props.level} k={key}
+            parent={objs} cb={this.props.cb}/>
       }
     }, this);
   }

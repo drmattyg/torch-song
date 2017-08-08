@@ -24,6 +24,9 @@ class TorchSong:
 
         logging.info('Welcome to Torchsong')
 
+        self.edges = dict()
+        edge_count = 0
+
         # Build edges
         if (not sim and not force_sim):
             self.io = dict()
@@ -34,15 +37,29 @@ class TorchSong:
                 mcps[m['id']] = mcp
             self.io['mcp23017'] = mcps
 
-            self.edges = {i: RealEdge(i, self.io, self.config, verbose) for i in range(1, num_edges + 1)}
+            for e in self.config['edges']:
+                if e['enabled'] is True:
+                    id = e['id']
+                    self.edges[id] = RealEdge(id, self.io, self.config, verbose)
+                edge_count += 1
+                if edge_count >= num_edges:
+                    break
+
         else:
-            self.edges = {i: SimEdge(i, 1000, verbose) for i in range(1, num_edges + 1)}
+            for e in self.config['edges']:
+                if e['enabled'] is True:
+                    id = e['id']
+                    self.edges[id] = SimEdge(id, 1000, verbose)
+                edge_count += 1
+                if edge_count >= num_edges:
+                    break
 
         self.load_calibration()
         logging.info('Loaded calibration')
         # Hook up command mux
         for e in self.edges.items():
-            self.edges[e[0]] = EdgeControlMux(e[1])
+            # FIXME
+            self.edges[e[0]] = EdgeControlMux(e[1], self.config['edges'][e[0] - 1])
 
     def turn_off(self):
         for e in self.edges.values():
@@ -56,11 +73,27 @@ class TorchSong:
 
     def home(self):
         logging.info('Homing')
-        run_parallel('home', self.edges.values())
+        run_parallel('home', self.edges.values(), 'kill')
+
+    def go_middle(self):
+        logging.info('Going to the middle')
+        run_parallel('go_middle', self.edges.values(), 'kill')
+
+    def puff(self, t = 3):
+        logging.info('Puffing')
+        for e in self.edges.values():
+            e.set_igniter_state(1)
+        time.sleep(4)
+        for e in self.edges.values():
+            e.set_valve_state(1)
+        time.sleep(t)
+        for e in self.edges.values():
+            e.set_igniter_state(0)
+            e.set_valve_state(0)
 
     def calibrate(self):
         logging.info('Starting calibration')
-        run_parallel('calibrate', self.edges.values())
+        run_parallel('calibrate', self.edges.values(), 'kill')
         self.save_calibration()
         logging.info('Finished and saved calibration')
 

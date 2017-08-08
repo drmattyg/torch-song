@@ -10,8 +10,10 @@ from torch_song.hardware.igniter import Igniter
 from torch_song.hardware.valve import Valve
 from torch_song.hardware.limit_switch import LimitSwitch
 
-
 class RealEdge(AbstractEdge):
+
+    SLOW_DOWN_SPEED = 80
+
     def __init__(self, i, io, config, verbose=False, update_rate_hz=20, calibration=None):
         super().__init__(i)
 
@@ -48,7 +50,6 @@ class RealEdge(AbstractEdge):
             # insert a default calibration
             self.set_calibration(EdgeCalibration(self))
 
-        self.stall_time = 20
         self.set_stall_time()
 
         # let limit switches settle
@@ -133,13 +134,35 @@ class RealEdge(AbstractEdge):
                 if (self.verbose):
                     logging.info('Rev limit switch hit for id:%d' % (self.id), extra={'edge_id': self.id})
             elif (self.speed_request >= 0):
+
+
                     self.motor_driver.set_speed(self.speed_request)
+
                     if (self.speed_request is not 0):
                         last_cal_time = self.calibration.get_cal_time(self.speed_request, self.dir_request)
                     else:
                         last_cal_time = 0
                     last_cal_time = last_cal_time * self.dir_request
                     self.speed_request = -1
+
+            # Slow down at stops
+            speed = self.motor_driver.get_speed()
+            if (speed > RealEdge.SLOW_DOWN_SPEED and
+                    self.dir_request == 1 and
+                    self._ignore_limit is False and
+                    self.position > 0.90):
+                if self.verbose:
+                    logging.info('slowing down :%d' % (self.id), extra={'edge_id': self.id})
+                self.motor_driver.set_speed(RealEdge.SLOW_DOWN_SPEED)
+
+            if (speed > RealEdge.SLOW_DOWN_SPEED and
+                    self.dir_request == -1 and
+                    self._ignore_limit is False and
+                    self.position < 0.10):
+                if self.verbose:
+                    logging.info('slowing down :%d' % (self.id), extra={'edge_id': self.id})
+                self.motor_driver.set_speed(RealEdge.SLOW_DOWN_SPEED)
+
 
             self.lock.release()
 
@@ -210,6 +233,9 @@ class RealEdge(AbstractEdge):
         self.igniter.set_state(0)
         self.pleaseExit = True
         self.runner.join(5000)
+
+    def is_healthy(self):
+        return self.runner.is_alive()
 
     def __del__(self):
         self.kill()

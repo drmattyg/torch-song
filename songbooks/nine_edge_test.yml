@@ -1,7 +1,7 @@
 version: 1.0
 songbook:
   - start_at: 0
-    time: 6000
+    time: 5500
     edges:
       - edge: 1
         flame: 0
@@ -30,8 +30,8 @@ songbook:
       - edge: 9
         flame: 0
         dir: 1
-  - start_at: 6000
-    time: 6000
+  - start_at: 5500
+    time: 5500
     edges:
       - edge: 1
         flame: 1

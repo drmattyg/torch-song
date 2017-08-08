@@ -2,6 +2,7 @@ import threading
 import time
 import curses
 import logging
+import random
 from enum import Enum
 
 import sys
@@ -73,6 +74,9 @@ class SimEdge(AbstractEdge):
 
     def get_igniter_state(self):
         return self.igniter
+
+    def is_healthy(self):
+        return self._runner_thread.is_alve()
 
     # a software simulated edge
     SLEEP_TIME = 1.0
@@ -164,6 +168,7 @@ class SimEdge(AbstractEdge):
         self.kill()
 
     def kill(self):
+        logging.info('Stopping edge %d' % (self.id), extra={'edge_id': self.id})
         self._run_thread.clear()
         self._runner_thread.join()
 
