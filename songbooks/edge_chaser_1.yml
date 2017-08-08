@@ -16,6 +16,14 @@ songbook:
      - edge: 4
        flame: 1
        dir: 1
+  - start_at: 6500
+    time: 500
+    edges:
+     - edge: 4
+       flame: 1
+       dir: 0
+       
+
   - start_at: 14000
     time: 7000
     edges:
@@ -25,6 +33,18 @@ songbook:
      - edge: 5
        flame: 1
        dir: 1
+  - start_at: 13500
+    time: 500
+    edges:
+     - edge: 5
+       flame: 1
+       dir: 0
+  - start_at: 20500
+    time: 500
+    edges:
+      - edge: 0
+        flame: 1
+        dir: 0
   - start_at: 21000
     time: 7000
     edges:
@@ -37,6 +57,12 @@ songbook:
      - edge: 2
        flame: 0
        dir: 1
+  - start_at: 27500
+    time: 500
+    edges:
+      - edge: 2
+        flame: 1
+        dir: 0       
   - start_at: 28000
     time: 7000
     edges:
@@ -49,6 +75,12 @@ songbook:
      - edge: 8
        flame: 0
        dir: 1
+  - start_at: 34500
+    time: 500
+    edges:
+      - edge: 8
+        flame: 1
+        dir: 0      
   - start_at: 35000
     time: 7000
     edges:
@@ -58,6 +90,12 @@ songbook:
      - edge: 2
        flame: 0
        dir: 0
+  - start_at: 41500
+    time: 500
+    edges:
+      - edge: 6
+        flame: 1
+        dir: 0       
   - start_at: 42000
     time: 7000
     edges:
@@ -67,6 +105,12 @@ songbook:
      - edge: 8
        flame: 0
        dir: 0
+  - start_at: 48500
+    time: 500
+    edges:
+      - edge: 3
+        flame: 1
+        dir: 0       
   - start_at: 49000
     time: 7000
     edges:
@@ -76,6 +120,12 @@ songbook:
      - edge: 3
        flame: 1
        dir: 1
+  - start_at: 55500
+    time: 500
+    edges:
+      - edge: 4
+        flame: 1
+        dir: 0       
   - start_at: 56000
     time: 7000
     edges:
@@ -85,6 +135,12 @@ songbook:
      - edge: 4
        flame: 1
        dir: 1
+  - start_at: 62500
+    time: 500
+    edges:
+      - edge: 2
+        flame: 1
+        dir: 0       
   - start_at: 63000
     time: 7000
     edges:
