@@ -1,0 +1,148 @@
+version: 1.0
+author: matt@hydrocarboncollective.org
+songbook:
+  # pre-position
+  - start_at: 0
+    time: 5000
+    edges:
+     - edge: 0
+       flame: 0
+       dir: 1
+     - edge: 1
+       flame: 0
+       dir: 1
+     - edge: 2
+       flame: 0
+       dir: 1
+     - edge: 6
+       flame: 0
+       dir: 1
+     - edge: 7
+       flame: 0
+       dir: 1
+     - edge: 8
+       flame: 0
+       dir: 1
+     - edge: 3
+       flame: 0
+       dir: 1
+       distance: 0.5
+     - edge: 4
+       flame: 0
+       dir: 1
+       distance: 0.5
+     - edge: 5
+       flame: 0
+       dir: 1
+       distance: 0.5
+
+  - start_at: 5000
+    time: 8000
+    edges:
+      - edge: 0
+        dir: -1
+        flame: 1
+  - start_at: 12500
+    time: 500
+    edges:
+      - edge: 6
+        dir: 0
+        flame: 1
+  - start_at: 13000
+    time: 8000
+    edges:
+      - edge: 6
+        dir: -1
+        flame: 1
+      - edge: 0
+        flame: 0
+        dir: 1
+  - start_at: 21000
+    time: 5000
+    edges:
+      - edge: 6
+        flame: 0
+        dir: 1
+
+  - start_at: 8000
+    time: 8000
+    edges:
+      - edge: 1
+        dir: -1
+        flame: 1
+  - start_at: 15500
+    time: 500
+    edges:
+      - edge: 7
+        dir: 0
+        flame: 1
+  - start_at: 16000
+    time: 8000
+    edges:
+      - edge: 7
+        dir: -1
+        flame: 1
+      - edge: 1
+        flame: 0
+        dir: 1
+  - start_at: 24000
+    time: 5000
+    edges:
+      - edge: 7
+        flame: 0
+        dir: 1        
+
+  - start_at: 21000
+    time: 8000
+    edges:
+      - edge: 2
+        dir: -1
+        flame: 1
+  - start_at: 28500
+    time: 500
+    edges:
+      - edge: 8
+        dir: 0
+        flame: 1
+  - start_at: 29000
+    time: 8000
+    edges:
+      - edge: 8
+        dir: -1
+        flame: 1
+      - edge: 2
+        flame: 0
+        dir: 1
+  - start_at: 37000
+    time: 5000
+    edges:
+      - edge: 8
+        flame: 0
+        dir: 1          
+  - start_at: 26000
+    time: 8000
+    edges:
+      - edge: 0
+        dir: -1
+        flame: 1
+  - start_at: 33500
+    time: 500
+    edges:
+      - edge: 6
+        dir: 0
+        flame: 1
+  - start_at: 34000
+    time: 8000
+    edges:
+      - edge: 6
+        dir: -1
+        flame: 1
+      - edge: 0
+        flame: 0
+        dir: 1
+  - start_at: 42000
+    time: 5000
+    edges:
+      - edge: 6
+        flame: 0
+        dir: 1              
