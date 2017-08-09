@@ -18,9 +18,9 @@ from torch_song.icosahedron.icosahedron import Icosahedron
 from torch_song.edge.edge_handlers import *
 
 songbooks = [
-    #'songbooks/three_edge_chaser.yml',
-    #'songbooks/points_of_light.yml'
     'songbooks/eli_eli.yml'
+    'songbooks/rainy.yml'
+    'songbooks/out_of_sync.yml'
 ]
 
 def main():

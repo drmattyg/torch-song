@@ -36,9 +36,6 @@ class TorchRequestHandler(BaseRequestHandler):
         if 'next' in command:
             logging.info('Next song')
             self.server.songbook_manager.request_next()
-        if 'prev' in command:
-            logging.info('Prev song')
-            self.server.songbook_manager.request_prev()
         if 'calibrate' in command:
             logging.info('Calibrating')
             self.server.songbook_manager.request_stop(True)

@@ -1,3 +1,5 @@
+import subprocess
+
 try:
     import pygame
 except Execption as e:
@@ -9,6 +11,12 @@ class Sound:
         try:
             pygame.init()
             pygame.mixer.init()
+
+            try:
+                subprocess.call('amixer set PCM -- 100%')
+            except Exception as e:
+                pass
+
         except Exception as e:
             logging.error('failed to initialize sound module:')
 
