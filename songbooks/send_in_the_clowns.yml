@@ -59,12 +59,6 @@ songbook:
   #       flame: 0
   #       dir: -1
   #   comment: '(00:00:20.5) Are we a pair? [#] 1 down (6 down pre-position)'
-  - start_at: 24314
-    time: 4000
-    edges:
-      - edge: 1
-        flame: 0
-        dir: -1
   - start_at: 23399
     time: 1312
     edges:
@@ -149,7 +143,7 @@ songbook:
       - edge: 0
         flame: 0
         dir: 0
-    # left off here
+ 
   # - start_at: 47217
   #   time: 2241
   #   edges:
@@ -157,31 +151,61 @@ songbook:
   #       flame: 0
   #       dir: 1
   #   comment: '(00:00:47.2) Don''t you [approve?] # 0 down'
-  - start_at: 49458
-    time: 1486
-    edges:
-      - edge: 0
-        flame: 0
-        dir: 1
-    comment: '(00:00:49.4) Don''t you approve? [#] 0 down'
+  # - start_at: 49458
+  #   time: 1486
+  #   edges:
+  #     - edge: 0
+  #       flame: 0
+  #       dir: 1
+  #   comment: '(00:00:49.4) Don''t you approve? [#] 0 down'
   - start_at: 50944
-    time: 12452
+    time: 4500
     edges:
-      - edge: 0
-        flame: 0
+      - edge: 3
+        flame: 1
         dir: 1
-    comment: >-
-      (00:00:50.9) [One] who keeps tearing around and one who can't move #
-      rotate around the center
-  - start_at: 63396
-    time: 10559
+    comment: (00:00:50.9) [One] who keeps tearing around and one who can't move # rotate around the center
+  - start_at: 55444
+    time: 4000
     edges:
-      - edge: 0
+      - edge: 3
         flame: 0
+        dir: -1
+  - start_at: 54944
+    time: 4500
+    edges:
+      - edge: 4
+        flame: 1
         dir: 1
-    comment: >-
-      (00:01:03.3) [But] where are the clowns? Send in the clowns # everything
-      off 
+  - start_at: 59444
+    time: 4000
+    edges:
+      - edge: 4
+        flame: 0
+        dir: -1
+  - start_at: 58944
+    time: 4500
+    edges:
+      - edge: 5
+        flame: 1
+        dir: 1
+  - start_at: 63444
+    time: 4000
+    edges:
+      - edge: 5
+        flame: 0
+        dir: -1
+
+  # - start_at: 63396
+  #   time: 10559
+  #   edges:
+  #     - edge: 0
+  #       flame: 0
+  #       dir: 1
+  #   comment: >-
+  #     (00:01:03.3) [But] where are the clowns? Send in the clowns # everything
+  #     off 
+   # left off here  
   - start_at: 73955
     time: 2850
     edges:
