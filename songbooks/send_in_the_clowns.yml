@@ -1,0 +1,396 @@
+version: 1
+songbook:
+  # - start_at: 0
+  #   time: 12231
+  #   edges:
+  #     - edge: 0
+  #       flame: 0
+  #       dir: 1
+  #   comment: '(00:00:00.000) start here'
+  - start_at: 12231
+    time: 5000
+    edges:
+      - edge: 6
+        flame: 1
+        dir: 1
+      - edge: 1
+        flame: 0
+        dir: -1
+    comment: '(00:00:12.2) [Isn''t] it rich? # 6 up (1 up preposition)'
+  # - start_at: 14570
+  #   time: 5000
+  #   edges:
+  #     - edge: 6
+  #       flame: 1
+  #       dir: 1
+  #     - edge: 1
+  #       flame: 0
+  #       dir: -1
+  #   comment: '(00:00:14.5) Isn''t it rich? [#] 6 up (1 up preposition)'
+  - start_at: 17231
+    time: 100
+    edges:
+      - edge: 6
+        flame: 0
+        dir: 0
+  - start_at: 17798
+    time: 5000
+    edges:
+      - edge: 1
+        flame: 1
+        dir: 1
+      - edge: 6
+        flame: 0
+        dir: -1
+    comment: '(00:00:17.7) [Are] we a pair? # 1 down (6 down pre-position)'
+  - start_at: 22798
+    time: 100
+    edges:
+      - edge: 1
+        flame: 0
+        dir: 0
+  # - start_at: 20514
+  #   time: 3800
+  #   edges:
+  #     - edge: 1
+  #       flame: 1
+  #       dir: 1
+  #     - edge: 6
+  #       flame: 0
+  #       dir: -1
+  #   comment: '(00:00:20.5) Are we a pair? [#] 1 down (6 down pre-position)'
+  - start_at: 24314
+    time: 4000
+    edges:
+      - edge: 1
+        flame: 0
+        dir: -1
+  - start_at: 23399
+    time: 1312
+    edges:
+      - edge: 6
+        flame: 1
+        dir: 0
+    comment: '(00:00:23.3) [Me] here # 6 on'
+  - start_at: 24711
+    time: 958
+    edges:
+      - edge: 7
+        flame: 1
+        dir: 0
+    comment: '(00:00:24.7) [at] last # 7 on'
+  - start_at: 25669
+    time: 1765
+    edges:
+      - edge: 8
+        flame: 1
+        dir: 0
+    comment: '(00:00:25.6) [on] the ground # 8 on'
+  - start_at: 27434
+    time: 4278
+    edges:
+      - edge: 6
+        flame: 1
+        dir: 1
+      - edge: 7
+        flame: 1
+        dir: 1 
+      - edge: 8
+        flame: 1
+        dir: 1          
+    comment: '(00:00:27.4) [and] you in mid-air # 6 7 8 up'
+  - start_at: 31712
+    time: 5000
+    edges:
+      - edge: 6
+        flame: 0
+        dir: -1
+      - edge: 7
+        flame: 0
+        dir: -1 
+      - edge: 8
+        flame: 0
+        dir: -1   
+    comment: '(00:00:31.7) and you in mid-air [#] 6 7 8 up'
+  # - start_at: 34330
+  #   time: 5463
+  #   edges:
+  #     - edge: 0
+  #       flame: 0
+  #       dir: 1
+  #   comment: '(00:00:34.3) [Where] are the clowns? # everything off'
+  - start_at: 39793
+    time: 4000
+    edges:
+      - edge: 8
+        flame: 1
+        dir: 1
+      - edge: 0
+        flame: 0
+        dir: 1
+    comment: '(00:00:39.7) [Isn''t] it bliss? # 8 up'
+  - start_at: 43793
+    time: 100
+    edges:
+      - edge: 8
+        flame: 0
+        dir: 0
+    comment: '(00:00:42.6) Isn''t it bliss? [#] 8 up'
+  - start_at: 45424
+    time: 4000
+    edges:
+      - edge: 0
+        flame: 1
+        dir: -1
+    comment: '(00:00:45.4) [Don''t] you approve? # 0 down'
+  - start_at: 49424
+    time: 100
+    edges:
+      - edge: 0
+        flame: 0
+        dir: 0
+    # left off here
+  # - start_at: 47217
+  #   time: 2241
+  #   edges:
+  #     - edge: 0
+  #       flame: 0
+  #       dir: 1
+  #   comment: '(00:00:47.2) Don''t you [approve?] # 0 down'
+  - start_at: 49458
+    time: 1486
+    edges:
+      - edge: 0
+        flame: 0
+        dir: 1
+    comment: '(00:00:49.4) Don''t you approve? [#] 0 down'
+  - start_at: 50944
+    time: 12452
+    edges:
+      - edge: 0
+        flame: 0
+        dir: 1
+    comment: >-
+      (00:00:50.9) [One] who keeps tearing around and one who can't move #
+      rotate around the center
+  - start_at: 63396
+    time: 10559
+    edges:
+      - edge: 0
+        flame: 0
+        dir: 1
+    comment: >-
+      (00:01:03.3) [But] where are the clowns? Send in the clowns # everything
+      off 
+  - start_at: 73955
+    time: 2850
+    edges:
+      - edge: 0
+        flame: 0
+        dir: 1
+    comment: >-
+      (00:01:13.9) [Just] when I stopped opening doors # everything to middle,
+      rotating around in 2 sec intervals, 0+6+4, 2+8+3, 1+7+5
+  - start_at: 76805
+    time: 3762
+    edges:
+      - edge: 0
+        flame: 0
+        dir: 1
+    comment: >-
+      (00:01:16.8) Just when I stopped [opening] doors # everything to middle,
+      rotating around in 2 sec intervals, 0+6+4, 2+8+3, 1+7+5
+  - start_at: 80567
+    time: 8835
+    edges:
+      - edge: 0
+        flame: 0
+        dir: 1
+    comment: '(00:01:20.5) [Finally] finding the one that I wanted was yours'
+  - start_at: 89402
+    time: 6937
+    edges:
+      - edge: 0
+        flame: 0
+        dir: 1
+    comment: '(00:01:29.4) [Making] my entrance again with my usual flair'
+  - start_at: 96339
+    time: 3170
+    edges:
+      - edge: 0
+        flame: 0
+        dir: 1
+    comment: '(00:01:36.3) [Sure] of my lines # 6 7 8 to bottom'
+  - start_at: 99509
+    time: 2223
+    edges:
+      - edge: 0
+        flame: 0
+        dir: 1
+    comment: '(00:01:39.5) Sure of my lines [#] 6 7 8 to bottom'
+  - start_at: 101732
+    time: 4063
+    edges:
+      - edge: 0
+        flame: 0
+        dir: 1
+    comment: '(00:01:41.7) [Nobody''s] there # 0 1 2 to bottom'
+  - start_at: 105795
+    time: 5991
+    edges:
+      - edge: 0
+        flame: 0
+        dir: 1
+    comment: '(00:01:45.7) Nobody''s there [#] 0 1 2 to bottom'
+  - start_at: 111786
+    time: 4006
+    edges:
+      - edge: 0
+        flame: 0
+        dir: 1
+    comment: '(00:01:51.7) [Don''t] you love a farce? # 1 up (6 up pre-position)'
+  - start_at: 115792
+    time: 2217
+    edges:
+      - edge: 0
+        flame: 0
+        dir: 1
+    comment: '(00:01:55.7) Don''t you love a farce? [#] 1 up (6 up pre-position)'
+  - start_at: 118009
+    time: 3077
+    edges:
+      - edge: 0
+        flame: 0
+        dir: 1
+    comment: '(00:01:58.0) [My] fault, I fear # 6 down (1 down pre-position)'
+  - start_at: 121086
+    time: 2420
+    edges:
+      - edge: 0
+        flame: 0
+        dir: 1
+    comment: '(00:02:01.0) My fault, I fear [#] 6 down (1 down pre-position)'
+  - start_at: 123506
+    time: 3013
+    edges:
+      - edge: 0
+        flame: 0
+        dir: 1
+    comment: '(00:02:03.5) [I] thought that you''d want what I want, # 0 1 2 up'
+  - start_at: 126519
+    time: 7547
+    edges:
+      - edge: 0
+        flame: 0
+        dir: 1
+    comment: '(00:02:06.5) I thought that you''d want what I [want,] # 0 1 2 up'
+  - start_at: 134066
+    time: 4661
+    edges:
+      - edge: 0
+        flame: 0
+        dir: 1
+    comment: >-
+      (00:02:14.0) [But] where are the clowns? Send in the clowns # 0, 1 2
+      rotate at top in sequence 3 seconds
+  - start_at: 138727
+    time: 5306
+    edges:
+      - edge: 0
+        flame: 0
+        dir: 1
+    comment: >-
+      (00:02:18.7) But where are the clowns? [Send] in the clowns # 0, 1 2
+      rotate at top in sequence 3 seconds
+  - start_at: 144033
+    time: 4580
+    edges:
+      - edge: 0
+        flame: 0
+        dir: 1
+    comment: '(00:02:24.0) [Don''t] bother they''re here'
+  - start_at: 148613
+    time: 11535
+    edges:
+      - edge: 0
+        flame: 0
+        dir: 1
+    comment: '(00:02:28.6) Don''t bother they''re [here]'
+  - start_at: 160148
+    time: 4452
+    edges:
+      - edge: 0
+        flame: 0
+        dir: 1
+    comment: '(00:02:40.1) [Isn''t] it rich? Isn''t it queer? # random position blinking'
+  - start_at: 164600
+    time: 4499
+    edges:
+      - edge: 0
+        flame: 0
+        dir: 1
+    comment: '(00:02:44.5) Isn''t it rich? [Isn''t] it queer? # random position blinking'
+  - start_at: 169099
+    time: 1190
+    edges:
+      - edge: 0
+        flame: 0
+        dir: 1
+    comment: >-
+      (00:02:49.0) [Losing] my timing this late in my career # random position
+      blinking
+  - start_at: 170289
+    time: 1231
+    edges:
+      - edge: 0
+        flame: 0
+        dir: 1
+    comment: >-
+      (00:02:50.2) Losing my [timing] this late in my career # random position
+      blinking
+  - start_at: 171520
+    time: 7906
+    edges:
+      - edge: 0
+        flame: 0
+        dir: 1
+    comment: >-
+      (00:02:51.5) Losing my timing this [late] in my career # random position
+      blinking
+  - start_at: 179426
+    time: 1144
+    edges:
+      - edge: 0
+        flame: 0
+        dir: 1
+    comment: '(00:02:59.4) [But] where are the clowns? Send in the clowns '
+  - start_at: 180570
+    time: 8597
+    edges:
+      - edge: 0
+        flame: 0
+        dir: 1
+    comment: '(00:03:00.5) But where are the [clowns?] Send in the clowns '
+  - start_at: 189167
+    time: 1085
+    edges:
+      - edge: 0
+        flame: 0
+        dir: 1
+    comment: '(00:03:09.1) [Well,] maybe next year'
+  - start_at: 190252
+    time: 4505
+    edges:
+      - edge: 0
+        flame: 0
+        dir: 1
+    comment: '(00:03:10.2) Well, [maybe] next year'
+  - start_at: 194757
+    time: (not set)
+    edges:
+      - edge: 0
+        flame: 0
+        dir: 1
+    comment: '(00:03:14.7) Well, maybe [next] year'
+author: my name here
+title: send_in_the_clowns.mp3
