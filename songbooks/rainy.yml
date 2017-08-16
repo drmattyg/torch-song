@@ -145,4 +145,177 @@ songbook:
     edges:
       - edge: 6
         flame: 0
-        dir: 1              
+        dir: 1  
+
+# thunder
+  - start_at: 8000
+    time: 1500
+    edges:
+      - edge: 3
+        flame: 1
+        dir: 0
+  - start_at: 9500
+    time: 100
+    edges:
+      - edge: 3
+        flame: 0
+        dir: 0
+
+  - start_at: 10500
+    time: 1500
+    edges:
+      - edge: 4
+        flame: 1
+        dir: 0
+  - start_at: 12000
+    time: 100
+    edges:
+      - edge: 4
+        flame: 0
+        dir: 0
+
+  - start_at: 16500
+    time: 2000
+    edges:
+      - edge: 5
+        flame: 1
+        dir: 0
+  - start_at: 18500
+    time: 100
+    edges:
+      - edge: 5
+        flame: 0
+        dir: 0        
+
+  - start_at: 17500
+    time: 2000
+    edges:
+      - edge: 4
+        flame: 1
+        dir: 0
+  - start_at: 19500
+    time: 100
+    edges:
+      - edge: 4
+        flame: 0
+        dir: 0        
+
+  - start_at: 21500
+    time: 1000
+    edges:
+      - edge: 3
+        flame: 1
+        dir: 0
+      - edge: 4
+        flame: 1
+        dir: 0
+  - start_at: 22500
+    time: 100
+    edges:
+      - edge: 3
+        flame: 0
+        dir: 0   
+  - start_at: 23000
+    time: 100
+    edges:
+      - edge: 4
+        flame: 0
+        dir: 0   
+
+  - start_at: 25000
+    time: 500
+    edges:
+      - edge: 5
+        flame: 1
+        dir: 0
+  - start_at: 25500
+    time: 100
+    edges:
+      - edge: 5
+        flame: 0
+        dir: 0
+
+  - start_at: 29000
+    time: 2000
+    edges:
+      - edge: 3
+        flame: 1
+        dir: 0
+  - start_at: 29500
+    time: 500
+    edges:
+      - edge: 4
+        flame: 1
+        dir: 0
+
+  - start_at: 30000
+    time: 100
+    edges:
+      - edge: 4
+        flame: 0
+        dir: 0
+
+  - start_at: 31000
+    time: 100
+    edges:
+      - edge: 3
+        flame: 0
+        dir: 0
+
+
+  - start_at: 34000
+    time: 1500
+    edges:
+      - edge: 5
+        flame: 1
+        dir: 0
+  - start_at: 35000
+    time: 1500
+    edges:
+      - edge: 4
+        flame: 1
+        dir: 0
+
+  - start_at: 35500
+    time: 100
+    edges:
+      - edge: 5
+        flame: 0
+        dir: 0
+
+  - start_at: 36500
+    time: 100
+    edges:
+      - edge: 4
+        flame: 0
+        dir: 0
+
+  - start_at: 36000
+    time: 500
+    edges:
+      - edge: 3
+        flame: 1
+        dir: 0
+
+  - start_at: 36500
+    time: 100
+    edges:
+      - edge: 3
+        flame: 0
+        dir: 0        
+
+  - start_at: 39000
+    time: 1000
+    edges:
+      - edge: 3
+        flame: 1
+        dir: 0
+
+
+  - start_at: 40000
+    time: 100
+    edges:
+      - edge: 3
+        flame: 0
+        dir: 0
+
