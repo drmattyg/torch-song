@@ -22,7 +22,6 @@ export class SongbookPanel extends React.PureComponent {
     this.isPaused = false
     this.post = this.post.bind(this);
     this.sendCalibrate = this.sendCalibrate.bind(this);
-    this.sendRewind = this.sendRewind.bind(this);
     this.sendPlayStop = this.sendPlayStop.bind(this);
     this.sendPlay= this.sendPlay.bind(this);
     this.sendFastForward = this.sendFastForward.bind(this);
@@ -66,7 +65,6 @@ export class SongbookPanel extends React.PureComponent {
     this.post('control', {calibrate: true})
     this.props.notify('Calibrating')
   }
-  sendRewind() { this.post('control', {prev: true})}
   sendPlayStop() { this.post('control', {stop: true})}
   sendPlay() { this.post('control', {play: true})}
   sendFastForward() { this.post('control', {next: true})}
@@ -109,11 +107,6 @@ export class SongbookPanel extends React.PureComponent {
           <div className="song-controls-outter">
             <div className="song-controls-inner">
               <div className="song-control">
-                <IconButton iconClassName="material-icons"
-                  onTouchTap={this.sendRewind}
-                  hoveredStyle={{backgroundColor: '#eee'}}>
-                  fast_rewind
-                </IconButton>
               </div>
               <div className="song-control">
                 <IconButton iconClassName="material-icons"
