@@ -171,6 +171,7 @@ songbook:
       - edge: 3
         flame: 0
         dir: -1
+        distance: 0.5
   - start_at: 54944
     time: 4500
     edges:
@@ -183,6 +184,7 @@ songbook:
       - edge: 4
         flame: 0
         dir: -1
+        distance: 0.5
   - start_at: 58944
     time: 4500
     edges:
@@ -195,6 +197,34 @@ songbook:
       - edge: 5
         flame: 0
         dir: -1
+        distance: 0.5
+
+      - edge: 0
+        flame: 0
+        dir: 1
+        distance: 0.5        
+      - edge: 1
+        flame: 0
+        dir: -1
+        distance: 0.5
+      - edge: 2
+        flame: 0
+        dir: 1
+        distance: 0.5   
+
+      - edge: 6
+        flame: 0
+        dir: 1
+        distance: 0.5        
+      - edge: 7
+        flame: 0
+        dir: 1
+        distance: 0.5
+      - edge: 8
+        flame: 0
+        dir: -1
+        distance: 0.5                        
+
 
   # - start_at: 63396
   #   time: 10559
@@ -205,39 +235,92 @@ songbook:
   #   comment: >-
   #     (00:01:03.3) [But] where are the clowns? Send in the clowns # everything
   #     off 
-   # left off here  
-  - start_at: 73955
-    time: 2850
+   
+  - start_at: 74000
+    time: 3000
     edges:
       - edge: 0
-        flame: 0
-        dir: 1
-    comment: >-
-      (00:01:13.9) [Just] when I stopped opening doors # everything to middle,
-      rotating around in 2 sec intervals, 0+6+4, 2+8+3, 1+7+5
-  - start_at: 76805
-    time: 3762
+        flame: 1
+        dir: 0
+      - edge: 6
+        flame: 1
+        dir: 0 
+      - edge: 4
+        flame: 1
+        dir: 0               
+    comment:       (00:01:13.9) [Just] when I stopped opening doors # everything to middle, rotating around in 2 sec intervals, 0+6+4, 2+8+3, 1+7+5
+  - start_at: 77000
+    time: 3000
     edges:
-      - edge: 0
-        flame: 0
-        dir: 1
-    comment: >-
-      (00:01:16.8) Just when I stopped [opening] doors # everything to middle,
-      rotating around in 2 sec intervals, 0+6+4, 2+8+3, 1+7+5
-  - start_at: 80567
-    time: 8835
+      # off
+     - edge: 0
+       flame: 0
+       dir: 0
+     - edge: 6
+       flame: 0
+       dir: 0 
+     - edge: 4
+       flame: 0
+       dir: 0  
+    # on
+     - edge: 2
+       flame: 1
+       dir: 0
+     - edge: 8
+       flame: 1
+       dir: 0 
+     - edge: 3
+       flame: 1
+       dir: 0 
+  - start_at: 80000
+    time: 3000
     edges:
-      - edge: 0
+        # on
+      - edge: 2
         flame: 0
-        dir: 1
-    comment: '(00:01:20.5) [Finally] finding the one that I wanted was yours'
-  - start_at: 89402
-    time: 6937
-    edges:
-      - edge: 0
+        dir: 0
+      - edge: 8
         flame: 0
-        dir: 1
-    comment: '(00:01:29.4) [Making] my entrance again with my usual flair'
+        dir: 0 
+      - edge: 3
+        flame: 0
+        dir: 0 
+         # on     
+      - edge: 1
+        flame: 1
+        dir: 0
+      - edge: 7
+        flame: 1
+        dir: 0 
+      - edge: 5
+        flame: 1
+        dir: 0   
+
+# left off here                    
+  # - start_at: 76805
+  #   time: 3762
+  #   edges:
+  #     - edge: 0
+  #       flame: 0
+  #       dir: 1
+  #   comment: >-
+  #     (00:01:16.8) Just when I stopped [opening] doors # everything to middle,
+  #     rotating around in 2 sec intervals, 0+6+4, 2+8+3, 1+7+5
+  # - start_at: 80567
+  #   time: 8835
+  #   edges:
+  #     - edge: 0
+  #       flame: 0
+  #       dir: 1
+  #   comment: '(00:01:20.5) [Finally] finding the one that I wanted was yours'
+  # - start_at: 89402
+  #   time: 6937
+  #   edges:
+  #     - edge: 0
+  #       flame: 0
+  #       dir: 1
+  #   comment: '(00:01:29.4) [Making] my entrance again with my usual flair'
+
   - start_at: 96339
     time: 3170
     edges:
@@ -245,6 +328,8 @@ songbook:
         flame: 0
         dir: 1
     comment: '(00:01:36.3) [Sure] of my lines # 6 7 8 to bottom'
+
+
   - start_at: 99509
     time: 2223
     edges:
