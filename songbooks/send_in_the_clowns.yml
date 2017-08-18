@@ -313,7 +313,7 @@ songbook:
     time: 3000
     edges:
         # off
-      - edge: 5
+      - edge: 4
         flame: 0
         dir: 0
 
