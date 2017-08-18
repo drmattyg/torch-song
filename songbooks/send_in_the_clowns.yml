@@ -385,6 +385,7 @@ songbook:
         flame: 0
         dir: 0     
     comment: '(00:01:45.7) Nobody''s there [#] 0 1 2 to top'
+    # left off here
   - start_at: 111786
     time: 9000
     edges:
@@ -408,6 +409,20 @@ songbook:
 
 
     comment: '(00:01:51.7) [Don''t] you love a farce? # 1 up (6 up pre-position)'
+    # 0 1 2 forward, can preposition here if we want
+  - start_at: 122000
+    time: 100
+    edges:
+      - edge: 0
+        dir: 0
+        flame: 0
+      - edge: 1
+        dir: 0
+        flame: 0          
+      - edge: 2
+        dir: 0
+        flame: 0          
+
   # - start_at: 115792
   #   time: 2217
   #   edges:
@@ -429,21 +444,35 @@ songbook:
   #       flame: 0
   #       dir: 1
   #   comment: '(00:02:01.0) My fault, I fear [#] 6 down (1 down pre-position)'
-  #134066 - 123506
+  # left off here
+  #134066 - 123506 = 10560
   - start_at: 123506
-    time: 3013
+    time: 10000
     edges:
-      - edge: 0
-        flame: 0
+      - edge: 7
+        flame: 1
         dir: 1
+  - start_at: 123506
+    time: 8000
+    edges:
+      - edge: 6
+        flame: 1
+        dir: 1
+  - start_at: 123506
+    time: 6000
+    edges:
+      - edge: 8
+        flame: 1
+        dir: 1               
     comment: '(00:02:03.5) [I] thought that you''d want what I want, # 0 1 2 up'
-  - start_at: 126519
-    time: 7547
-    edges:
-      - edge: 0
-        flame: 0
-        dir: 1
-    comment: '(00:02:06.5) I thought that you''d want what I [want,] # 0 1 2 up'
+  # - start_at: 126519
+  #   time: 7547
+  #   edges:
+  #     - edge: 0
+  #       flame: 0
+  #       dir: 1
+  #   comment: '(00:02:06.5) I thought that you''d want what I [want,] # 0 1 2 up'
+# left off here
   - start_at: 134066
     time: 4661
     edges:
