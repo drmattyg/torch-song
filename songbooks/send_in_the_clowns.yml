@@ -242,7 +242,6 @@ songbook:
       - edge: 0
         flame: 1
         dir: 0
-      - edge: 6
             
     comment:       (00:01:13.9) [Just] when I stopped opening doors # everything to middle, rotating around in 2 sec intervals, 0+6+4, 2+8+3, 1+7+5
   - start_at: 77000
@@ -317,103 +316,120 @@ songbook:
         flame: 0
         dir: 0
 
-         # on     
-      - edge: 6
-        flame: 1
-        dir: 0    
-
 
   - start_at: 95000
-    time: 3000
+    time: 100
     edges:
         # off
       - edge: 6
         flame: 0
         dir: 0
 
-# left off here                    
-  # - start_at: 76805
-  #   time: 3762
-  #   edges:
-  #     - edge: 0
-  #       flame: 0
-  #       dir: 1
-  #   comment: >-
-  #     (00:01:16.8) Just when I stopped [opening] doors # everything to middle,
-  #     rotating around in 2 sec intervals, 0+6+4, 2+8+3, 1+7+5
-  # - start_at: 80567
-  #   time: 8835
-  #   edges:
-  #     - edge: 0
-  #       flame: 0
-  #       dir: 1
-  #   comment: '(00:01:20.5) [Finally] finding the one that I wanted was yours'
-  # - start_at: 89402
-  #   time: 6937
-  #   edges:
-  #     - edge: 0
-  #       flame: 0
-  #       dir: 1
-  #   comment: '(00:01:29.4) [Making] my entrance again with my usual flair'
-
   - start_at: 96339
     time: 3170
     edges:
-      - edge: 0
-        flame: 0
-        dir: 1
+      - edge: 6
+        flame: 1
+        dir: -1
+        distance: 0.5
+      - edge: 7
+        flame: 1
+        dir: -1
+        distance: 0.5        
+      - edge: 8
+        flame: 1
+        dir: -1
+        distance: 0.5        
     comment: '(00:01:36.3) [Sure] of my lines # 6 7 8 to bottom'
 
 
   - start_at: 99509
     time: 2223
     edges:
-      - edge: 0
+      - edge: 6
         flame: 0
-        dir: 1
+        dir: 0
+      - edge: 7
+        flame: 0
+        dir: 0 
+      - edge: 8
+        flame: 0
+        dir: 0         
     comment: '(00:01:39.5) Sure of my lines [#] 6 7 8 to bottom'
   - start_at: 101732
     time: 4063
     edges:
       - edge: 0
-        flame: 0
+        flame: 1
         dir: 1
-    comment: '(00:01:41.7) [Nobody''s] there # 0 1 2 to bottom'
+        distance: 0.5
+      - edge: 1
+        flame: 1
+        dir: 1
+        distance: 0.5        
+      - edge: 2
+        flame: 1
+        dir: 1
+        distance: 0.5  
+    comment: '(00:01:41.7) [Nobody''s] there # 0 1 2 to top'
   - start_at: 105795
     time: 5991
     edges:
       - edge: 0
         flame: 0
-        dir: 1
-    comment: '(00:01:45.7) Nobody''s there [#] 0 1 2 to bottom'
+        dir: 0
+      - edge: 1
+        flame: 0
+        dir: 0 
+      - edge: 2
+        flame: 0
+        dir: 0     
+    comment: '(00:01:45.7) Nobody''s there [#] 0 1 2 to top'
   - start_at: 111786
-    time: 4006
+    time: 9000
+    edges:
+      - edge: 2
+        flame: 1
+        dir: -1
+
+  - start_at: 113786
+    time: 7000
+    edges:
+      - edge: 1
+        flame: 1
+        dir: -1
+
+  - start_at: 115786
+    time: 5000
     edges:
       - edge: 0
-        flame: 0
-        dir: 1
+        flame: 1
+        dir: -1
+
+
     comment: '(00:01:51.7) [Don''t] you love a farce? # 1 up (6 up pre-position)'
-  - start_at: 115792
-    time: 2217
-    edges:
-      - edge: 0
-        flame: 0
-        dir: 1
-    comment: '(00:01:55.7) Don''t you love a farce? [#] 1 up (6 up pre-position)'
-  - start_at: 118009
-    time: 3077
-    edges:
-      - edge: 0
-        flame: 0
-        dir: 1
-    comment: '(00:01:58.0) [My] fault, I fear # 6 down (1 down pre-position)'
-  - start_at: 121086
-    time: 2420
-    edges:
-      - edge: 0
-        flame: 0
-        dir: 1
-    comment: '(00:02:01.0) My fault, I fear [#] 6 down (1 down pre-position)'
+  # - start_at: 115792
+  #   time: 2217
+  #   edges:
+  #     - edge: 0
+  #       flame: 0
+  #       dir: 1
+  #   comment: '(00:01:55.7) Don''t you love a farce? [#] 1 up (6 up pre-position)'
+  # - start_at: 118009
+  #   time: 3077
+  #   edges:
+  #     - edge: 0
+  #       flame: 0
+  #       dir: 1
+  #   comment: '(00:01:58.0) [My] fault, I fear # 6 down (1 down pre-position)'
+  # - start_at: 121086
+  #   time: 2420
+  #   edges:
+  #     - edge: 0
+  #       flame: 0
+  #       dir: 1
+  #   comment: '(00:02:01.0) My fault, I fear [#] 6 down (1 down pre-position)'
+  #134066 - 123506
   - start_at: 123506
     time: 3013
     edges:
@@ -530,7 +546,7 @@ songbook:
         dir: 1
     comment: '(00:03:10.2) Well, [maybe] next year'
   - start_at: 194757
-    time: (not set)
+    time: 100
     edges:
       - edge: 0
         flame: 0
