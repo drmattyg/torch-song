@@ -243,11 +243,7 @@ songbook:
         flame: 1
         dir: 0
       - edge: 6
-        flame: 1
-        dir: 0 
-      - edge: 4
-        flame: 1
-        dir: 0               
+            
     comment:       (00:01:13.9) [Just] when I stopped opening doors # everything to middle, rotating around in 2 sec intervals, 0+6+4, 2+8+3, 1+7+5
   - start_at: 77000
     time: 3000
@@ -256,45 +252,84 @@ songbook:
      - edge: 0
        flame: 0
        dir: 0
-     - edge: 6
-       flame: 0
-       dir: 0 
-     - edge: 4
-       flame: 0
-       dir: 0  
     # on
      - edge: 2
        flame: 1
        dir: 0
-     - edge: 8
-       flame: 1
-       dir: 0 
-     - edge: 3
-       flame: 1
-       dir: 0 
+
   - start_at: 80000
     time: 3000
     edges:
-        # on
+        # off
       - edge: 2
         flame: 0
         dir: 0
-      - edge: 8
-        flame: 0
-        dir: 0 
-      - edge: 3
-        flame: 0
-        dir: 0 
+
          # on     
       - edge: 1
         flame: 1
         dir: 0
-      - edge: 7
+
+  - start_at: 83000
+    time: 3000
+    edges:
+        # off
+      - edge: 1
+        flame: 0
+        dir: 0
+
+         # on     
+      - edge: 3
         flame: 1
-        dir: 0 
+        dir: 0
+
+  - start_at: 86000
+    time: 3000
+    edges:
+        # off
+      - edge: 3
+        flame: 0
+        dir: 0
+
+         # on     
       - edge: 5
         flame: 1
-        dir: 0   
+        dir: 0
+
+  - start_at: 89000
+    time: 3000
+    edges:
+        # off
+      - edge: 5
+        flame: 0
+        dir: 0
+
+         # on     
+      - edge: 4
+        flame: 1
+        dir: 0        
+
+  - start_at: 92000
+    time: 3000
+    edges:
+        # off
+      - edge: 5
+        flame: 0
+        dir: 0
+
+         # on     
+      - edge: 6
+        flame: 1
+        dir: 0    
+
+
+  - start_at: 95000
+    time: 3000
+    edges:
+        # off
+      - edge: 6
+        flame: 0
+        dir: 0
 
 # left off here                    
   # - start_at: 76805
