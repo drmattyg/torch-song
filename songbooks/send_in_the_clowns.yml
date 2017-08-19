@@ -385,7 +385,7 @@ songbook:
         flame: 0
         dir: 0     
     comment: '(00:01:45.7) Nobody''s there [#] 0 1 2 to top'
-    # left off here
+
   - start_at: 111786
     time: 9000
     edges:
@@ -411,17 +411,20 @@ songbook:
     comment: '(00:01:51.7) [Don''t] you love a farce? # 1 up (6 up pre-position)'
     # 0 1 2 forward, can preposition here if we want
   - start_at: 122000
-    time: 100
+    time: 4000
     edges:
       - edge: 0
-        dir: 0
+        dir: 1
         flame: 0
+        distance: 0.75
       - edge: 1
-        dir: 0
-        flame: 0          
+        dir: 1
+        flame: 0
+        distance: 0.75    
       - edge: 2
-        dir: 0
-        flame: 0          
+        dir: 1
+        flame: 0      
+        distance: 0.75    
 
   # - start_at: 115792
   #   time: 2217
@@ -444,8 +447,7 @@ songbook:
   #       flame: 0
   #       dir: 1
   #   comment: '(00:02:01.0) My fault, I fear [#] 6 down (1 down pre-position)'
-  # left off here
-  #134066 - 123506 = 10560
+  
   - start_at: 123506
     time: 10000
     edges:
@@ -465,6 +467,18 @@ songbook:
         flame: 1
         dir: 1               
     comment: '(00:02:03.5) [I] thought that you''d want what I want, # 0 1 2 up'
+  - start_at: 129506
+    time: 100
+    edges: 
+      - edge: 6
+        flame: 0
+        dir: 0
+      - edge: 7
+        flame: 0
+        dir: 0
+      - edge: 8
+        flame: 0
+        dir: 0
   # - start_at: 126519
   #   time: 7547
   #   edges:
@@ -472,80 +486,170 @@ songbook:
   #       flame: 0
   #       dir: 1
   #   comment: '(00:02:06.5) I thought that you''d want what I [want,] # 0 1 2 up'
-# left off here
+  # rotate here
   - start_at: 134066
-    time: 4661
+    time: 3000
+    edges:
+      - edge: 2
+        flame: 1
+        dir: 0
+    comment: (00:02:14.0) [But] where are the clowns? Send in the clowns # 0, 1 2 rotate at top in sequence 3 seconds
+  - start_at: 137066
+    time: 3000
+    edges:
+      - edge: 0
+        flame: 1
+        dir: 0
+  - start_at: 140066
+    time: 3000
+    edges:
+      - edge: 1
+        flame: 1
+        dir: 0  
+  - start_at: 143066
+    time: 3000
+    edges:
+      - edge: 2
+        flame: 0
+        dir: 0   
+  - start_at: 146066
+    time: 3000
     edges:
       - edge: 0
         flame: 0
-        dir: 1
-    comment: >-
-      (00:02:14.0) [But] where are the clowns? Send in the clowns # 0, 1 2
-      rotate at top in sequence 3 seconds
-  - start_at: 138727
-    time: 5306
+        dir: 0          
+  - start_at: 149066
+    time: 3000
+    edges:
+      - edge: 1
+        flame: 0
+        dir: 0      
+  # preopsition        
+  - start_at: 152066
+    time: 2000
     edges:
       - edge: 0
-        flame: 0
         dir: 1
-    comment: >-
-      (00:02:18.7) But where are the clowns? [Send] in the clowns # 0, 1 2
-      rotate at top in sequence 3 seconds
-  - start_at: 144033
-    time: 4580
-    edges:
-      - edge: 0
         flame: 0
+        distance: 0.25    
+      - edge: 1
         dir: 1
-    comment: '(00:02:24.0) [Don''t] bother they''re here'
-  - start_at: 148613
-    time: 11535
-    edges:
-      - edge: 0
         flame: 0
+        distance: 0.25    
+      - edge: 2
         dir: 1
-    comment: '(00:02:28.6) Don''t bother they''re [here]'
+        flame: 0
+        distance: 0.25                    
+  # - start_at: 138727
+  #   time: 5306
+  #   edges:
+  #     - edge: 0
+  #       flame: 0
+  #       dir: 1
+  #   comment: >-
+  #     (00:02:18.7) But where are the clowns? [Send] in the clowns # 0, 1 2
+  #     rotate at top in sequence 3 seconds
+  # - start_at: 144033
+  #   time: 5000
+  #   edges:
+  #     - edge: 0
+  #       flame: 1
+  #       dir: 0
+  # - start_at: 146033
+  #   time: 3000
+  #   edges:
+  #     - edge: 1
+  #       flame: 1
+  #       dir: 0    
+  # - start_at: 148033
+  #   time: 1000
+  #   edges:
+  #     - edge: 2
+  #       flame: 1
+  #       dir: 0                
+  #   comment: '(00:02:24.0) [Don''t] bother they''re here'
+  # - start_at: 149033
+  #   time: 100
+  #   edges:
+  #     - edge: 1
+  #       flame: 0
+  #       dir: 0      
+  #     - edge: 0
+  #       flame: 0
+  #       dir: 0 
+  #     - edge: 2
+  #       flame: 0
+  #       dir: 0                           
+  # # - start_at: 148613
+  # #   time: 11535
+  # #   edges:
+  # #     - edge: 0
+  # #       flame: 0
+  # #       dir: 1
+  # #   comment: '(00:02:28.6) Don''t bother they''re [here]'
+  # left off here
   - start_at: 160148
     time: 4452
     edges:
-      - edge: 0
-        flame: 0
-        dir: 1
+      - edge: 2
+        flame: 1
+        dir: -1
     comment: '(00:02:40.1) [Isn''t] it rich? Isn''t it queer? # random position blinking'
   - start_at: 164600
     time: 4499
     edges:
-      - edge: 0
+      - edge: 7
+        flame: 1
+        dir: -1
+      - edge: 2
         flame: 0
-        dir: 1
+        dir: 0
     comment: '(00:02:44.5) Isn''t it rich? [Isn''t] it queer? # random position blinking'
   - start_at: 169099
     time: 1190
     edges:
-      - edge: 0
-        flame: 0
+      - edge: 3
+        flame: 1
         dir: 1
+        distance: 0.25
     comment: >-
       (00:02:49.0) [Losing] my timing this late in my career # random position
       blinking
   - start_at: 170289
     time: 1231
     edges:
-      - edge: 0
-        flame: 0
+      - edge: 4
+        flame: 1
         dir: 1
+        distace: 0.25
+      - edge: 3
+        flame: 0
+        dir: -1
+        distance: 0.25
     comment: >-
       (00:02:50.2) Losing my [timing] this late in my career # random position
       blinking
   - start_at: 171520
-    time: 7906
+    time: 1250
     edges:
-      - edge: 0
-        flame: 0
+      - edge: 5
+        flame: 1
         dir: 1
+        distance: 0.25
+      - edge: 4
+        flame: 0
+        dir: -1
+        distance: 0.25
     comment: >-
       (00:02:51.5) Losing my timing this [late] in my career # random position
       blinking
+  - start_at: 172770
+    time: 2000
+    edges:
+      - edge: 5
+        flame: 0
+        dir: -1
+        distance: 0.25
   - start_at: 179426
     time: 1144
     edges:
