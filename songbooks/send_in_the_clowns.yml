@@ -314,9 +314,16 @@ songbook:
         # off
       - edge: 4
         flame: 0
-        dir: 0
-
-
+        dir: -1
+        distnace: 0.5
+      - edge: 3
+        flame: 0
+        dir: -1
+        distnace: 0.5
+      - edge: 5
+        flame: 0
+        dir: -1
+        distnace: 0.5
   - start_at: 95000
     time: 100
     edges:
@@ -467,7 +474,7 @@ songbook:
         flame: 1
         dir: 1               
     comment: '(00:02:03.5) [I] thought that you''d want what I want, # 0 1 2 up'
-  - start_at: 129506
+  - start_at: 134006
     time: 100
     edges: 
       - edge: 6
@@ -587,7 +594,6 @@ songbook:
   # #       flame: 0
   # #       dir: 1
   # #   comment: '(00:02:28.6) Don''t bother they''re [here]'
-  # left off here
   - start_at: 160148
     time: 4452
     edges:
@@ -621,7 +627,7 @@ songbook:
       - edge: 4
         flame: 1
         dir: 1
-        distace: 0.25
+        distance: 0.25
       - edge: 3
         flame: 0
         dir: -1
@@ -650,40 +656,49 @@ songbook:
         flame: 0
         dir: -1
         distance: 0.25
+  # left off here
   - start_at: 179426
-    time: 1144
+    time: 3000
     edges:
       - edge: 0
-        flame: 0
-        dir: 1
+        flame: 1
+        dir: 0
+  - start_at: 182426
+    time: 3000
+    edges:
+      - edge: 1
+        flame: 1
+        dir: 0
+  - start_at: 185426
+    time: 3000
+    edges:
+      - edge: 2
+        flame: 1
+        dir: 0
+
+
     comment: '(00:02:59.4) [But] where are the clowns? Send in the clowns '
-  - start_at: 180570
-    time: 8597
-    edges:
-      - edge: 0
-        flame: 0
-        dir: 1
-    comment: '(00:03:00.5) But where are the [clowns?] Send in the clowns '
+  # - start_at: 180570
+  #   time: 8597
+  #   edges:
+  #     - edge: 0
+  #       flame: 0
+  #       dir: 1
+  #   comment: '(00:03:00.5) But where are the [clowns?] Send in the clowns '
   - start_at: 189167
-    time: 1085
+    time: 5590
     edges:
       - edge: 0
-        flame: 0
+        flame: 1
         dir: 1
+      - edge: 1
+        flame: 1
+        dir: 1
+      - edge: 2
+        flame: 1
+        dir: 1
+
     comment: '(00:03:09.1) [Well,] maybe next year'
-  - start_at: 190252
-    time: 4505
-    edges:
-      - edge: 0
-        flame: 0
-        dir: 1
-    comment: '(00:03:10.2) Well, [maybe] next year'
-  - start_at: 194757
-    time: 100
-    edges:
-      - edge: 0
-        flame: 0
-        dir: 1
-    comment: '(00:03:14.7) Well, maybe [next] year'
+
 author: my name here
 title: send_in_the_clowns.mp3
