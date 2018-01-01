@@ -8,7 +8,7 @@ from torch_song.edge import AbstractEdge
 from torch_song.hardware.motor_driver import MotorDriver
 from torch_song.hardware.igniter import Igniter
 from torch_song.hardware.valve import Valve
-from torch_song.hardware.limit_switch import LimitSwitch
+from torch_song.hardware.limit_switch import DebounceLimitSwitch
 
 
 class RealEdge(AbstractEdge):
@@ -27,8 +27,8 @@ class RealEdge(AbstractEdge):
         beg_mcp_io = config['subsystems']['limit_switches'][self.id - 1]['beg_mcp_io']
         end_mcp_id = config['subsystems']['limit_switches'][self.id - 1]['end_mcp_id']
         end_mcp_io = config['subsystems']['limit_switches'][self.id - 1]['end_mcp_io']
-        self.limit_switch_beg = LimitSwitch(io['mcp23017'][beg_mcp_id], beg_mcp_io)
-        self.limit_switch_end = LimitSwitch(io['mcp23017'][end_mcp_id], end_mcp_io)
+        self.limit_switch_beg = DebounceLimitSwitch(io['mcp23017'][beg_mcp_id], beg_mcp_io)
+        self.limit_switch_end = DebounceLimitSwitch(io['mcp23017'][end_mcp_id], end_mcp_io)
         self.valve = Valve(config['subsystems']['valves'][self.id - 1]['gpio'])
         self.igniter = Igniter(config['subsystems']['igniters'][self.id - 1]['gpio'])
         self.dir_polarity = config['subsystems']['motors'][self.id - 1]['polarity']
