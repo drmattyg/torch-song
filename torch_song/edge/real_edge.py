@@ -10,11 +10,11 @@ from torch_song.hardware.igniter import Igniter
 from torch_song.hardware.valve import Valve
 from torch_song.hardware.limit_switch import LimitSwitch
 
-class RealEdge(AbstractEdge):
 
+class RealEdge(AbstractEdge):
     SLOW_DOWN_SPEED = 80
 
-    def __init__(self, i, io, config, verbose=False, update_rate_hz=20, calibration=None):
+    def __init__(self, i, io, config, verbose=False, update_rate_hz=100, calibration=None):
         super().__init__(i)
 
         # Hardware config
@@ -31,7 +31,7 @@ class RealEdge(AbstractEdge):
         self.limit_switch_end = LimitSwitch(io['mcp23017'][end_mcp_id], end_mcp_io)
         self.valve = Valve(config['subsystems']['valves'][self.id - 1]['gpio'])
         self.igniter = Igniter(config['subsystems']['igniters'][self.id - 1]['gpio'])
-        self.dir_polarity =  config['subsystems']['motors'][self.id - 1]['polarity']
+        self.dir_polarity = config['subsystems']['motors'][self.id - 1]['polarity']
 
         self.position = 0
 
@@ -53,7 +53,7 @@ class RealEdge(AbstractEdge):
         self.set_stall_time()
 
         # let limit switches settle
-        try_decorator(timeout=5)(lambda:not all(self.get_limit_switch_state()))()
+        try_decorator(timeout=5)(lambda: not all(self.get_limit_switch_state()))()
 
         # Threading
         self.lock = Lock()
@@ -62,7 +62,6 @@ class RealEdge(AbstractEdge):
         self.runner.start()
 
         logging.info('Starting edge %d' % (self.id), extra={'edge_id': self.id})
-
 
     def __str__(self):
         s = "igniter: %d, valve: %d, beg. limit: %d, end. limit: %d, motor speed: %f, motor dir: %s" % (
@@ -94,75 +93,76 @@ class RealEdge(AbstractEdge):
                 if (self.position < 0):
                     self.position = 0
 
-
             prev_time = now
 
-            #safety checks  
-            #both limit switches on
+            # safety checks
+            # both limit switches on
             if all(self.get_limit_switch_state()):
                 raise Exception('Both limit switches on for edge', self.id)
 
-            #stalled motor
+            # stalled motor
             if (any(self.get_limit_switch_state()) or self.motor_driver.get_speed() == 0):
                 self.time_of_last_limit_switch = time()
             if (self.motor_driver.get_speed() > 0 and
-                time()-self.time_of_last_limit_switch > self.stall_time):
+                            time() - self.time_of_last_limit_switch > self.stall_time):
                 logging.info('id:%d theoretically stalled' % (self.id), extra={'edge_id': self.id})
                 pass
-                #raise Exception('Stalled motor')
+                # raise Exception('Stalled motor')
 
-            self.motor_driver.set_dir(MotorDriver.REVERSE if self.dir_request == -1 else MotorDriver.FORWARD)
+            self.motor_driver.set_dir(
+                MotorDriver.REVERSE if self.dir_request == -1 else MotorDriver.FORWARD)
 
             if (self.motor_driver.get_dir() == MotorDriver.FORWARD and
                         self.motor_driver.get_speed() > 0 and
-                        not self._ignore_limit and
+                    not self._ignore_limit and
                         self.get_forward_limit_switch_state() == True):
                 self.motor_driver.stop()
                 self.speed_request = 0
                 self.position = 1
                 last_cal_time = 0
                 if (self.verbose):
-                    logging.info('Fwd limit switch hit for id:%d' % (self.id), extra={'edge_id': self.id})
+                    logging.info('Fwd limit switch hit for id:%d' % (self.id),
+                                 extra={'edge_id': self.id})
             elif (self.motor_driver.get_dir() == MotorDriver.REVERSE and
-                        self.motor_driver.get_speed() > 0 and
-                        not self._ignore_limit and
-                        self.get_reverse_limit_switch_state() == True):
+                          self.motor_driver.get_speed() > 0 and
+                      not self._ignore_limit and
+                          self.get_reverse_limit_switch_state() == True):
                 self.motor_driver.stop()
                 self.speed_request = 0
                 self.position = 0
                 last_cal_time = 0
                 if (self.verbose):
-                    logging.info('Rev limit switch hit for id:%d' % (self.id), extra={'edge_id': self.id})
+                    logging.info('Rev limit switch hit for id:%d' % (self.id),
+                                 extra={'edge_id': self.id})
             elif (self.speed_request >= 0):
 
+                self.motor_driver.set_speed(self.speed_request)
 
-                    self.motor_driver.set_speed(self.speed_request)
-
-                    if (self.speed_request is not 0):
-                        last_cal_time = self.calibration.get_cal_time(self.speed_request, self.dir_request)
-                    else:
-                        last_cal_time = 0
-                    last_cal_time = last_cal_time * self.dir_request
-                    self.speed_request = -1
+                if (self.speed_request is not 0):
+                    last_cal_time = self.calibration.get_cal_time(self.speed_request,
+                                                                  self.dir_request)
+                else:
+                    last_cal_time = 0
+                last_cal_time = last_cal_time * self.dir_request
+                self.speed_request = -1
 
             # Slow down at stops
             speed = self.motor_driver.get_speed()
             if (speed > RealEdge.SLOW_DOWN_SPEED and
-                    self.dir_request == 1 and
-                    self._ignore_limit is False and
-                    self.position > 0.90):
+                        self.dir_request == 1 and
+                        self._ignore_limit is False and
+                        self.position > 0.90):
                 if self.verbose:
                     logging.info('slowing down :%d' % (self.id), extra={'edge_id': self.id})
                 self.motor_driver.set_speed(RealEdge.SLOW_DOWN_SPEED)
 
             if (speed > RealEdge.SLOW_DOWN_SPEED and
-                    self.dir_request == -1 and
-                    self._ignore_limit is False and
-                    self.position < 0.10):
+                        self.dir_request == -1 and
+                        self._ignore_limit is False and
+                        self.position < 0.10):
                 if self.verbose:
                     logging.info('slowing down :%d' % (self.id), extra={'edge_id': self.id})
                 self.motor_driver.set_speed(RealEdge.SLOW_DOWN_SPEED)
-
 
             self.lock.release()
 
@@ -183,19 +183,19 @@ class RealEdge(AbstractEdge):
         self.speed_request = speed
         if (self.verbose):
             logging.info('Setting edge:%d to spd:%d and dir:%d' %
-                (self.id, speed, direction), extra={'edge_id': self.id})
+                         (self.id, speed, direction), extra={'edge_id': self.id})
         self.lock.release()
 
     def set_valve_state(self, v):
         if (self.verbose):
             logging.info('Valve edge:%d %s' %
-                (self.id, 'ON' if v else 'OFF'), extra={'edge_id': self.id})
+                         (self.id, 'ON' if v else 'OFF'), extra={'edge_id': self.id})
         self.valve.set_state(v)
 
     def set_igniter_state(self, g):
         if (self.verbose):
             logging.info('Igniter edge:%d %s' %
-                (self.id, 'ON' if g else 'OFF'), extra={'edge_id': self.id})
+                         (self.id, 'ON' if g else 'OFF'), extra={'edge_id': self.id})
         self.igniter.set_state(g)
 
     def get_limit_switch_state(self):
@@ -221,7 +221,6 @@ class RealEdge(AbstractEdge):
 
     def get_igniter_state(self):
         return self.igniter.get_state()
-
 
     def get_calibration(self):
         return self.calibration
