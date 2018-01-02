@@ -26,17 +26,19 @@ def main(scr):
         beg_mcp_io = config['subsystems']['limit_switches'][EDGE_ID - 1]['beg_mcp_io']
         end_mcp_id = config['subsystems']['limit_switches'][EDGE_ID - 1]['end_mcp_id']
         end_mcp_io = config['subsystems']['limit_switches'][EDGE_ID - 1]['end_mcp_io']
-        ls0 = DebounceLimitSwitch(io['mcp23017'][beg_mcp_id], beg_mcp_io)
-        ls1 = DebounceLimitSwitch(io['mcp23017'][end_mcp_id], end_mcp_io)
-        ls01_count = 0
-        ls02_count = 0
+        ls1 = DebounceLimitSwitch(io['mcp23017'][beg_mcp_id], beg_mcp_io)
+        ls2 = DebounceLimitSwitch(io['mcp23017'][end_mcp_id], end_mcp_io)
+        ls1_count = 0
+        ls2_count = 0
+        s1 = ls1.get_state()
+        s2 = ls2.get_state()
         while True:
-            scr.addstr(1, 0, "LS01: {}".format(ls01_count))
-            scr.addstr(2, 0, "LS02: {}".format(ls02_count))
-            if ls0.get_state() is True:
-                ls01_count += 1
-            if ls1.get_state() is True:
-                ls02_count += 1
+            scr.addstr(1, 0, "LS01: {} ({})".format(s1, ls1_count))
+            scr.addstr(2, 0, "LS02: {} ({})".format(s2, ls2_count))
+            if s1 is True:
+                ls1_count += 1
+            if s2 is True:
+                ls2_count += 1
     except KeyboardInterrupt:
         return
 
