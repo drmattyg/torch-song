@@ -15,6 +15,7 @@ def get_io(config):
         mcp = MCPInput(m['i2c_address'], m['bits'])
         mcps[m['id']] = mcp
     io['mcp23017'] = mcps
+    return io
 
 
 def main(scr):

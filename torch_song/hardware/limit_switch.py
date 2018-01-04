@@ -9,7 +9,7 @@ class LimitSwitch:
 
 class DebounceLimitSwitch(LimitSwitch):
     def __init__(self, mcp, io, debounce_state=True, debounce_count=3):
-        super.__init__(mcp, io)
+        super().__init__(mcp, io)
         self.debounce_state = debounce_state
         self.debounce_count = debounce_count
         self.last_state = None
