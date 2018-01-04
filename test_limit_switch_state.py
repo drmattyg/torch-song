@@ -20,15 +20,16 @@ def get_io(config):
 
 def main(scr):
     try:
-        stream = open('conf/default.yml', 'r')
-        config = yaml.load(stream)
-        io = get_io(config)
-        beg_mcp_id = config['subsystems']['limit_switches'][EDGE_ID - 1]['beg_mcp_id']
-        beg_mcp_io = config['subsystems']['limit_switches'][EDGE_ID - 1]['beg_mcp_io']
-        end_mcp_id = config['subsystems']['limit_switches'][EDGE_ID - 1]['end_mcp_id']
-        end_mcp_io = config['subsystems']['limit_switches'][EDGE_ID - 1]['end_mcp_io']
-        ls1 = DebounceLimitSwitch(io['mcp23017'][beg_mcp_id], beg_mcp_io)
-        ls2 = DebounceLimitSwitch(io['mcp23017'][end_mcp_id], end_mcp_io)
+        # stream = open('conf/default.yml', 'r')
+        # config = yaml.load(stream)
+        # io = get_io(config)
+        # beg_mcp_id = config['subsystems']['limit_switches'][EDGE_ID - 1]['beg_mcp_id']
+        # beg_mcp_io = config['subsystems']['limit_switches'][EDGE_ID - 1]['beg_mcp_io']
+        # end_mcp_id = config['subsystems']['limit_switches'][EDGE_ID - 1]['end_mcp_id']
+        # end_mcp_io = config['subsystems']['limit_switches'][EDGE_ID - 1]['end_mcp_io']
+        mcp = MCPInput(0x22, 16)
+        ls1 = DebounceLimitSwitch(mcp, 0)
+        ls2 = DebounceLimitSwitch(mcp, 1)
         ls1_count = 0
         ls2_count = 0
         s1 = ls1.get_state()

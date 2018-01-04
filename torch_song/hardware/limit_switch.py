@@ -33,7 +33,7 @@ class DebounceLimitSwitch(LimitSwitch):
 
         # if we've exceeded the state counter, reset the state counter and return the state
         if self.state_count > self.debounce_count:
-            self.state_count = 0
+            #            self.state_count = 0
             return state
 
         # otherwise, return the default state
