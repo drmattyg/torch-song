@@ -2,7 +2,7 @@ import subprocess
 
 try:
     import pygame
-except Execption as e:
+except Exception as e:
     print('failed to load pygame')
 
 
@@ -42,4 +42,3 @@ class Sound:
 
     def __del__(self):
         self.kill()
-

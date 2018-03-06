@@ -6,16 +6,17 @@ import random
 
 from torch_song.songbook import Songbook
 from torch_song.songbook import SongbookRunner
-from torch_song.sound.sound import Sound
+# from torch_song.sound.sound import Sound
 from torch_song.common import interruptable_sleep
 from torch_song.icosahedron.icosahedron import Icosahedron
 from os import path
+
 
 class SongbookManager:
     def __init__(self, songbooks, torchsong, mode='manual'):
         self.songbooks = songbooks
         self.torchsong = torchsong
-        self.sound_module = Sound()
+        self.sound_module = None  # Sound()
 
         self.songbook_iterator = itertools.cycle(self.songbooks)
 
@@ -128,4 +129,3 @@ class SongbookManager:
                     self.runner = SongbookRunner(sb, self.torchsong, self.sound_module)
                     self.runner.run()
                     self.torchsong.turn_off()
-

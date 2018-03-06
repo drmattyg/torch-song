@@ -12,6 +12,7 @@ MTransition = Measure.Transition
 IGNITER_OFFSET = 4000
 IGNITER_DELAY = 1000
 
+
 class Songbook:
     def __init__(self, filename, torch_song):
         self.songbook = yaml.load(open(filename, "r").read())
@@ -117,9 +118,9 @@ class SongbookRunner:
 
         min_time = -min(self.songbook.sorted_timepoints)
         self.end_song_time = ((self.songbook.sorted_timepoints[-1] -
-                              self.songbook.sorted_timepoints[0]) + time.time() * 1000)
-        if self.songbook.mp3 is not None:
-            self.sound_module.play(self.songbook.mp3)
+                               self.songbook.sorted_timepoints[0]) + time.time() * 1000)
+        # if self.songbook.mp3 is not None:
+        #     self.sound_module.play(self.songbook.mp3)
         for ts in self.songbook.sorted_timepoints:
             now = time.time() * 1000
             ts_0 = ts + min_time
@@ -145,7 +146,6 @@ class SongbookRunner:
     # Should be called from a different thread
     def request_stop(self, block=False):
         self.stop.set()
-        self.sound_module.stop()
+        # self.sound_module.stop()
         if (block):
             self.finished.wait(15)
-

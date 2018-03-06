@@ -1,0 +1,28 @@
+version: 1.0
+author: matt@hydrocarboncollective.org
+title: Edge tester
+songbook:
+  - start_at: 0
+    time: 5000
+    edges:
+      - edge: 0
+        flame: 1
+        dir: 1
+  - start_at: 7000
+    time: 5000
+    edges:
+      - edge: 0
+        flame: 1
+        dir: -1
+  - start_at: 14000
+    time: 
+    edges:
+      - edge: 0
+        flame: 0
+        dir: 0
+  - start_at: 16000
+    time: 2000
+    edges:
+      - edge: 0
+        flame: 1
+        dir: 0
