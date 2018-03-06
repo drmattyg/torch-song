@@ -11,6 +11,7 @@ import pprint
 MTransition = Measure.Transition
 IGNITER_OFFSET = 4000
 IGNITER_DELAY = 1000
+logging.basicConfig(level=logging.INFO)
 
 
 class Songbook:

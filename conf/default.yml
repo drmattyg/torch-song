@@ -1,6 +1,6 @@
 num_edges: 9
 # modes are 'manual', 'inorder', 'shuffle', 'icosahedron'
-songbook_mode: shuffle
+songbook_mode: test
 logging:
   remote_port: 3001
 control_server:

@@ -11,6 +11,8 @@ from torch_song.common import interruptable_sleep
 from torch_song.icosahedron.icosahedron import Icosahedron
 from os import path
 
+logging.basicConfig(level=logging.INFO)
+
 
 class SongbookManager:
     def __init__(self, songbooks, torchsong, mode='manual'):
@@ -94,8 +96,10 @@ class SongbookManager:
     def run(self):
         while (not self.kill_signal.is_set()):
             if (self.is_stopped.is_set()):
+                logging.info("Waiting to be unstopped")
                 time.sleep(1)
             elif (self.mode == 'test'):
+                logging.info("Running test mode")
                 self.torchsong.home()
                 self.next_song_request.clear()
                 sb = Songbook(self.next_up, self.torchsong)
