@@ -1,0 +1,59 @@
+version: 1.0
+author: matt@hydrocarboncollective.org
+title: Chaser 6
+songbook:
+  - start_at: 0
+    time: 6000
+    edges:
+      - edge: 3
+        flame: 1
+        dir: 1
+  - start_at: 6000
+    time: 6000
+    edges:
+      - edge: 4
+        flame: 1
+        dir: 1
+      - edge: 3
+        flame: 0
+        dir: -1
+  - start_at: 12000
+    time: 6000
+    edges:
+      - edge: 5
+        flame: 1
+        dir: 1
+      - edge: 4
+        flame: 0
+        dir: 0
+  - start_at: 18000
+    time: 6000
+    edges:
+        - edge: 0
+          flame: 1
+          dir: 1
+        - edge: 2
+          flame: 0
+          dir: 1
+        - edge: 5
+          flame: 0
+          dir: 0          
+  - start_at: 24000
+    time: 6000
+    edges:
+        - edge: 2
+          flame: 1
+          dir: -1
+        - edge: 0
+          flame: 0
+          dir: 0         
+  - start_at: 30000
+    time: 6000
+    edges:
+        - edge: 4
+          flame: 1
+          dir: -1
+        - edge: 2
+          flame: 0
+          dir: 0         
+        
