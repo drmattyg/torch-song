@@ -1,0 +1,28 @@
+version: 1.0
+author: matt@hydrocarboncollective.org
+title: Song 1
+songbook:
+  - start_at: 0
+    time: 6000
+    edges:
+      - edge: 3
+        flame: 1
+        dir: 1
+  - start_at: 6000
+    time: 6000
+    edges:
+      - edge: 4
+        flame: 1
+        dir: 1
+      - edge: 3
+        flame: 0
+        dir: -1
+  - start_at: 12000
+    time: 6000
+    edges:
+      - edge: 5
+        flame: 1
+        dir: 1
+      - edge: 4
+        flame: 0
+        dir: -1
